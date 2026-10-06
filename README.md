@@ -11,6 +11,7 @@ Este diretório contém os arquivos usados para executar o DSpace da biblioteca:
 | `docker-compose-local.yml` | Publicação opcional de portas apenas para uso local. |
 | `.env.production.example` | Modelo das variáveis exigidas em produção, sem credenciais reais. |
 | `Dockerfile.angular` | Compila o tema local sobre o código-fonte da versão oficial. |
+| `.github/workflows/deploy.yml` | Compila e publica a imagem Angular customizada no GHCR. |
 | `backend/config/submission-forms.xml` | Formulários oficiais do backend com os overrides locais de metadados. |
 | `frontend/themes/custom/` | SCSS, assets e componentes sobrescritos pelo projeto. |
 | `frontend/config/config.prod.yml` | Configuração local carregada em tempo de execução. |
@@ -137,10 +138,7 @@ docker compose --env-file .env -p d10 -f docker-compose-dist.yml \
   -f docker-compose-rest.yml -f docker-compose-prod.yml config --quiet
 docker compose --env-file .env -p d10 -f docker-compose-dist.yml \
   -f docker-compose-rest.yml -f docker-compose-prod.yml \
-  pull dspace dspacedb dspacesolr dspace-proxy
-docker compose --env-file .env -p d10 -f docker-compose-dist.yml \
-  -f docker-compose-rest.yml -f docker-compose-prod.yml \
-  build --pull dspace-angular
+  pull dspace dspace-angular dspacedb dspacesolr dspace-proxy
 docker compose --env-file .env -p d10 -f docker-compose-dist.yml \
   -f docker-compose-rest.yml -f docker-compose-prod.yml up -d
 ```
@@ -172,7 +170,11 @@ restauração. Inclua `solr_data` e `sitemaps` no plano de recuperação ou
 documente como reconstruí-los. Monitore espaço em disco,
 disponibilidade dos containers e validade do certificado TLS.
 
-O frontend não usa mais diretamente a imagem `*-dist` publicada. O
+O workflow `.github/workflows/deploy.yml` compila a imagem customizada e a
+publica em `ghcr.io/nti-ufal-arapiraca/dspace-bca-angular` a cada push. O
+Compose de produção usa essa imagem, sem executar build local; mantenha
+`DSPACE_ANGULAR_IMAGE` e `DSPACE_ANGULAR_TAG` alinhados ao workflow. O frontend
+não usa mais diretamente a imagem `*-dist` publicada. O
 `Dockerfile.angular` parte da imagem oficial `dspace-10.1`, sobrepõe os arquivos
 locais no tema oficial `custom`, compila a distribuição e reutiliza a imagem
 oficial `dspace-10.1-dist` como runtime.
@@ -261,8 +263,8 @@ Acervos importados antes dessa normalização devem executar uma vez
 após um backup e uma revisão dos dados afetados.
 
 O tema `custom` é ativado em `frontend/config/config.prod.yml`. Mudanças em
-SCSS, assets ou componentes exigem `build --no-cache dspace-angular` quando for
-necessário invalidar todo o cache. Mudanças apenas nesse YAML exigem somente:
+SCSS, assets ou componentes são compiladas pelo workflow após o push. Mudanças
+apenas nesse YAML exigem somente:
 
 ```bash
 docker compose --env-file .env -p d10 -f docker-compose-dist.yml \

@@ -19,6 +19,10 @@ services:
         bind:
           create_host_path: false
   dspace-angular:
+    # Production consumes the image published by .github/workflows/deploy.yml.
+    # Remove the build inherited from docker-compose-dist.yml.
+    build: !reset null
+    image: ${DSPACE_ANGULAR_IMAGE:-ghcr.io/nti-ufal-arapiraca/dspace-bca-angular}:${DSPACE_ANGULAR_TAG:-dspace-10.1}
     environment:
       # TLS terminates at the server's general proxy. Node listens on HTTP
       # inside the DSpace network, without publishing a host port.
