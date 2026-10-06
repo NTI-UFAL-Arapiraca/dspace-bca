@@ -40,6 +40,11 @@ services:
     volumes:
     # Keep DSpace assetstore directory between reboots
     - assetstore:/dspace/assetstore
+    # Let the DSpace CLI consume the same host-side migration input directory.
+    - type: bind
+      source: ${DSPACE_MIGRATION_HOST_DIR:-../migration_data}
+      target: /dspace/migration_data
+      read_only: true
     # Keep CLI validation consistent with the REST backend submission form.
     - ./backend/config/submission-forms.xml:/dspace/config/submission-forms.xml:ro
 

@@ -123,9 +123,11 @@ alcançar o servidor DSpace. O domínio público já está configurado em
 container. Ajuste o limite de upload e os tempos limite tanto no proxy geral
 quanto em `proxy/nginx.conf` ao perfil do acervo.
 
-Crie previamente o diretório `DSPACE_SAF_HOST_DIR` e forneça o arquivo
-GeoLite2 City em `GEOLITE2_CITY_DB_PATH`; os binds de produção não criam
-esses caminhos automaticamente. Configure o servidor SMTP acessível em
+Crie previamente os diretórios `DSPACE_SAF_HOST_DIR` e
+`DSPACE_MIGRATION_HOST_DIR` e forneça o arquivo GeoLite2 City em
+`GEOLITE2_CITY_DB_PATH`; os binds de produção não criam esses caminhos
+automaticamente. Os arquivos de migração ficam disponíveis somente para
+leitura em `/dspace/migration_data` no backend e na CLI. Configure o servidor SMTP acessível em
 `DSPACE_MAIL_SERVER`, o remetente em `DSPACE_MAIL_FROM` e o contato em
 `DSPACE_ADMIN_EMAIL`. Caso seu SMTP exija porta, TLS ou autenticação, defina
 as propriedades `mail.*` correspondentes do DSpace no ambiente do serviço
@@ -289,8 +291,9 @@ pois esse arquivo conecta seus containers à rede e ao volume criados acima.
 
 O serviço REST monta `../saf_bundle` por padrão e reutiliza `SAF_BUNDLE_DIR` se
 ela estiver definida. `DSPACE_SAF_HOST_DIR` permite sobrescrever somente o
-mount; nesse caso, seu caminho deve identificar o mesmo diretório usado pela
-migração.
+mount SAF. `DSPACE_MIGRATION_HOST_DIR` define separadamente o diretório de
+entrada da migração, montado como `/dspace/migration_data` no backend e na CLI
+em modo somente leitura.
 
 ## Configuração do backend
 
