@@ -1,0 +1,28 @@
+# Apply after docker-compose-dist.yml and docker-compose-rest.yml.
+# Required variables make production fail during `docker compose config` if
+# public URLs, contact details, or the database password were not supplied.
+services:
+  dspace:
+    environment:
+      dspace__P__server__P__url: ${DSPACE_SERVER_URL:?Defina DSPACE_SERVER_URL com a URL HTTPS publica da API}
+      dspace__P__ui__P__url: ${DSPACE_UI_URL:?Defina DSPACE_UI_URL com a URL HTTPS publica da interface}
+      mail__P__admin: ${DSPACE_ADMIN_EMAIL:?Defina DSPACE_ADMIN_EMAIL}
+      mail__P__server: ${DSPACE_MAIL_SERVER:?Defina DSPACE_MAIL_SERVER}
+      mail__P__from__P__address: ${DSPACE_MAIL_FROM:?Defina DSPACE_MAIL_FROM}
+    volumes:
+      - type: bind
+        source: ${DSPACE_SAF_HOST_DIR:?Defina DSPACE_SAF_HOST_DIR para o diretorio SAF existente}
+        target: /dspace/saf_bundle
+        read_only: true
+        bind:
+          create_host_path: false
+  dspace-angular:
+    environment:
+      # TLS terminates at the host reverse proxy. Node continues to listen on
+      # plain HTTP inside the host and Docker network.
+      DSPACE_UI_SSL: "false"
+      DSPACE_UI_BASEURL: ${DSPACE_UI_URL:?Defina DSPACE_UI_URL}
+      DSPACE_REST_SSL: "true"
+      DSPACE_REST_HOST: ${DSPACE_REST_HOST:?Defina DSPACE_REST_HOST com o hostname publico da API}
+      DSPACE_REST_PORT: "443"
+      DSPACE_REST_NAMESPACE: /server
