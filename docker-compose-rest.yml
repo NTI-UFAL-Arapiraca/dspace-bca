@@ -78,11 +78,6 @@ services:
     # DSPACE_SAF_HOST_DIR permite sobrescrever o mount; se ausente, reutiliza
     # SAF_BUNDLE_DIR. Sem nenhuma das variáveis, usa saf_bundle/ na raiz.
     - ${DSPACE_SAF_HOST_DIR:-${SAF_BUNDLE_DIR:-../saf_bundle}}:/dspace/saf_bundle
-    # Input files for future migrations, read-only to the DSpace service.
-    - type: bind
-      source: ${DSPACE_MIGRATION_HOST_DIR:-../migration_data}
-      target: /dspace/migration_data
-      read_only: true
     # Submission form override maintained by this project. It allows one
     # abstract per language instead of replacing the previous value.
     - ./backend/config/submission-forms.xml:/dspace/config/submission-forms.xml:ro

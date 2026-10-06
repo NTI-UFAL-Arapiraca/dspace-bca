@@ -18,12 +18,6 @@ services:
         read_only: true
         bind:
           create_host_path: false
-      - type: bind
-        source: ${DSPACE_MIGRATION_HOST_DIR:?Defina DSPACE_MIGRATION_HOST_DIR para o diretorio com os dados de migracao}
-        target: /dspace/migration_data
-        read_only: true
-        bind:
-          create_host_path: false
   dspace-angular:
     # Production consumes the image published by .github/workflows/deploy.yml.
     # Remove the build inherited from docker-compose-dist.yml.
