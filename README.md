@@ -7,7 +7,7 @@ Este diretório contém os arquivos usados para executar o DSpace da biblioteca:
 | `docker-compose-rest.yml` | Backend DSpace, PostgreSQL, Solr, volumes persistentes e montagem do pacote SAF. |
 | `docker-compose-dist.yml` | Build e execução da interface DSpace Angular customizada. |
 | `docker-compose-prod.yml` | Valores obrigatórios e configuração da implantação de produção. |
-| `proxy/nginx.conf` | Proxy HTTP/HTTPS interno que roteia `/dspace` e `/dspace-api`. |
+| `proxy/nginx.conf` | Proxy HTTP interno que roteia `/dspace` e `/dspace-api`. |
 | `docker-compose-local.yml` | Publicação opcional de portas apenas para uso local. |
 | `.env.production.example` | Modelo das variáveis exigidas em produção, sem credenciais reais. |
 | `Dockerfile.angular` | Compila o tema local sobre o código-fonte da versão oficial. |
@@ -26,18 +26,14 @@ Mantenha o arquivo fora do controle de versão e restrinja sua leitura no host
 (`chmod 600 .env`). O mesmo valor é passado ao PostgreSQL, ao backend e à CLI.
 
 O serviço `dspace-proxy` deste projeto compartilha a rede `dspacenet` com
-backend e frontend. Ele é o único serviço do projeto que publica portas:
-HTTP em `127.0.0.1:8088` e HTTPS em `127.0.0.1:8443` por padrão. Dentro do
-container, o Nginx escuta nas portas 80 e 443. As portas públicas 80/443
-continuam sob controle do proxy geral do servidor, que encaminha `/dspace`
-e `/dspace-api` para um desses listeners locais. Os containers DSpace,
-PostgreSQL e Solr não publicam portas.
-
-Defina `DSPACE_PROXY_TLS_CERT_PATH` e `DSPACE_PROXY_TLS_KEY_PATH` com os
-caminhos de arquivos PEM existentes no host. O certificado deve cobrir o
-hostname público e ser confiável para o proxy geral. Os arquivos são montados
-somente para leitura; o Nginx não sobe sem eles. Após renovar o certificado,
-recrie `dspace-proxy` para carregar os arquivos novamente.
+backend e frontend. Ele é o único serviço do projeto que publica uma porta:
+HTTP na porta **80 do servidor DSpace**. O proxy reverso geral, externo a este
+servidor, recebe HTTP e HTTPS públicos e encerra o TLS. Ele encaminha as
+requisições já decifradas para a porta 80 do `dspace-proxy`.
+Portanto, certificados e a porta 443 pertencem exclusivamente ao proxy geral.
+Os containers DSpace, PostgreSQL e Solr não publicam portas.
+A porta 80 do servidor DSpace precisa estar livre e o firewall deve permitir
+acesso a ela somente a partir do proxy geral.
 
 A imagem do proxy interno está fixada em `nginx:1.30.5-alpine3.24` e no digest
 correspondente, para que um `pull` posterior não troque os bytes da imagem sem
@@ -51,33 +47,62 @@ O roteamento já está implementado em `proxy/nginx.conf`:
 | `/dspace/` | `dspace-angular:4000` | Preserva `/dspace/` |
 | `/dspace-api/` | `dspace:8080` | Troca `/dspace-api/` por `/server/` |
 
-O proxy geral pode encaminhar esses prefixos via HTTP para
-`http://127.0.0.1:8088` ou via TLS para `https://127.0.0.1:8443`, mantendo
+O proxy geral encaminha esses prefixos para o nome interno do servidor DSpace,
+por exemplo `http://dspace-host.interno.example.org:80`, mantendo
 o caminho original, o cabeçalho `Host` e os cabeçalhos `X-Forwarded-Proto`,
-`X-Forwarded-Host` e `X-Forwarded-For`. Na opção TLS, habilite SNI com o
-hostname coberto pelo certificado e valide a cadeia de confiança. O proxy
-interno preserva o protocolo público ao falar com Angular e DSpace. Use
-esses prefixos antes de qualquer rota genérica do proxy geral.
+`X-Forwarded-Host` e `X-Forwarded-For`. Para uma requisição HTTPS pública,
+ele informa `X-Forwarded-Proto: https`. O proxy interno preserva esse valor
+ao falar com Angular e DSpace. Use esses prefixos antes de qualquer rota
+genérica do proxy geral.
 
-`DSPACE_PUBLIC_ORIGIN` é o esquema e hostname HTTPS, sem caminho. Defina
-`DSPACE_UI_URL` como essa origem seguida de `/dspace` e
-`DSPACE_SERVER_URL` como a mesma origem seguida de `/dspace-api`, ambas sem
-barra final. `DSPACE_REST_HOST` contém apenas o hostname. O backend usa
-`DSPACE_PUBLIC_ORIGIN` para CORS porque o cabeçalho `Origin` do navegador não
-inclui `/dspace`. O intervalo `172.23.0` já configurado no backend apenas
-permite confiar no IP real do visitante repassado pelos containers da própria
-rede DSpace; não precisa ser alterado para apontar o domínio público. Verifique
-somente se a sub-rede fixa `172.23.0.0/16` não conflita com as redes do host.
+### Qual endereço vai em cada variável
 
-Exemplo de integração via TLS no proxy geral Nginx do servidor:
+**Endereço público** é o que aparece no navegador, mesmo quando o DNS só
+funciona na rede interna. Suponha que, nesta fase, os usuários acessem
+`https://repo.interno.example.org`:
+
+| Variável do `.env` | Valor nesta fase | Uso |
+| --- | --- | --- |
+| `DSPACE_PUBLIC_ORIGIN` | `https://repo.interno.example.org` | Origem autorizada no CORS da API, sem caminho. |
+| `DSPACE_UI_URL` | `https://repo.interno.example.org/dspace` | URL da interface exibida ao usuário e usada em links, e-mails e sitemaps. |
+| `DSPACE_SERVER_URL` | `https://repo.interno.example.org/dspace-api` | URL pública da API e do OAI-PMH. |
+| `DSPACE_REST_HOST` | `repo.interno.example.org` | Hostname da API no navegador, sem `https://` nem caminho. |
+
+Essas URLs não devem terminar em `/`. O proxy geral encaminha os caminhos
+`/dspace` e `/dspace-api` para **outro nome**, que identifica a máquina DSpace
+na rede entre servidores: `http://dspace-host.interno.example.org:80` no
+exemplo. Esse destino é configurado somente no proxy geral; não pertence ao
+`.env` do DSpace. Não use como destino o próprio nome que resolve para o
+proxy geral, para evitar um ciclo de encaminhamento.
+
+Quando `https://repo.example.org` passar a ser o endereço visto pelos usuários,
+troque o hostname nas quatro variáveis acima, ajuste o DNS e o host virtual do
+proxy geral, recrie os containers `dspace` e `dspace-angular` e gere novamente
+os sitemaps. O destino interno do proxy geral continua apontando para a mesma
+máquina DSpace. Planeje a mudança de URLs de OAI-PMH e links já divulgados.
+
+O exemplo pressupõe HTTPS entre o navegador e o proxy geral. O Compose de
+produção configura o frontend para usar a API em HTTPS na porta 443; se o
+endereço interno acessível aos usuários oferecer somente HTTP, ajuste essas
+opções e as quatro URLs antes de iniciar essa fase. A comunicação do proxy
+geral com o `dspace-proxy` continua HTTP na porta 80.
+
+`DSPACE_PUBLIC_ORIGIN` é usado no CORS porque o cabeçalho `Origin` do
+navegador não inclui `/dspace`. A sub-rede Docker `172.23.0.0/24` fornece IPs
+internos aos containers da aplicação; o prefixo `172.23.0` no backend permite
+confiar no IP real do visitante repassado pelo proxy e pelo frontend nessa rede.
+Esse prefixo não é um domínio público. Confira se a sub-rede não conflita com
+outras redes Docker, do host ou da VPN. Se precisar trocá-la, ajuste também
+`proxies__P__trusted__P__ipranges` para os três primeiros números da nova faixa.
+Se já existir uma rede `d10_dspacenet` criada com a faixa antiga `/16`, planeje
+uma parada para recriá-la com `/24`; o Docker não altera a faixa de uma rede
+existente. Preserve os volumes de dados ao fazer essa operação.
+
+Exemplo de integração no Nginx do proxy geral externo:
 
 ```nginx
 location ~ ^/(dspace|dspace-api)(/|$) {
-    proxy_pass https://127.0.0.1:8443;
-    proxy_ssl_server_name on;
-    proxy_ssl_name repositorio.example.edu.br;
-    proxy_ssl_verify on;
-    proxy_ssl_trusted_certificate /etc/ssl/certs/ca-certificates.crt;
+    proxy_pass http://dspace-host.interno.example.org:80;
     client_max_body_size 2g;
     proxy_read_timeout 300s;
     proxy_send_timeout 300s;
@@ -90,14 +115,12 @@ location ~ ^/(dspace|dspace-api)(/|$) {
 
 Esse bloco deve ficar no host virtual da instituição. Sem barra final em
 `proxy_pass`, o Nginx geral preserva o caminho para o proxy deste projeto.
-Substitua o hostname ilustrativo e configure o arquivo CA adequado ao
-certificado institucional. Para usar HTTP entre os dois proxies, troque
-apenas `proxy_pass` por `http://127.0.0.1:8088` e remova as diretivas
-`proxy_ssl_*`.
-Se o proxy geral roda em outro container, seu destino deve ser uma conexão
-privada com o host que aceite essa porta; o binding padrão em loopback atende
-quando ele roda no host. Ajuste o limite de upload e os tempos limite tanto
-no proxy geral quanto em `proxy/nginx.conf` ao perfil do acervo.
+Substitua o nome interno ilustrativo pelo DNS que o proxy geral usa para
+alcançar o servidor DSpace. O domínio público já está configurado em
+`DSPACE_PUBLIC_ORIGIN`, `DSPACE_UI_URL`, `DSPACE_SERVER_URL` e
+`DSPACE_REST_HOST`; ele não precisa ser usado como endereço de bind do
+container. Ajuste o limite de upload e os tempos limite tanto no proxy geral
+quanto em `proxy/nginx.conf` ao perfil do acervo.
 
 Crie previamente o diretório `DSPACE_SAF_HOST_DIR` e forneça o arquivo
 GeoLite2 City em `GEOLITE2_CITY_DB_PATH`; os binds de produção não criam
@@ -122,16 +145,16 @@ docker compose --env-file .env -p d10 -f docker-compose-dist.yml \
   -f docker-compose-rest.yml -f docker-compose-prod.yml up -d
 ```
 
-Teste o listener TLS do proxy interno antes de liberar a rota no proxy geral
-(substitua o hostname e a porta, se alterada):
+Teste o roteamento interno antes de liberar o acesso público:
 
 ```bash
-curl --fail --resolve repositorio.example.edu.br:8443:127.0.0.1 \
-  https://repositorio.example.edu.br:8443/dspace-api/api
+curl --fail -H 'Host: repo.interno.example.org' \
+  -H 'X-Forwarded-Proto: https' \
+  http://localhost:80/dspace-api/api
 ```
 
-Esse teste verifica o handshake, o nome do certificado e a rota da API. Se a
-instituição usa uma CA privada, adicione `--cacert /caminho/ca.pem`.
+Depois, teste a URL HTTPS pública. O handshake TLS é responsabilidade do
+proxy geral; o teste local acima verifica apenas o roteamento deste projeto.
 
 `config --quiet` valida a composição e a presença das variáveis exigidas; use
 o arquivo de produção em **todos** os comandos de subida e recriação. Após a
@@ -174,14 +197,14 @@ O módulo OAI-PMH está explicitamente habilitado no backend e usa o mesmo
 container da API REST. Em produção, o endpoint público é:
 
 ```text
-https://repositorio.example.edu.br/dspace-api/oai/request
+https://repo.interno.example.org/dspace-api/oai/request
 ```
 
 Valide o protocolo com o verbo `Identify`:
 
 ```bash
 curl --fail \
-  'https://repositorio.example.edu.br/dspace-api/oai/request?verb=Identify'
+  'https://repo.interno.example.org/dspace-api/oai/request?verb=Identify'
 ```
 
 Depois de uma importação inicial ou reconstrução completa do acervo, popule o
@@ -225,9 +248,9 @@ configuração local mantém `transferState` e a substituição da URL REST ativ
 Valide o ambiente público iniciado com:
 
 ```bash
-curl --fail https://repositorio.example.edu.br/dspace/robots.txt
-curl --fail https://repositorio.example.edu.br/dspace/sitemap_index.xml
-curl --fail https://repositorio.example.edu.br/dspace/sitemap_index.html
+curl --fail https://repo.interno.example.org/dspace/robots.txt
+curl --fail https://repo.interno.example.org/dspace/sitemap_index.xml
+curl --fail https://repo.interno.example.org/dspace/sitemap_index.html
 ```
 
 Substitua o domínio ilustrativo pelo real e confira se os links gerados contêm

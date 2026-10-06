@@ -1,0 +1,12 @@
+# Optional local-only access to the UI and API, never use in production.
+services:
+  dspace:
+    ports:
+      - host_ip: 127.0.0.1
+        published: 8080
+        target: 8080
+  dspace-angular:
+    ports:
+      - host_ip: 127.0.0.1
+        published: 4000
+        target: 4000

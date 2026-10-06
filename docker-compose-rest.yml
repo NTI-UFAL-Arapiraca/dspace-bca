@@ -2,12 +2,10 @@ networks:
   dspacenet:
     ipam:
       config:
-        # Define a custom subnet for our DSpace network, so that we can easily trust requests from host to container.
-        # If you customize this value, be sure to customize the 'proxies.trusted.ipranges' env variable below.
-        - subnet: 172.23.0.0/16
-    # Explicitly set external=false because this script creates the network.
-    # NOTE: Because of how compose files are merged, this script should be specified LAST when passed
-    # to "docker compose" for the network to be created properly.
+        # Keep this subnet aligned with the DSpace trusted proxy prefix below.
+        # Change both if this range overlaps a Docker, VPN or host network.
+        - subnet: 172.23.0.0/24
+    # Compose creates this network as part of the project.
     external: false
 services:
   # DSpace (backend) webapp container
@@ -55,8 +53,8 @@ services:
       solr__P__server: ${solr__P__server:-http://dspacesolr:8983/solr}
       # matomo.tracker.url: Ensure we are using the 'matomo' image for Matomo
       matomo__P__tracker__P__url: ${matomo__P__tracker__P__url:-http://matomo}
-      # proxies.trusted.ipranges: This setting is required for a REST API running in Docker to trust requests
-      # from the host machine. This IP range MUST correspond to the 'dspacenet' subnet defined above.
+      # Trust the internal proxy and Angular containers on dspacenet (172.23.0.*).
+      # DSpace interprets this three-octet prefix as an IP range, not CIDR.
       proxies__P__trusted__P__ipranges: ${proxies__P__trusted__P__ipranges:-172.23.0}
       LOGGING_CONFIG: ${LOGGING_CONFIG:-/dspace/config/log4j2-container.xml}
       # Oculta dc.description.provenance do público (notas internas de restrição/embargo).
@@ -72,10 +70,6 @@ services:
     stop_grace_period: 60s
     networks:
       - dspacenet
-    ports:
-    - host_ip: 127.0.0.1
-      published: 8080
-      target: 8080
     volumes:
     # Keep DSpace assetstore directory between reboots
     - assetstore:/dspace/assetstore

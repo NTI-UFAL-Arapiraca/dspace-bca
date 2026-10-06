@@ -6,6 +6,8 @@ services:
     environment:
       dspace__P__server__P__url: ${DSPACE_SERVER_URL:?Defina DSPACE_SERVER_URL com a URL HTTPS publica da API}
       dspace__P__ui__P__url: ${DSPACE_UI_URL:?Defina DSPACE_UI_URL com a URL HTTPS publica da interface}
+      # Browser Origin excludes /dspace, even though dspace.ui.url includes it.
+      rest__P__cors__P__allowed__D__origins: ${DSPACE_PUBLIC_ORIGIN:?Defina DSPACE_PUBLIC_ORIGIN sem caminho}
       mail__P__admin: ${DSPACE_ADMIN_EMAIL:?Defina DSPACE_ADMIN_EMAIL}
       mail__P__server: ${DSPACE_MAIL_SERVER:?Defina DSPACE_MAIL_SERVER}
       mail__P__from__P__address: ${DSPACE_MAIL_FROM:?Defina DSPACE_MAIL_FROM}
@@ -18,11 +20,34 @@ services:
           create_host_path: false
   dspace-angular:
     environment:
-      # TLS terminates at the host reverse proxy. Node continues to listen on
-      # plain HTTP inside the host and Docker network.
+      # TLS terminates at the server's general proxy. Node listens on HTTP
+      # inside the DSpace network, without publishing a host port.
       DSPACE_UI_SSL: "false"
+      DSPACE_UI_HOST: 0.0.0.0
+      DSPACE_UI_NAMESPACE: /dspace
       DSPACE_UI_BASEURL: ${DSPACE_UI_URL:?Defina DSPACE_UI_URL}
       DSPACE_REST_SSL: "true"
       DSPACE_REST_HOST: ${DSPACE_REST_HOST:?Defina DSPACE_REST_HOST com o hostname publico da API}
       DSPACE_REST_PORT: "443"
-      DSPACE_REST_NAMESPACE: /server
+      DSPACE_REST_NAMESPACE: /dspace-api
+  dspace-proxy:
+    image: docker.io/library/nginx:1.30.5-alpine3.24@sha256:0985e772fb9f729e6fa0980da05fca5d9c468e870eed43071545afa9d2e27d94
+    restart: unless-stopped
+    depends_on:
+      dspace:
+        condition: service_started
+      dspace-angular:
+        condition: service_started
+    networks:
+      - dspacenet
+    ports:
+      # The external TLS proxy reaches this server on its standard HTTP port.
+      - published: 80
+        target: 80
+    volumes:
+      - ./proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

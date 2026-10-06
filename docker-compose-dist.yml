@@ -32,9 +32,5 @@ services:
         condition: service_started
     restart: unless-stopped
     stop_grace_period: 60s
-    ports:
-    - host_ip: 127.0.0.1
-      published: 4000
-      target: 4000
     volumes:
     - ./frontend/config/config.prod.yml:/app/config/local/config.prod.yml:ro
