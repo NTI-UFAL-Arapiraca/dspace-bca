@@ -82,11 +82,26 @@ proxy geral, recrie os containers `dspace` e `dspace-angular` e gere novamente
 os sitemaps. O destino interno do proxy geral continua apontando para a mesma
 máquina DSpace. Planeje a mudança de URLs de OAI-PMH e links já divulgados.
 
-O exemplo pressupõe HTTPS entre o navegador e o proxy geral. O Compose de
-produção configura o frontend para usar a API em HTTPS na porta 443; se o
-endereço interno acessível aos usuários oferecer somente HTTP, ajuste essas
-opções e as quatro URLs antes de iniciar essa fase. A comunicação do proxy
-geral com o `dspace-proxy` continua HTTP na porta 80.
+O exemplo pressupõe HTTPS entre o navegador e o proxy geral, com
+`DSPACE_REST_SSL=true` e `DSPACE_REST_PORT=443` no `.env`. Se o endereço
+acessível aos usuários oferecer somente HTTP nesta fase, configure:
+
+```dotenv
+DSPACE_PUBLIC_ORIGIN=http://repo.interno.example.org
+DSPACE_UI_URL=http://repo.interno.example.org/dspace
+DSPACE_SERVER_URL=http://repo.interno.example.org/dspace-api
+DSPACE_REST_HOST=repo.interno.example.org
+DSPACE_REST_SSL=false
+DSPACE_REST_PORT=80
+```
+
+Depois de alterar esses valores, recrie `dspace` e `dspace-angular` usando os
+três arquivos Compose de produção. Alterar somente o `.env` não atualiza
+containers existentes. Quando o proxy geral passar a oferecer HTTPS, mude as
+três URLs para `https://`, `DSPACE_REST_SSL` para `true` e `DSPACE_REST_PORT`
+para `443`, e recrie os mesmos serviços. Essas opções descrevem a conexão do
+navegador com a API; a comunicação do proxy geral com o `dspace-proxy`
+continua HTTP na porta 80, inclusive depois da ativação do TLS.
 
 `DSPACE_PUBLIC_ORIGIN` é usado no CORS porque o cabeçalho `Origin` do
 navegador não inclui `/dspace`. A sub-rede Docker `172.23.0.0/24` fornece IPs

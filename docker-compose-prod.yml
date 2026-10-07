@@ -4,8 +4,8 @@
 services:
   dspace:
     environment:
-      dspace__P__server__P__url: ${DSPACE_SERVER_URL:?Defina DSPACE_SERVER_URL com a URL HTTPS publica da API}
-      dspace__P__ui__P__url: ${DSPACE_UI_URL:?Defina DSPACE_UI_URL com a URL HTTPS publica da interface}
+      dspace__P__server__P__url: ${DSPACE_SERVER_URL:?Defina DSPACE_SERVER_URL com a URL publica da API}
+      dspace__P__ui__P__url: ${DSPACE_UI_URL:?Defina DSPACE_UI_URL com a URL publica da interface}
       # Browser Origin excludes /dspace, even though dspace.ui.url includes it.
       rest__P__cors__P__allowed__D__origins: ${DSPACE_PUBLIC_ORIGIN:?Defina DSPACE_PUBLIC_ORIGIN sem caminho}
       mail__P__admin: ${DSPACE_ADMIN_EMAIL:?Defina DSPACE_ADMIN_EMAIL}
@@ -30,9 +30,10 @@ services:
       DSPACE_UI_HOST: 0.0.0.0
       DSPACE_UI_NAMESPACE: /dspace
       DSPACE_UI_BASEURL: ${DSPACE_UI_URL:?Defina DSPACE_UI_URL}
-      DSPACE_REST_SSL: "true"
+      # Match the browser-facing protocol, independently of internal HTTP.
+      DSPACE_REST_SSL: "${DSPACE_REST_SSL:-true}"
       DSPACE_REST_HOST: ${DSPACE_REST_HOST:?Defina DSPACE_REST_HOST com o hostname publico da API}
-      DSPACE_REST_PORT: "443"
+      DSPACE_REST_PORT: "${DSPACE_REST_PORT:-443}"
       DSPACE_REST_NAMESPACE: /dspace-api
   dspace-proxy:
     image: docker.io/library/nginx:1.30.5-alpine3.24@sha256:0985e772fb9f729e6fa0980da05fca5d9c468e870eed43071545afa9d2e27d94
