@@ -6,6 +6,11 @@
 # browser's Accept-Language header; an explicit selection remains persisted.
 fallbackLanguage: pt-BR
 
+# Do not require users to accept the end user agreement during registration
+# or when accessing the repository.
+info:
+  enableEndUserAgreement: false
+
 # Production is served by the official *-dist SSR runtime. Keep server state
 # transfer and public/internal REST URL replacement enabled for indexable HTML.
 ssr:
