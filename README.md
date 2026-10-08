@@ -7,7 +7,7 @@ Este diretório contém os arquivos usados para executar o DSpace da biblioteca:
 | `docker-compose-rest.yml` | Backend DSpace, PostgreSQL, Solr, volumes persistentes e montagem do pacote SAF. |
 | `docker-compose-dist.yml` | Build e execução da interface DSpace Angular customizada. |
 | `docker-compose-prod.yml` | Valores obrigatórios e configuração da implantação de produção. |
-| `proxy/nginx.conf` | Proxy HTTP interno que roteia `/dspace` e `/dspace-api`. |
+| `proxy/nginx.conf` | Proxy HTTP interno que roteia `/dspace` e `/dspace-server`. |
 | `docker-compose-local.yml` | Publicação opcional de portas apenas para uso local. |
 | `.env.production.example` | Modelo das variáveis exigidas em produção, sem credenciais reais. |
 | `Dockerfile.angular` | Compila o tema local sobre o código-fonte da versão oficial. |
@@ -46,7 +46,10 @@ O roteamento já está implementado em `proxy/nginx.conf`:
 | Caminho público | Destino interno | Tratamento |
 | --- | --- | --- |
 | `/dspace/` | `dspace-angular:4000` | Preserva `/dspace/` |
-| `/dspace-api/` | `dspace:8080` | Troca `/dspace-api/` por `/server/` |
+| `/dspace-server/` | `dspace:8080` | Troca `/dspace-server/` por `/server/` |
+
+O prefixo `/dspace-server/` atende os serviços do backend: a API REST fica em
+`/dspace-server/api` e o OAI-PMH em `/dspace-server/oai/request`.
 
 O proxy geral encaminha esses prefixos para o nome interno do servidor DSpace,
 por exemplo `http://dspace-host.interno.example.org:80`, mantendo
@@ -55,6 +58,11 @@ o caminho original, o cabeçalho `Host` e os cabeçalhos `X-Forwarded-Proto`,
 ele informa `X-Forwarded-Proto: https`. O proxy interno preserva esse valor
 ao falar com Angular e DSpace. Use esses prefixos antes de qualquer rota
 genérica do proxy geral.
+
+Ao migrar de `/dspace-api` para `/dspace-server`, atualize também o prefixo
+no proxy geral e `DSPACE_SERVER_URL` no `.env` privado. Recrie os serviços
+`dspace`, `dspace-angular` e `dspace-proxy` com os três arquivos Compose de
+produção. Atualize integrações e coletores OAI-PMH que usam o endereço antigo.
 
 ### Qual endereço vai em cada variável
 
@@ -66,11 +74,11 @@ funciona na rede interna. Suponha que, nesta fase, os usuários acessem
 | --- | --- | --- |
 | `DSPACE_PUBLIC_ORIGIN` | `https://repo.interno.example.org` | Origem autorizada no CORS da API, sem caminho. |
 | `DSPACE_UI_URL` | `https://repo.interno.example.org/dspace` | URL da interface exibida ao usuário e usada em links, e-mails e sitemaps. |
-| `DSPACE_SERVER_URL` | `https://repo.interno.example.org/dspace-api` | URL pública da API e do OAI-PMH. |
+| `DSPACE_SERVER_URL` | `https://repo.interno.example.org/dspace-server` | URL pública do backend, incluindo API e OAI-PMH. |
 | `DSPACE_REST_HOST` | `repo.interno.example.org` | Hostname da API no navegador, sem `https://` nem caminho. |
 
 Essas URLs não devem terminar em `/`. O proxy geral encaminha os caminhos
-`/dspace` e `/dspace-api` para **outro nome**, que identifica a máquina DSpace
+`/dspace` e `/dspace-server` para **outro nome**, que identifica a máquina DSpace
 na rede entre servidores: `http://dspace-host.interno.example.org:80` no
 exemplo. Esse destino é configurado somente no proxy geral; não pertence ao
 `.env` do DSpace. Não use como destino o próprio nome que resolve para o
@@ -89,7 +97,7 @@ acessível aos usuários oferecer somente HTTP nesta fase, configure:
 ```dotenv
 DSPACE_PUBLIC_ORIGIN=http://repo.interno.example.org
 DSPACE_UI_URL=http://repo.interno.example.org/dspace
-DSPACE_SERVER_URL=http://repo.interno.example.org/dspace-api
+DSPACE_SERVER_URL=http://repo.interno.example.org/dspace-server
 DSPACE_REST_HOST=repo.interno.example.org
 DSPACE_REST_SSL=false
 DSPACE_REST_PORT=80
@@ -117,7 +125,7 @@ existente. Preserve os volumes de dados ao fazer essa operação.
 Exemplo de integração no Nginx do proxy geral externo:
 
 ```nginx
-location ~ ^/(dspace|dspace-api)(/|$) {
+location ~ ^/(dspace|dspace-server)(/|$) {
     proxy_pass http://dspace-host.interno.example.org:80;
     client_max_body_size 2g;
     proxy_read_timeout 300s;
@@ -163,7 +171,7 @@ Teste o roteamento interno antes de liberar o acesso público:
 ```bash
 curl --fail -H 'Host: repo.interno.example.org' \
   -H 'X-Forwarded-Proto: https' \
-  http://localhost:80/dspace-api/api
+  http://localhost:80/dspace-server/api
 ```
 
 Depois, teste a URL HTTPS pública. O handshake TLS é responsabilidade do
@@ -172,8 +180,8 @@ proxy geral; o teste local acima verifica apenas o roteamento deste projeto.
 `config --quiet` valida a composição e a presença das variáveis exigidas; use
 o arquivo de produção em **todos** os comandos de subida e recriação. Após a
 subida, confira `docker compose ... ps`, os logs dos serviços e as URLs HTTPS
-públicas da interface (`/dspace/`), API (`/dspace-api/api`), OAI-PMH
-(`/dspace-api/oai/request?verb=Identify`) e `/dspace/sitemap_index.xml`.
+públicas da interface (`/dspace/`), API (`/dspace-server/api`), OAI-PMH
+(`/dspace-server/oai/request?verb=Identify`) e `/dspace/sitemap_index.xml`.
 Verifique também `/dspace/robots.txt` e faça um teste de login, upload de
 arquivo e envio de e-mail.
 Um `config --quiet` bem-sucedido não verifica DNS, certificado, proxy, SMTP ou
@@ -214,14 +222,14 @@ O módulo OAI-PMH está explicitamente habilitado no backend e usa o mesmo
 container da API REST. Em produção, o endpoint público é:
 
 ```text
-https://repo.interno.example.org/dspace-api/oai/request
+https://repo.interno.example.org/dspace-server/oai/request
 ```
 
 Valide o protocolo com o verbo `Identify`:
 
 ```bash
 curl --fail \
-  'https://repo.interno.example.org/dspace-api/oai/request?verb=Identify'
+  'https://repo.interno.example.org/dspace-server/oai/request?verb=Identify'
 ```
 
 Depois de uma importação inicial ou reconstrução completa do acervo, popule o
