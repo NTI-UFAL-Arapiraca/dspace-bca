@@ -1,3 +1,5 @@
 .env
 .env.*
+saf_bundle/
 !.env.production.example
+!.env.development.example

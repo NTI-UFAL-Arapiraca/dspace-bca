@@ -1,0 +1,24 @@
+ARG DSPACE_ANGULAR_TAG=dspace-10.1
+FROM docker.io/dspace/dspace-angular:${DSPACE_ANGULAR_TAG}
+
+WORKDIR /app
+
+# Apply the same source patches as the production build before ng serve starts.
+COPY frontend/patches/apply-default-anonymous-language.mjs \
+    /tmp/apply-default-anonymous-language.mjs
+RUN node /tmp/apply-default-anonymous-language.mjs \
+    /app/src/app/core/locale/locale.service.ts
+
+COPY frontend/overrides/edit-item-all-languages.resolver.ts \
+    /app/src/app/item-page/edit-item-page/edit-item-all-languages.resolver.ts
+COPY frontend/patches/apply-item-all-languages.mjs /tmp/apply-item-all-languages.mjs
+RUN node /tmp/apply-item-all-languages.mjs \
+    /app/src/app/core/data/item-data.service.ts \
+    /app/src/app/item-page/edit-item-page/edit-item-page-routes.ts
+
+COPY frontend/overrides/robots.txt.ejs /app/src/robots.txt.ejs
+COPY frontend/dev/live-theme.mjs /app/dev/live-theme.mjs
+
+# The official source image starts npm serve. The local entrypoint first copies
+# changed theme files into that source tree, then starts the watcher.
+ENTRYPOINT ["node", "/app/dev/live-theme.mjs"]

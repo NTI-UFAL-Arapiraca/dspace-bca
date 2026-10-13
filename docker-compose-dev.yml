@@ -1,0 +1,61 @@
+# Local Angular development. Apply after docker-compose-rest.yml with an
+# isolated project name so its database and assetstore stay separate.
+services:
+  dspace:
+    container_name: d10dev-dspace
+    environment:
+      dspace__P__server__P__url: http://localhost:8080/server
+      dspace__P__ui__P__url: http://localhost:4000
+      rest__P__cors__P__allowed__D__origins: http://localhost:4000
+      MANAGEMENT_HEALTH_SEO_ENABLED: "false"
+      proxies__P__trusted__P__ipranges: 172.27.0
+    ports:
+      - host_ip: 127.0.0.1
+        published: 8080
+        target: 8080
+
+  dspace-angular:
+    container_name: d10dev-dspace-angular
+    build:
+      context: .
+      dockerfile: Dockerfile.angular.dev
+      args:
+        DSPACE_ANGULAR_TAG: dspace-10.1
+    image: dspace-bca-angular-dev:dspace-10.1
+    environment:
+      NODE_ENV: development
+      DSPACE_APP_CONFIG_PATH: /app/config/local/config.prod.yml
+      DSPACE_UI_SSL: "false"
+      DSPACE_UI_HOST: 0.0.0.0
+      DSPACE_UI_PORT: "4000"
+      DSPACE_UI_NAMESPACE: /
+      DSPACE_UI_BASEURL: http://localhost:4000
+      DSPACE_REST_SSL: "false"
+      DSPACE_REST_HOST: localhost
+      DSPACE_REST_PORT: "8080"
+      DSPACE_REST_NAMESPACE: /server
+      NODE_OPTIONS: --max_old_space_size=4096
+    depends_on:
+      dspace:
+        condition: service_started
+    networks:
+      - dspacenet
+    ports:
+      - host_ip: 127.0.0.1
+        published: 4000
+        target: 4000
+    volumes:
+      - ./frontend/themes:/workspace/frontend/themes:ro
+      - ./frontend/config/config.prod.yml:/app/config/local/config.prod.yml:ro
+
+  dspacedb:
+    container_name: d10dev-dspacedb
+
+  dspacesolr:
+    container_name: d10dev-dspacesolr
+
+networks:
+  dspacenet:
+    ipam:
+      config: !override
+        - subnet: 172.27.0.0/24

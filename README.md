@@ -9,13 +9,54 @@ Este diretório contém os arquivos usados para executar o DSpace da biblioteca:
 | `docker-compose-prod.yml` | Valores obrigatórios e configuração da implantação de produção. |
 | `proxy/nginx.conf` | Proxy HTTP interno que roteia `/dspace` e `/dspace-server`. |
 | `docker-compose-local.yml` | Publicação opcional de portas apenas para uso local. |
+| `docker-compose-dev.yml` | Angular com atualização automática do tema e backend local isolado. |
 | `.env.production.example` | Modelo das variáveis exigidas em produção, sem credenciais reais. |
+| `.env.development.example` | Modelo das variáveis para o ambiente local isolado. |
 | `Dockerfile.angular` | Compila o tema local sobre o código-fonte da versão oficial. |
+| `Dockerfile.angular.dev` | Inicia o servidor de desenvolvimento da versão oficial com os patches locais. |
 | `.github/workflows/deploy.yml` | Compila e publica a imagem Angular customizada no GHCR. |
 | `backend/config/submission-forms.xml` | Formulários oficiais do backend com os overrides locais de metadados. |
 | `frontend/themes/custom/` | SCSS, assets e componentes sobrescritos pelo projeto. |
 | `frontend/config/config.prod.yml` | Configuração local carregada em tempo de execução. |
 | `cli.yml` | Comandos administrativos, como criação do administrador e `filter-media`. |
+
+## Desenvolvimento local do frontend
+
+Use um projeto Compose separado para não compartilhar banco, Solr ou arquivos
+com a implantação de produção. O frontend usa o código-fonte oficial
+`dspace-10.1`, aplica os mesmos patches do build de produção e observa
+`frontend/themes/` a cada dois segundos. Edições em SCSS, templates, componentes,
+assets e traduções são copiadas para a árvore oficial e recompiladas pelo
+servidor Angular. O primeiro build pode levar alguns minutos e requer memória
+suficiente para o processo Node (limite de heap de 4 GiB).
+
+```bash
+cp .env.development.example .env.development
+# Edite POSTGRES_PASSWORD, GEOLITE2_CITY_DB_PATH e DSPACE_SAF_HOST_DIR.
+# Crie o diretório SAF e use um arquivo GeoLite2 City já existente.
+docker compose --env-file .env.development -p d10dev \
+  -f docker-compose-rest.yml -f docker-compose-dev.yml up --build
+```
+
+Abra `http://localhost:4000/`; a API está em
+`http://localhost:8080/server/api`. As portas 4000 e 8080 só aceitam conexões
+em `127.0.0.1`. O frontend acessa a API pelo navegador nesse endereço, e o
+backend permite `http://localhost:4000` no CORS. Esse fluxo local não usa o
+proxy institucional nem os caminhos públicos `/dspace/` e `/dspace-server/`.
+O Compose de desenvolvimento usa a rede `172.27.0.0/24`, alinhada ao prefixo
+confiável `172.27.0`; confira se ela não conflita com o host ou a VPN. Requer
+Docker Compose 2.24.4 ou posterior para `!override`.
+
+Ao editar `frontend/config/config.prod.yml`, reinicie `dspace-angular` para
+recarregar a configuração. Alterações nos patches e em `frontend/overrides/`
+exigem `up --build` novamente. O backend continua sendo a imagem DSpace 10.1:
+alterações em código Java exigem um build próprio e reinício do backend. Para
+encerrar o ambiente local sem remover seus dados:
+
+```bash
+docker compose --env-file .env.development -p d10dev \
+  -f docker-compose-rest.yml -f docker-compose-dev.yml down
+```
 
 ## Preparação para produção
 

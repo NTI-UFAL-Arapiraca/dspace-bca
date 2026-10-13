@@ -27,7 +27,9 @@ em `src/themes/custom` da versão `dspace-10.1`. Por exemplo, um cabeçalho pode
 ser sobrescrito em `app/header/`. O caminho e as importações devem acompanhar a
 mesma versão definida por `DSPACE_ANGULAR_TAG`.
 
-Depois de qualquer alteração no tema, reconstrua a imagem:
+Durante o desenvolvimento local, use o fluxo com atualização automática
+descrito no `README.md` da raiz. Para compilar a imagem usada fora desse
+ambiente, reconstrua após alterar o tema:
 
 ```bash
 docker compose -p d10 \
