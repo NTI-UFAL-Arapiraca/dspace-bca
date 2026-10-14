@@ -40,13 +40,26 @@
       [metadataFields]="['dc.contributor.author', 'dc.creator']"
       [label]="'item.page.authors' | translate">
     </ds-metadata-representation-list>
+    <ds-metadata-representation-list
+      [parentItem]="object" [itemType]="'Person'"
+      [metadataFields]="['dc.contributor.advisor']"
+      [label]="'item.page.advisor' | translate">
+    </ds-metadata-representation-list>
+    <ds-metadata-representation-list
+      [parentItem]="object" [itemType]="'Person'"
+      [metadataFields]="['dc.contributor.coadvisor']"
+      [label]="'item.page.coadvisor' | translate">
+    </ds-metadata-representation-list>
+    <ds-metadata-representation-list
+      [parentItem]="object" [itemType]="'Person'"
+      [metadataFields]="['dc.contributor.referee']"
+      [label]="'item.page.referees' | translate">
+    </ds-metadata-representation-list>
     <ds-generic-item-page-field [item]="object"
-      [fields]="['dc.contributor.advisor']"
-      [label]="'item.page.advisor'">
+      [fields]="['local.course.name']" [label]="'item.page.course'">
     </ds-generic-item-page-field>
     <ds-generic-item-page-field [item]="object"
-      [fields]="['dc.contributor.referee']"
-      [label]="'item.page.referees'">
+      [fields]="['local.campus.name']" [label]="'item.page.campus'">
     </ds-generic-item-page-field>
     <ds-generic-item-page-field [item]="object"
       [fields]="['journal.title']"

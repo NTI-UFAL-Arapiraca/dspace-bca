@@ -1,0 +1,12 @@
+# Apply after the three production files only while importing SAF packages.
+# ItemImport writes mapfile.txt beside each collection's packages. Restore the
+# regular production composition after the migration to make this bind read-only.
+services:
+  dspace:
+    volumes:
+      - type: bind
+        source: ${DSPACE_SAF_HOST_DIR:?Defina DSPACE_SAF_HOST_DIR para o diretorio SAF existente}
+        target: /dspace/saf_bundle
+        read_only: false
+        bind:
+          create_host_path: false

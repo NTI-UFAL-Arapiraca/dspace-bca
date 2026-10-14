@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!-- Extend the already-configured upstream map instead of replacing its
+         default, collection, workflow, and other entity search definitions. -->
+    <bean id="academicDiscoveryMap"
+          factory-bean="org.dspace.discovery.configuration.DiscoveryConfigurationService"
+          factory-method="getMap"/>
+    <bean id="registerAcademicDiscovery" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean" lazy-init="false">
+        <property name="targetObject" ref="academicDiscoveryMap"/>
+        <property name="targetMethod" value="putAll"/>
+        <property name="arguments">
+            <list>
+                <map>
+                        <entry key="RELATION.Person.authored" value-ref="academic_authored"/>
+                        <entry key="RELATION.Person.advised" value-ref="academic_advised"/>
+                        <entry key="RELATION.Person.coadvised" value-ref="academic_coadvised"/>
+                        <entry key="RELATION.Person.reviewed" value-ref="academic_reviewed"/>
+                </map>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="academicFilter_advisor" class="org.dspace.discovery.configuration.DiscoverySearchFilterFacet">
+        <property name="indexFieldName" value="advisor"/>
+        <property name="metadataFields"><list><value>dc.contributor.advisor</value></list></property>
+        <property name="facetLimit" value="10"/>
+    </bean>
+
+    <bean id="academicFilter_coadvisor" class="org.dspace.discovery.configuration.DiscoverySearchFilterFacet">
+        <property name="indexFieldName" value="coadvisor"/>
+        <property name="metadataFields"><list><value>dc.contributor.coadvisor</value></list></property>
+        <property name="facetLimit" value="10"/>
+    </bean>
+
+    <bean id="academicFilter_referee" class="org.dspace.discovery.configuration.DiscoverySearchFilterFacet">
+        <property name="indexFieldName" value="referee"/>
+        <property name="metadataFields"><list><value>dc.contributor.referee</value></list></property>
+        <property name="facetLimit" value="10"/>
+    </bean>
+
+    <bean id="academicFilter_course" class="org.dspace.discovery.configuration.DiscoverySearchFilterFacet">
+        <property name="indexFieldName" value="course"/>
+        <property name="metadataFields"><list><value>local.course.name</value></list></property>
+        <property name="facetLimit" value="10"/>
+    </bean>
+
+    <bean id="academicFilter_campus" class="org.dspace.discovery.configuration.DiscoverySearchFilterFacet">
+        <property name="indexFieldName" value="campus"/>
+        <property name="metadataFields"><list><value>local.campus.name</value></list></property>
+        <property name="facetLimit" value="10"/>
+    </bean>
+
+    <bean id="academic_authored" class="org.dspace.discovery.configuration.DiscoveryRelatedItemConfiguration">
+        <property name="id" value="RELATION.Person.authored"/>
+        <property name="indexAlways" value="true"/>
+        <property name="searchFilters">
+            <list>
+                <ref bean="searchFilterTitle"/>
+                <ref bean="searchFilterAuthor"/>
+                <ref bean="searchFilterIssued"/>
+                <ref bean="searchFilterSubject"/>
+                <ref bean="searchFilterType"/>
+                <ref bean="academicFilter_advisor"/>
+                <ref bean="academicFilter_coadvisor"/>
+                <ref bean="academicFilter_referee"/>
+                <ref bean="academicFilter_course"/>
+                <ref bean="academicFilter_campus"/>
+            </list>
+        </property>
+        <property name="sidebarFacets"><list><ref bean="searchFilterIssued"/><ref bean="searchFilterType"/></list></property>
+        <property name="searchSortConfiguration">
+            <bean class="org.dspace.discovery.configuration.DiscoverySortConfiguration">
+                <property name="sortFields"><list><ref bean="sortDateIssued"/><ref bean="sortTitleAsc"/></list></property>
+            </bean>
+        </property>
+        <property name="defaultFilterQueries">
+            <list>
+                <value>author_authority:{0} AND search.resourcetype:Item</value>
+                <value>-withdrawn:true AND -discoverable:false AND latestVersion:true</value>
+            </list>
+        </property>
+        <property name="defaultRpp" value="10"/>
+    </bean>
+
+    <bean id="academic_advised" class="org.dspace.discovery.configuration.DiscoveryRelatedItemConfiguration">
+        <property name="id" value="RELATION.Person.advised"/>
+        <property name="indexAlways" value="true"/>
+        <property name="searchFilters">
+            <list>
+                <ref bean="searchFilterTitle"/>
+                <ref bean="searchFilterAuthor"/>
+                <ref bean="searchFilterIssued"/>
+                <ref bean="searchFilterSubject"/>
+                <ref bean="searchFilterType"/>
+                <ref bean="academicFilter_advisor"/>
+                <ref bean="academicFilter_coadvisor"/>
+                <ref bean="academicFilter_referee"/>
+                <ref bean="academicFilter_course"/>
+                <ref bean="academicFilter_campus"/>
+            </list>
+        </property>
+        <property name="sidebarFacets"><list><ref bean="searchFilterIssued"/><ref bean="searchFilterType"/></list></property>
+        <property name="searchSortConfiguration">
+            <bean class="org.dspace.discovery.configuration.DiscoverySortConfiguration">
+                <property name="sortFields"><list><ref bean="sortDateIssued"/><ref bean="sortTitleAsc"/></list></property>
+            </bean>
+        </property>
+        <property name="defaultFilterQueries">
+            <list>
+                <value>advisor_authority:{0} AND search.resourcetype:Item</value>
+                <value>-withdrawn:true AND -discoverable:false AND latestVersion:true</value>
+            </list>
+        </property>
+        <property name="defaultRpp" value="10"/>
+    </bean>
+
+    <bean id="academic_coadvised" class="org.dspace.discovery.configuration.DiscoveryRelatedItemConfiguration">
+        <property name="id" value="RELATION.Person.coadvised"/>
+        <property name="indexAlways" value="true"/>
+        <property name="searchFilters">
+            <list>
+                <ref bean="searchFilterTitle"/>
+                <ref bean="searchFilterAuthor"/>
+                <ref bean="searchFilterIssued"/>
+                <ref bean="searchFilterSubject"/>
+                <ref bean="searchFilterType"/>
+                <ref bean="academicFilter_advisor"/>
+                <ref bean="academicFilter_coadvisor"/>
+                <ref bean="academicFilter_referee"/>
+                <ref bean="academicFilter_course"/>
+                <ref bean="academicFilter_campus"/>
+            </list>
+        </property>
+        <property name="sidebarFacets"><list><ref bean="searchFilterIssued"/><ref bean="searchFilterType"/></list></property>
+        <property name="searchSortConfiguration">
+            <bean class="org.dspace.discovery.configuration.DiscoverySortConfiguration">
+                <property name="sortFields"><list><ref bean="sortDateIssued"/><ref bean="sortTitleAsc"/></list></property>
+            </bean>
+        </property>
+        <property name="defaultFilterQueries">
+            <list>
+                <value>coadvisor_authority:{0} AND search.resourcetype:Item</value>
+                <value>-withdrawn:true AND -discoverable:false AND latestVersion:true</value>
+            </list>
+        </property>
+        <property name="defaultRpp" value="10"/>
+    </bean>
+
+    <bean id="academic_reviewed" class="org.dspace.discovery.configuration.DiscoveryRelatedItemConfiguration">
+        <property name="id" value="RELATION.Person.reviewed"/>
+        <property name="indexAlways" value="true"/>
+        <property name="searchFilters">
+            <list>
+                <ref bean="searchFilterTitle"/>
+                <ref bean="searchFilterAuthor"/>
+                <ref bean="searchFilterIssued"/>
+                <ref bean="searchFilterSubject"/>
+                <ref bean="searchFilterType"/>
+                <ref bean="academicFilter_advisor"/>
+                <ref bean="academicFilter_coadvisor"/>
+                <ref bean="academicFilter_referee"/>
+                <ref bean="academicFilter_course"/>
+                <ref bean="academicFilter_campus"/>
+            </list>
+        </property>
+        <property name="sidebarFacets"><list><ref bean="searchFilterIssued"/><ref bean="searchFilterType"/></list></property>
+        <property name="searchSortConfiguration">
+            <bean class="org.dspace.discovery.configuration.DiscoverySortConfiguration">
+                <property name="sortFields"><list><ref bean="sortDateIssued"/><ref bean="sortTitleAsc"/></list></property>
+            </bean>
+        </property>
+        <property name="defaultFilterQueries">
+            <list>
+                <value>referee_authority:{0} AND search.resourcetype:Item</value>
+                <value>-withdrawn:true AND -discoverable:false AND latestVersion:true</value>
+            </list>
+        </property>
+        <property name="defaultRpp" value="10"/>
+    </bean>
+</beans>

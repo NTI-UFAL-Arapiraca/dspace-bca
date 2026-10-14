@@ -64,9 +64,9 @@
                     <dc-qualifier>transcript</dc-qualifier>
                     <repeatable>false</repeatable>
                     <label>Audio Transcription</label>
+                    <type-bind>audio,audio+video</type-bind>
                     <input-type>textarea</input-type>
                     <hint>Enter a transcription for the file</hint>
-                    <type-bind>audio,audio+video</type-bind>
                     <required></required>
                 </field>
             </row>
@@ -77,9 +77,9 @@
                     <dc-qualifier>textalternative</dc-qualifier>
                     <repeatable>false</repeatable>
                     <label>Text alternative</label>
+                    <type-bind>video,audio+video</type-bind>
                     <input-type>textarea</input-type>
                     <hint>Enter a text alternative or video description for the file</hint>
-                    <type-bind>video,audio+video</type-bind>
                     <required></required>
                 </field>
             </row>
@@ -94,10 +94,11 @@
                     <dc-element>contributor</dc-element>
                     <dc-qualifier>author</dc-qualifier>
                     <repeatable>true</repeatable>
-                    <label>Author</label>
+                    <label>Autor</label>
                     <input-type>onebox</input-type>
-                    <hint>Enter the author's name (Family name, Given names).</hint>
+                    <hint>Selecione a pessoa cadastrada. Se ela não existir, peça seu cadastro à biblioteca.</hint>
                     <required></required>
+                    <vocabulary closed="true">MigrationPersonAuthority</vocabulary>
                 </field>
             </row>
             <row>
@@ -283,25 +284,17 @@
              Publication Entity to a Person Entity. -->
         <form name="publicationStep">
             <row>
-                <relation-field>
-                    <relationship-type>isAuthorOfPublication</relationship-type>
-                    <search-configuration>person</search-configuration>
+                <field>
+                    <dc-schema>dc</dc-schema>
+                    <dc-element>contributor</dc-element>
+                    <dc-qualifier>author</dc-qualifier>
                     <repeatable>true</repeatable>
-                    <label>Author</label>
-                    <hint>Enter the author's name (Family name, Given names).</hint>
-                    <linked-metadata-field>
-                        <dc-schema>dc</dc-schema>
-                        <dc-element>contributor</dc-element>
-                        <dc-qualifier>author</dc-qualifier>
-                        <input-type>onebox</input-type>
-                    </linked-metadata-field>
-                    <externalsources>orcid</externalsources>
+                    <label>Autor</label>
+                    <input-type>onebox</input-type>
+                    <hint>Selecione a pessoa cadastrada. Se ela não existir, peça seu cadastro à biblioteca.</hint>
                     <required></required>
-                    <!-- You may choose to validate author names via a Regular Expression if it's appropriate for
-                         your institution. The below regex requires a comma to be present in the author field.
-                         However, this is disabled by default to support organizations as authors, etc. -->
-                    <!--<regex>\w+(,)+\w+</regex>-->
-                </relation-field>
+                    <vocabulary closed="true">MigrationPersonAuthority</vocabulary>
+                </field>
             </row>
             <!--
                 Uncomment the following definition to enable entry of
@@ -402,19 +395,16 @@
                 </field>
             </row>
             <row>
-                <relation-field>
-                    <relationship-type>isDatasetOfPublication</relationship-type>
-                    <search-configuration>dataset</search-configuration>
+                <field>
+                    <dc-schema>dc</dc-schema>
+                    <dc-element>relation</dc-element>
+                    <dc-qualifier>isBasedOn</dc-qualifier>
                     <repeatable>true</repeatable>
-                    <label>Research Data</label>
-                    <hint>Enter the datasets this publication is based on.</hint>
-                    <linked-metadata-field>
-                        <dc-schema>dc</dc-schema>
-                        <dc-element>relation</dc-element>
-                        <dc-qualifier>isBasedOn</dc-qualifier>
-                        <input-type>onebox</input-type>
-                    </linked-metadata-field>
-                </relation-field>
+                    <label>Dados de pesquisa relacionados</label>
+                    <input-type>onebox</input-type>
+                    <hint>Informe um identificador ou uma referência aos dados usados no trabalho.</hint>
+                    <required></required>
+                </field>
             </row>
             <row>
                 <field>
@@ -463,7 +453,110 @@
         </form>
 
         <!-- Form which defines the metadata page/section for depositing Person Entities -->
+        <!-- Academic details shared by submission and EditItem. -->
+        <form name="academicDetails">
+            <row>
+                <field>
+                    <dc-schema>local</dc-schema>
+                    <dc-element>course</dc-element>
+                    <dc-qualifier>name</dc-qualifier>
+                    <repeatable>false</repeatable>
+                    <label>Curso</label>
+                    <input-type>onebox</input-type>
+                    <hint>Informe o curso de origem do trabalho; este campo não é o grau acadêmico.</hint>
+                    <required></required>
+                </field>
+            </row>
+            <row>
+                <field>
+                    <dc-schema>local</dc-schema>
+                    <dc-element>campus</dc-element>
+                    <dc-qualifier>name</dc-qualifier>
+                    <repeatable>false</repeatable>
+                    <label>Campus</label>
+                    <input-type>onebox</input-type>
+                    <hint>Informe o campus de origem do trabalho.</hint>
+                    <required></required>
+                </field>
+            </row>
+            <row>
+                <field>
+                    <dc-schema>dc</dc-schema>
+                    <dc-element>contributor</dc-element>
+                    <dc-qualifier>advisor</dc-qualifier>
+                    <repeatable>true</repeatable>
+                    <label>Orientador</label>
+                    <input-type>onebox</input-type>
+                    <hint>Selecione a pessoa que orientou o trabalho.</hint>
+                    <required></required>
+                    <vocabulary closed="true">MigrationPersonAuthority</vocabulary>
+                </field>
+            </row>
+            <row>
+                <field>
+                    <dc-schema>dc</dc-schema>
+                    <dc-element>contributor</dc-element>
+                    <dc-qualifier>coadvisor</dc-qualifier>
+                    <repeatable>true</repeatable>
+                    <label>Coorientador</label>
+                    <input-type>onebox</input-type>
+                    <hint>Selecione cada coorientador, quando houver.</hint>
+                    <required></required>
+                    <vocabulary closed="true">MigrationPersonAuthority</vocabulary>
+                </field>
+            </row>
+            <row>
+                <field>
+                    <dc-schema>dc</dc-schema>
+                    <dc-element>contributor</dc-element>
+                    <dc-qualifier>referee</dc-qualifier>
+                    <repeatable>true</repeatable>
+                    <label>Membros avaliadores da banca</label>
+                    <input-type>onebox</input-type>
+                    <hint>Selecione os avaliadores na ordem em que devem aparecer.</hint>
+                    <required></required>
+                    <vocabulary closed="true">MigrationPersonAuthority</vocabulary>
+                </field>
+            </row>
+            <row>
+                <field>
+                    <dc-schema>dc</dc-schema>
+                    <dc-element>format</dc-element>
+                    <dc-qualifier>extent</dc-qualifier>
+                    <repeatable>false</repeatable>
+                    <label>Número de páginas</label>
+                    <input-type>onebox</input-type>
+                    <hint>Informe o número de páginas do documento.</hint>
+                    <required></required>
+                </field>
+            </row>
+            <row>
+                <field>
+                    <dc-schema>dc</dc-schema>
+                    <dc-element>description</dc-element>
+                    <dc-qualifier>note</dc-qualifier>
+                    <repeatable>true</repeatable>
+                    <label>Observação de acervo</label>
+                    <input-type>textarea</input-type>
+                    <hint>Informação pública sobre o acervo. Não inclua notas internas ou informações de restrição.</hint>
+                    <required></required>
+                </field>
+            </row>
+        </form>
+
         <form name="personStep">
+            <row>
+                <field>
+                    <dc-schema>dc</dc-schema>
+                    <dc-element>title</dc-element>
+                    <dc-qualifier></dc-qualifier>
+                    <repeatable>false</repeatable>
+                    <label>Nome de exibição</label>
+                    <input-type>onebox</input-type>
+                    <hint>Nome preferido da pessoa, por exemplo Silva, Ana.</hint>
+                    <required>Informe o nome da pessoa.</required>
+                </field>
+            </row>
             <row>
                 <relation-field>
                     <relationship-type>isPublicationOfAuthor</relationship-type>
@@ -1518,11 +1611,11 @@
                     <dc-schema>dspace</dc-schema>
                     <dc-element>object</dc-element>
                     <dc-qualifier>owner</dc-qualifier>
+                    <repeatable>false</repeatable>
                     <label>Owner</label>
                     <input-type>onebox</input-type>
-                    <repeatable>false</repeatable>
-                    <required />
                     <hint />
+                    <required />
                 </field>
             </row>
         </form>

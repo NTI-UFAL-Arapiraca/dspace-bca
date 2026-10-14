@@ -17,6 +17,15 @@ Arquivos mantidos inicialmente:
   `assets/i18n/` são mesclados aos idiomas oficiais antes do build;
 - `app/item-page/simple/item-types/untyped-item/`: página usada pelos itens
   migrados, incluindo orientador e membros avaliadores abaixo dos autores.
+- `app/item-page/simple/item-types/publication/`: reutiliza a apresentação
+  acadêmica para trabalhos com tipo Publication;
+- `app/entity-groups/research-entities/item-pages/person/`: perfis com abas
+  de autoria, orientação, coorientação e banca.
+
+Os campos de pessoas mostram links a partir de seus UUIDs de autoridade.
+Curso e campus usam os novos campos locais. As abas dependem das buscas
+configuradas em `backend/config/spring/api/academic-discovery.xml` e da
+reindexação Discovery; `item.showAuthorityRelations` está ativado no YAML.
 
 O componente `app/home-page/home-news/home-news.component.ts` mantém a extensão
 oficial registrada, mas usa um template vazio para remover da página inicial o

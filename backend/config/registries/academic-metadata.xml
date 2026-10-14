@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Extensões usadas pelo SAF. Os esquemas dc e local já existem no DSpace 10.1.
+     Não declarar dc-schema: preserva os namespaces instalados.
+     Ver docs/metadados_customizados.md antes de mudar nomes ou significados. -->
+<dspace-dc-types>
+  <dc-type>
+    <schema>local</schema>
+    <element>course</element>
+    <qualifier>name</qualifier>
+    <scope_note>Nome do curso de origem conforme ud_curso.name; não representa grau acadêmico nem distingue um programa de pós-graduação.</scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>local</schema>
+    <element>campus</element>
+    <qualifier>name</qualifier>
+    <scope_note>Nome do campus de origem conforme ud_campus.name; não representa departamento nem editora.</scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>dc</schema>
+    <element>contributor</element>
+    <qualifier>coadvisor</qualifier>
+    <scope_note>Coorientador do trabalho acadêmico, no formato Sobrenome, Nome. Registrar um valor por pessoa.</scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>dc</schema>
+    <element>contributor</element>
+    <qualifier>referee</qualifier>
+    <scope_note>Membro avaliador da banca examinadora, no formato Sobrenome, Nome. Registrar um valor por pessoa.</scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>dc</schema>
+    <element>description</element>
+    <qualifier>note</qualifier>
+    <scope_note>Observação geral sobre o item, incluindo localização de exemplar físico. Não destinar informações confidenciais ou notas administrativas de restrição a este campo.</scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>local</schema>
+    <element>identifier</element>
+    <qualifier>legacy</qualifier>
+    <scope_note>Identificador da pessoa na origem no formato odoo:TABELA:ID. Usado para retomada e conciliação; não é uma conta de acesso.</scope_note>
+  </dc-type>
+</dspace-dc-types>

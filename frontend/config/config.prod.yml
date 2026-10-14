@@ -22,3 +22,7 @@ ssr:
 themes:
   - name: custom
   - name: dspace
+
+# People profiles query work roles through authority UUIDs.
+item:
+  showAuthorityRelations: true

@@ -81,6 +81,13 @@ services:
     # Submission form override maintained by this project. It allows one
     # abstract per language instead of replacing the previous value.
     - ./backend/config/submission-forms.xml:/dspace/config/submission-forms.xml:ro
+    # Load the academic overrides in REST and CLI without replacing local.cfg.
+    - ./backend/config/config-definition.xml:/dspace/config/config-definition.xml:ro
+    - ./backend/config/people-authority.cfg:/dspace/config/people-authority.cfg:ro
+    - ./backend/config/modules/rest.cfg:/dspace/config/modules/rest.cfg:ro
+    - ./backend/config/item-submission.xml:/dspace/config/item-submission.xml:ro
+    - ./backend/config/spring/api/academic-discovery.xml:/dspace/config/spring/api/academic-discovery.xml:ro
+    - ./backend/config/registries/academic-metadata.xml:/dspace/config/registries/academic-metadata.xml:ro
     # MaxMind GeoLite2 is supplied by the operator and must not be committed.
     - type: bind
       source: ${GEOLITE2_CITY_DB_PATH:?Defina GEOLITE2_CITY_DB_PATH no .env}

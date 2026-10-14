@@ -2,11 +2,16 @@
 
 Este diretório contém os arquivos usados para executar o DSpace da biblioteca:
 
+Para entender os cadastros, preparar pessoas e executar a migração, siga o
+[guia do DSpace acadêmico](docs/guia-dspace-academico.md). Ele explica os
+conceitos e traz os comandos para desenvolvimento, produção, piloto e retomada.
+
 | Arquivo | Uso |
 | --- | --- |
 | `docker-compose-rest.yml` | Backend DSpace, PostgreSQL, Solr, volumes persistentes e montagem do pacote SAF. |
 | `docker-compose-dist.yml` | Build e execução da interface DSpace Angular customizada. |
 | `docker-compose-prod.yml` | Valores obrigatórios e configuração da implantação de produção. |
+| `docker-compose-migration.yml` | Permite gravar mapfiles no SAF durante a importação em produção. |
 | `proxy/nginx.conf` | Proxy HTTP interno que roteia `/dspace` e `/dspace-server`. |
 | `docker-compose-local.yml` | Publicação opcional de portas apenas para uso local. |
 | `docker-compose-dev.yml` | Angular com atualização automática do tema e backend local isolado. |
@@ -16,6 +21,8 @@ Este diretório contém os arquivos usados para executar o DSpace da biblioteca:
 | `Dockerfile.angular.dev` | Inicia o servidor de desenvolvimento da versão oficial com os patches locais. |
 | `.github/workflows/deploy.yml` | Compila e publica a imagem Angular customizada no GHCR. |
 | `backend/config/submission-forms.xml` | Formulários oficiais do backend com os overrides locais de metadados. |
+| `backend/config/people-authority.cfg` | Pesquisa de pessoas cadastradas para autoria, orientação e banca. |
+| `scripts/prepare-academic.sh` | Registro de campos/tipos e preparação da coleção Person. |
 | `frontend/themes/custom/` | SCSS, assets e componentes sobrescritos pelo projeto. |
 | `frontend/config/config.prod.yml` | Configuração local carregada em tempo de execução. |
 | `cli.yml` | Comandos administrativos, como criação do administrador e `filter-media`. |
@@ -357,6 +364,24 @@ mount; nesse caso, seu caminho deve identificar o mesmo diretório usado pela
 migração.
 
 ## Configuração do backend
+
+Os serviços REST e CLI carregam os mesmos overrides acadêmicos por mounts.
+`config-definition.xml` acrescenta `people-authority.cfg` à cadeia oficial,
+preservando `local.cfg` e as variáveis de ambiente. `modules/rest.cfg` mantém
+as propriedades expostas pela versão 10.1 e acrescenta a propriedade do
+modelo de relações. Não é necessário copiar plugins Java para o container.
+
+Os processos tradicional e Publication, inclusive suas variantes de edição,
+incluem a seção “Dados acadêmicos”. Os campos de pessoas usam seleção
+fechada; curso e campus são editáveis em `local.course.name` e
+`local.campus.name`. As páginas de trabalho têm links para pessoas; seus
+perfis separam autoria, orientação, coorientação e participação em banca.
+
+Depois de iniciar o backend com esses arquivos, execute a preparação indicada
+no [guia](docs/guia-dspace-academico.md). O script registra os campos,
+inicializa as entidades e salva a coleção Person no `.env` da migração.
+O modelo escolhido é Authority Framework; instalações que já têm relações
+com metadados virtuais precisam planejar a conversão antes de adotá-lo.
 
 O `submission-forms.xml` da imagem oficial está versionado em
 `backend/config/` e é montado como somente leitura nos serviços `dspace` e

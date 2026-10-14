@@ -4,6 +4,27 @@ Pesquisa realizada em 13/10/2026, considerando a versão configurada neste
 projeto, a documentação oficial 10.x e os arquivos oficiais disponíveis na
 tag `dspace-10.1`. As recomendações abaixo são propostas para implementação.
 
+Atualização de contexto: a migração está em andamento e o legado mantém
+cadastros de pessoas sem contas de acesso. A proposta passa a ser importar
+essas pessoas como entidades `Person` desde a migração e revisar agora os
+nomes locais inadequados. A criação de contas `EPerson` fica condicionada à
+necessidade de acesso dos titulares.
+
+Implementação preparada no projeto de migração: a extração agora gera
+`local.course.name`, `local.campus.name`, `metadata_local.xml` e um manifesto
+de pessoas por tabela, ID e papel. O novo comando `apply-people` cria/reutiliza
+entidades `Person`, aplica autoridades e converte os campos acadêmicos dos
+lotes anteriores. Inclui simulação e retomada; 85 testes automatizados
+passaram. Em 14/10/2026, os overrides do backend, os formulários e os perfis
+também foram integrados à implantação. O build Angular e a validação dos
+arquivos na imagem oficial da CLI passaram. A execução contra a instalação
+e a revisão do lote continuam sendo etapas operacionais. Siga o
+[guia atual de preparação e execução](guia-dspace-academico.md) e o
+[guia de pessoas e vínculos](../../dspace-migration/docs/5_pessoas_e_vinculos.md).
+
+Os achados abaixo registram o estado anterior à implementação; o guia atual
+é a referência para os arquivos e os comandos já integrados.
+
 **O DSpace já oferece a base para cadastrar pessoas e relacioná-las aos
 trabalhos.** A adaptação necessária envolve formulários, identidade das
 pessoas, apresentação e migração. O problema dos campos ausentes e a criação
@@ -29,7 +50,9 @@ Também consultei o projeto irmão de migração, especialmente
 [`metadados_customizados.md`](../../dspace-migration/docs/metadados_customizados.md),
 [`migration-metadata.xml`](../../dspace-migration/config/registries/migration-metadata.xml)
 e [`extract_metadata.sql`](../../dspace-migration/sql/extract_metadata.sql).
-Eles estabelecem os significados efetivamente utilizados:
+Na investigação inicial, eles estabeleciam os seguintes significados. Os
+aliases de curso e campus foram posteriormente substituídos no pipeline,
+conforme a atualização acima:
 
 | Informação | Campo atual | Sugestão para a edição |
 | --- | --- | --- |
@@ -43,10 +66,30 @@ Eles estabelecem os significados efetivamente utilizados:
 
 `degree` significa **curso/programa nesta migração**, e não grau acadêmico.
 `department` significa **campus**, e não necessariamente departamento.
-Recomendo preservar esses campos na primeira entrega e documentar os rótulos
-corretos. Uma revisão semântica futura deve incluir os dados existentes, a
-migração, as buscas e os formatos de exportação. O grau acadêmico, se
-necessário, merece um campo e vocabulário próprios.
+Como a migração ainda está em andamento, recomendo corrigir agora esses
+nomes, alinhando a extração e a instalação de destino antes da importação
+definitiva. A recomendação inicial de preservá-los pressupunha maior custo
+de compatibilidade com um acervo já consolidado.
+
+Uma proposta de nomenclatura para discussão com a catalogação é:
+
+| Conceito | Campo proposto |
+| --- | --- |
+| Nome do curso | `local.course.name` |
+| Nome do programa de pós-graduação, quando distinto do curso | `local.program.name` |
+| Nome do campus | `local.campus.name` |
+| Nível do grau: graduação, mestrado, doutorado | `local.degree.level` |
+
+Esses nomes são uma proposta de esquema local, não campos padrão do DSpace
+nem uma afirmação de conformidade com um padrão bibliográfico. Antes de
+adotá-los, verificar o perfil de metadados exigido pelos serviços de coleta
+utilizados pela instituição. O dado legado de curso não permite preencher
+automaticamente programa e nível do grau sem uma regra validada.
+
+A alteração deve abranger registro, extração SQL, gerador SAF, formulários,
+exibição, buscas, exportação e testes. Para itens já importados, planejar a
+conversão dos valores, mantendo UUIDs e handles e conferindo os novos campos
+antes de retirar os antigos.
 
 **Como a edição funciona.** Há duas experiências distintas: o editor
 administrativo genérico de metadados e a edição por formulário na rota
@@ -132,7 +175,11 @@ sob curadoria da biblioteca, com um procedimento para solicitar pessoas
 ausentes.
 
 `EPerson` representa uma conta de acesso. Uma entidade `Person` representa
-a pessoa descrita no acervo e pode existir sem essa conta. O recurso
+a pessoa descrita no acervo e pode existir sem essa conta, como os cadastros
+do legado. A biblioteca pode criar e administrar essas pessoas e seus
+vínculos sem lhes conceder login. Uma página pública com trabalhos orientados
+depende de `Person`, dos vínculos e da apresentação; não exige `EPerson`.
+O recurso
 Researcher Profiles associa uma pessoa à conta proprietária usando
 `dspace.object.owner`, permitindo gestão pelo titular. Esse vínculo e a
 integração ORCID podem ser uma etapa posterior. A página 10.x desse recurso
@@ -219,19 +266,28 @@ handles e arquivos dos trabalhos. Homônimos, nomes divergentes e vínculos
 ambíguos devem ir para revisão; correspondência apenas pelo nome não deve
 fundir cadastros automaticamente.
 
+Para os próximos lotes, a migração deve produzir um cadastro de pessoas e
+uma lista de participações com IDs de origem, trabalho e papel. O fluxo pode
+criar as entidades `Person`, importar os trabalhos e aplicar os vínculos
+quando seus UUIDs estiverem disponíveis. O mapa de origem precisa permitir
+retomada sem recriar pessoas nem duplicar participações. Criar uma conta para
+cada autor não substitui esse trabalho de identidade e relacionamento.
+
 **Sequência de implementação sugerida:**
 
 1. Confirmar os modos de edição, tipos dos itens e coleções, campos
-   registrados e vínculos já existentes na instalação. Formalizar rótulos,
-   obrigatoriedade e repetição com a biblioteca.
-2. Disponibilizar curso, campus e demais campos acadêmicos nos formulários
-   apropriados, preservando os resumos em português e inglês. Essa entrega
-   resolve a lacuna de edição, mas ainda não cria identidade para os nomes.
+   registrados e vínculos já existentes na instalação. Definir a nomenclatura
+   de destino, rótulos, obrigatoriedade e repetição com a biblioteca.
+2. Alinhar os campos da migração e os formulários de destino, preservando
+   os resumos em português e inglês. Prever a conversão dos lotes já
+   importados. Essa entrega resolve a lacuna de edição, mas ainda não cria
+   identidade para os nomes.
 3. Em ambiente isolado, criar poucas pessoas e trabalhos e testar o modelo
    escolhido: seleção, vínculo persistido, rejeição de nome sem referência,
    perfil com trabalhos orientados e edição de um vínculo existente.
-4. Implementar a extração complementar e a conciliação do legado; aplicar
-   primeiro a um lote revisado. Registrar a decisão arquitetural em RFC.
+4. Incorporar a extração de pessoas, a conciliação do legado e a criação dos
+   vínculos ao pipeline em andamento; aplicar primeiro a um lote revisado.
+   Registrar a decisão arquitetural em RFC.
 5. Completar páginas públicas, buscas, filtros e exportação; ampliar ao
    acervo após validar o lote. Avaliar gestão pelo titular e ORCID depois.
 
@@ -251,5 +307,6 @@ seu banco. Portanto, o formulário e o modelo de relações efetivamente ativos
 ainda precisam ser confirmados. O checkout local de Angular consultado como
 apoio está adiante de `dspace-10.0` e não possui a tag 10.1 local; os detalhes
 de componentes devem ser conferidos na imagem fixada antes da implementação.
-As referências do contrato REST acompanham sua branch principal. Esta entrega
-acrescenta somente este relatório.
+As referências do contrato REST acompanham sua branch principal. A pesquisa
+original acrescentou somente este relatório; a implementação posterior está
+registrada no início do documento e no projeto de migração.
