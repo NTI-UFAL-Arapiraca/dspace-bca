@@ -1,0 +1,70 @@
+:host {
+  display: block;
+}
+
+.profile-degree {
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.5rem 0.875rem;
+  color: var(--ufal-ink);
+}
+
+.profile-identity {
+  max-width: 25rem;
+}
+
+.profile-links li {
+  margin-bottom: 0.8rem;
+  overflow-wrap: anywhere;
+}
+
+.activity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  gap: 0.875rem;
+}
+
+.activity-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  border: 1px solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius-lg);
+  background: var(--ufal-surface);
+  color: var(--bs-secondary-color);
+  font-size: 0.875rem;
+  text-decoration: none;
+
+  &[data-role="works"] {
+    background: var(--ufal-blue-soft);
+    border-top: 3px solid var(--bs-primary);
+  }
+
+  &:hover, &:focus-visible {
+    border-color: var(--bs-primary);
+    background: var(--ufal-blue-soft);
+    color: var(--ufal-ink);
+    text-decoration: none;
+  }
+}
+
+.activity-count {
+  display: block;
+  color: var(--ufal-ink);
+  font-size: 2rem;
+  line-height: 1.2;
+  font-weight: 650;
+  letter-spacing: -0.035em;
+}
+
+.context-values li {
+  margin: 0.5rem 0;
+  line-height: 1.5;
+}
+
+#person-works {
+  scroll-margin-top: 1.5rem;
+  min-height: max(32rem, calc(100svh - 3rem));
+}

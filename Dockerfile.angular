@@ -6,6 +6,11 @@ FROM docker.io/dspace/dspace-angular:${DSPACE_ANGULAR_TAG} AS build
 
 WORKDIR /app
 
+# Restore the browser's explicit color preference before Angular or styles load.
+COPY frontend/overrides/color-mode-init.js /tmp/color-mode-init.js
+COPY frontend/patches/apply-color-mode-init.mjs /tmp/apply-color-mode-init.mjs
+RUN node /tmp/apply-color-mode-init.mjs /app/src/index.html /tmp/color-mode-init.js
+
 # A first visit without dsLanguage must use the repository default instead of
 # inheriting the browser's Accept-Language before the UI has initialized.
 COPY frontend/patches/apply-default-anonymous-language.mjs \
@@ -21,6 +26,11 @@ COPY frontend/patches/apply-item-all-languages.mjs /tmp/apply-item-all-languages
 RUN node /tmp/apply-item-all-languages.mjs \
     /app/src/app/core/data/item-data.service.ts \
     /app/src/app/item-page/edit-item-page/edit-item-page-routes.ts
+
+# Keep Person search navigation local to its results, including smooth scrolling.
+COPY frontend/overrides/person-search-navigation*.ts /app/src/app/
+COPY frontend/patches/apply-person-search-navigation.mjs /tmp/apply-person-search-navigation.mjs
+RUN node /tmp/apply-person-search-navigation.mjs /app/src/app
 
 # Keep the crawler policy under version control. Express renders the public UI
 # origin into this EJS template and serves it at the top-level /robots.txt.

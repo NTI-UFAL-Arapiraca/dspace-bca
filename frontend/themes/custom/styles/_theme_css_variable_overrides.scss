@@ -2,6 +2,47 @@
 // after the Sass variables in _theme_sass_variable_overrides.scss.
 
 :root {
-  // --ds-header-logo-height: 80px;
-  // --ds-header-icon-color: #{$primary};
+  --ufal-accent: #{$ufal-red};
+  --ufal-ink: #{$dark};
+  --ufal-surface: #fff;
+  --ufal-surface-muted: #f0f4f8;
+  --ufal-blue-soft: #edf5fa;
+  --ufal-blue-border: #d3e4ef;
+  --ufal-badge-color: #004c76;
+  --ufal-focus: #{$primary};
+  --ufal-footer-bg: #{$dark};
+  --ufal-shadow: 0 4px 20px rgba(22, 50, 79, 0.06);
+
+  --ds-header-logo-height: 64px;
+  --ds-header-bg: var(--ufal-surface);
+  --ds-header-icon-color: var(--bs-link-color);
+  --ds-header-icon-color-hover: var(--bs-link-hover-color);
+  --ds-header-navbar-border-bottom-color: var(--bs-border-color);
+  --ds-navbar-bg: var(--ufal-surface);
+  --ds-expandable-navbar-bg: var(--ufal-surface);
+  --ds-user-menu-bg: var(--ufal-surface);
+  --ds-navbar-item-padding: 0.75rem 0.5rem;
+  --ds-navbar-link-color: var(--ufal-ink);
+  --ds-navbar-link-color-hover: var(--bs-link-color);
+  --ds-navbar-link-bg-hover: var(--ufal-blue-soft);
+  --ds-expandable-navbar-link-bg-hover: var(--ufal-blue-soft);
+  --ds-user-menu-dropdown-link-bg-hover: var(--ufal-blue-soft);
+  --ds-user-menu-dropdown-link-color: var(--bs-link-color);
+  --ds-user-menu-dropdown-link-color-hover: var(--bs-link-hover-color);
+  --ds-expandable-navbar-link-color: var(--bs-link-color);
+  --ds-expandable-navbar-link-color-hover: var(--bs-link-hover-color);
+
+  --ds-breadcrumb-bg: var(--ufal-surface-muted);
+  --ds-breadcrumb-link-color: var(--bs-link-color);
+  --ds-breadcrumb-link-active-color: var(--bs-secondary-color);
+  --ds-top-footer-bg: var(--ufal-surface-muted);
+  --ds-footer-bg: var(--ufal-footer-bg);
+  --ds-footer-border: 0;
+  --ds-thumbnail-placeholder-background: var(--ufal-surface-muted);
+  --ds-thumbnail-placeholder-border: 1px solid var(--bs-border-color);
+  --ds-thumbnail-placeholder-color: var(--bs-secondary-color);
+  --ds-slider-color: #{$primary};
+  --ds-slider-handle-color: var(--ufal-ink);
+  --ds-primary-bg: var(--ufal-blue-soft);
+  --ds-secondary-bg: var(--ufal-surface-muted);
 }

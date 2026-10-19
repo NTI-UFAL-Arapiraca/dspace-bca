@@ -46,7 +46,7 @@ public class AcademicConfigurationCheck {
             if (service.getMap().get("default") != defaultConfig) {
                 throw new AssertionError("The upstream discovery configuration was replaced");
             }
-            for (String role : new String[]{"authored", "advised", "coadvised", "reviewed"}) {
+            for (String role : new String[]{"works", "authored", "advised", "coadvised", "reviewed"}) {
                 String id = "RELATION.Person." + role;
                 if (!service.getMap().containsKey(id) || !id.equals(service.getMap().get(id).getId())) {
                     throw new AssertionError("Missing discovery registration: " + id);

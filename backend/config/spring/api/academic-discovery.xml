@@ -13,6 +13,7 @@
         <property name="arguments">
             <list>
                 <map>
+                        <entry key="RELATION.Person.works" value-ref="academic_works"/>
                         <entry key="RELATION.Person.authored" value-ref="academic_authored"/>
                         <entry key="RELATION.Person.advised" value-ref="academic_advised"/>
                         <entry key="RELATION.Person.coadvised" value-ref="academic_coadvised"/>
@@ -52,6 +53,41 @@
         <property name="facetLimit" value="10"/>
     </bean>
 
+    <bean id="academic_works" class="org.dspace.discovery.configuration.DiscoveryRelatedItemConfiguration">
+        <property name="id" value="RELATION.Person.works"/>
+        <property name="indexAlways" value="true"/>
+        <property name="searchFilters">
+            <list>
+                <ref bean="searchFilterTitle"/>
+                <ref bean="searchFilterAuthor"/>
+                <ref bean="searchFilterIssued"/>
+                <ref bean="searchFilterSubject"/>
+                <ref bean="searchFilterType"/>
+                <ref bean="academicFilter_advisor"/>
+                <ref bean="academicFilter_coadvisor"/>
+                <ref bean="academicFilter_referee"/>
+                <ref bean="academicFilter_course"/>
+                <ref bean="academicFilter_campus"/>
+            </list>
+        </property>
+        <property name="sidebarFacets"><list>
+            <ref bean="searchFilterIssued"/><ref bean="searchFilterType"/>
+            <ref bean="searchFilterSubject"/><ref bean="academicFilter_course"/><ref bean="academicFilter_campus"/>
+        </list></property>
+        <property name="searchSortConfiguration">
+            <bean class="org.dspace.discovery.configuration.DiscoverySortConfiguration">
+                <property name="sortFields"><list><ref bean="sortDateIssued"/><ref bean="sortTitleAsc"/></list></property>
+            </bean>
+        </property>
+        <property name="defaultFilterQueries">
+            <list>
+                <value>(author_authority:{0} OR advisor_authority:{0} OR coadvisor_authority:{0} OR referee_authority:{0}) AND search.resourcetype:Item</value>
+                <value>-withdrawn:true AND -discoverable:false AND latestVersion:true</value>
+            </list>
+        </property>
+        <property name="defaultRpp" value="10"/>
+    </bean>
+
     <bean id="academic_authored" class="org.dspace.discovery.configuration.DiscoveryRelatedItemConfiguration">
         <property name="id" value="RELATION.Person.authored"/>
         <property name="indexAlways" value="true"/>
@@ -69,7 +105,10 @@
                 <ref bean="academicFilter_campus"/>
             </list>
         </property>
-        <property name="sidebarFacets"><list><ref bean="searchFilterIssued"/><ref bean="searchFilterType"/></list></property>
+        <property name="sidebarFacets"><list>
+            <ref bean="searchFilterIssued"/><ref bean="searchFilterType"/>
+            <ref bean="searchFilterSubject"/><ref bean="academicFilter_course"/><ref bean="academicFilter_campus"/>
+        </list></property>
         <property name="searchSortConfiguration">
             <bean class="org.dspace.discovery.configuration.DiscoverySortConfiguration">
                 <property name="sortFields"><list><ref bean="sortDateIssued"/><ref bean="sortTitleAsc"/></list></property>
@@ -101,7 +140,10 @@
                 <ref bean="academicFilter_campus"/>
             </list>
         </property>
-        <property name="sidebarFacets"><list><ref bean="searchFilterIssued"/><ref bean="searchFilterType"/></list></property>
+        <property name="sidebarFacets"><list>
+            <ref bean="searchFilterIssued"/><ref bean="searchFilterType"/>
+            <ref bean="searchFilterSubject"/><ref bean="academicFilter_course"/><ref bean="academicFilter_campus"/>
+        </list></property>
         <property name="searchSortConfiguration">
             <bean class="org.dspace.discovery.configuration.DiscoverySortConfiguration">
                 <property name="sortFields"><list><ref bean="sortDateIssued"/><ref bean="sortTitleAsc"/></list></property>
@@ -133,7 +175,10 @@
                 <ref bean="academicFilter_campus"/>
             </list>
         </property>
-        <property name="sidebarFacets"><list><ref bean="searchFilterIssued"/><ref bean="searchFilterType"/></list></property>
+        <property name="sidebarFacets"><list>
+            <ref bean="searchFilterIssued"/><ref bean="searchFilterType"/>
+            <ref bean="searchFilterSubject"/><ref bean="academicFilter_course"/><ref bean="academicFilter_campus"/>
+        </list></property>
         <property name="searchSortConfiguration">
             <bean class="org.dspace.discovery.configuration.DiscoverySortConfiguration">
                 <property name="sortFields"><list><ref bean="sortDateIssued"/><ref bean="sortTitleAsc"/></list></property>
@@ -165,7 +210,10 @@
                 <ref bean="academicFilter_campus"/>
             </list>
         </property>
-        <property name="sidebarFacets"><list><ref bean="searchFilterIssued"/><ref bean="searchFilterType"/></list></property>
+        <property name="sidebarFacets"><list>
+            <ref bean="searchFilterIssued"/><ref bean="searchFilterType"/>
+            <ref bean="searchFilterSubject"/><ref bean="academicFilter_course"/><ref bean="academicFilter_campus"/>
+        </list></property>
         <property name="searchSortConfiguration">
             <bean class="org.dspace.discovery.configuration.DiscoverySortConfiguration">
                 <property name="sortFields"><list><ref bean="sortDateIssued"/><ref bean="sortTitleAsc"/></list></property>

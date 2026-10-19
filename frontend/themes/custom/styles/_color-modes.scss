@@ -1,0 +1,182 @@
+// Bootstrap handles its native dark variants; these tokens also cover DSpace
+// component mappings and the institutional surfaces layered on top of it.
+:root {
+  color-scheme: light;
+}
+
+:root[data-bs-theme='dark'] {
+  color-scheme: dark;
+  --ufal-ink: #e5eef6;
+  --ufal-surface: #182535;
+  --ufal-surface-muted: #202f40;
+  --ufal-blue-soft: #1d3447;
+  --ufal-blue-border: #385b73;
+  --ufal-badge-color: #a0d9f8;
+  --ufal-focus: #85c8f1;
+  --ufal-footer-bg: #0c131d;
+  --ufal-accent: #ff6973;
+  --ufal-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+
+  --bs-body-bg: #101923;
+  --bs-body-bg-rgb: 16, 25, 35;
+  --bs-body-color: #dbe6ef;
+  --bs-body-color-rgb: 219, 230, 239;
+  --bs-heading-color: var(--ufal-ink);
+  --bs-emphasis-color: #f1f6fb;
+  --bs-emphasis-color-rgb: 241, 246, 251;
+  --bs-secondary-color: #a8b9c9;
+  --bs-secondary-color-rgb: 168, 185, 201;
+  --bs-secondary-bg: var(--ufal-surface-muted);
+  --bs-secondary-bg-rgb: 32, 47, 64;
+  --bs-tertiary-bg: var(--ufal-surface);
+  --bs-tertiary-bg-rgb: 24, 37, 53;
+  --bs-light-rgb: 32, 47, 64;
+  --bs-border-color: #3a4f63;
+  --bs-border-color-translucent: rgba(168, 185, 201, 0.2);
+  --bs-link-color: #85c8f1;
+  --bs-link-color-rgb: 133, 200, 241;
+  --bs-link-hover-color: #b7e2fb;
+  --bs-link-hover-color-rgb: 183, 226, 251;
+  --bs-input-bg: var(--ufal-surface);
+  --bs-input-color: var(--bs-body-color);
+  --bs-input-border-color: #6d8297;
+  --bs-dropdown-link-hover-bg: var(--ufal-blue-soft);
+  --bs-dropdown-link-hover-color: var(--bs-link-hover-color);
+  --bs-card-border-color: var(--bs-border-color);
+  --ds-dso-selector-current-background-color: var(--ufal-surface-muted);
+  --ds-dso-selector-current-background-hover-color: var(--ufal-blue-soft);
+  --ds-slider-handle-color: var(--bs-link-color);
+
+  #main-navbar.navbar {
+    background-color: var(--ufal-surface);
+  }
+
+  .form-control, .form-select, .input-group-text {
+    color: var(--bs-body-color);
+    background-color: var(--ufal-surface);
+    border-color: var(--bs-input-border-color);
+  }
+
+  .form-control::placeholder {
+    color: var(--bs-secondary-color);
+  }
+
+  .form-control:disabled, .form-select:disabled {
+    background-color: var(--ufal-surface-muted);
+  }
+
+  .btn-link, .btn-outline-primary {
+    --bs-btn-color: var(--bs-link-color);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-focus-shadow-rgb: 133, 200, 241;
+  }
+
+  .btn-link {
+    --bs-btn-hover-color: var(--bs-link-hover-color);
+    --bs-btn-active-color: var(--bs-link-hover-color);
+  }
+
+  .btn-outline-primary {
+    --bs-btn-border-color: var(--bs-link-color);
+  }
+
+  .btn-outline-secondary {
+    --bs-btn-color: var(--bs-secondary-color);
+    --bs-btn-border-color: var(--bs-input-border-color);
+  }
+
+  .btn:focus {
+    outline-color: var(--ufal-focus) !important;
+  }
+
+  .dropdown-menu {
+    --bs-dropdown-bg: var(--ufal-surface);
+    --bs-dropdown-color: var(--bs-body-color);
+    --bs-dropdown-border-color: var(--bs-border-color);
+    --bs-dropdown-link-color: var(--bs-body-color);
+    --bs-dropdown-link-hover-color: var(--bs-link-hover-color);
+    --bs-dropdown-link-hover-bg: var(--ufal-blue-soft);
+  }
+
+  .card {
+    --bs-card-bg: var(--ufal-surface);
+    --bs-card-color: var(--bs-body-color);
+    --bs-card-cap-bg: var(--ufal-surface-muted);
+    --bs-card-border-color: var(--bs-border-color);
+  }
+
+  .modal-content {
+    --bs-modal-bg: var(--ufal-surface);
+    --bs-modal-color: var(--bs-body-color);
+    --bs-modal-border-color: var(--bs-border-color);
+  }
+
+  .table {
+    --bs-table-bg: var(--ufal-surface);
+    --bs-table-color: var(--bs-body-color);
+    --bs-table-border-color: var(--bs-border-color);
+    --bs-table-accent-bg: transparent;
+    --bs-table-hover-bg: var(--ufal-blue-soft);
+    --bs-table-hover-color: var(--bs-body-color);
+  }
+
+  .pagination {
+    --bs-pagination-bg: var(--ufal-surface);
+    --bs-pagination-color: var(--bs-link-color);
+    --bs-pagination-border-color: var(--bs-border-color);
+    --bs-pagination-hover-bg: var(--ufal-blue-soft);
+    --bs-pagination-hover-color: var(--bs-link-hover-color);
+    --bs-pagination-hover-border-color: var(--bs-link-color);
+    --bs-pagination-focus-bg: var(--ufal-blue-soft);
+    --bs-pagination-focus-color: var(--bs-link-hover-color);
+    --bs-pagination-disabled-bg: var(--ufal-surface-muted);
+    --bs-pagination-disabled-color: var(--bs-secondary-color);
+    --bs-pagination-disabled-border-color: var(--bs-border-color);
+  }
+
+  .bg-white, .bg-light, .text-bg-light {
+    background-color: var(--ufal-surface-muted) !important;
+  }
+
+  .text-dark, .text-bg-light {
+    color: var(--bs-body-color) !important;
+  }
+
+  .text-success { color: #90cba5 !important; }
+  .text-primary, .link-primary { color: var(--bs-link-color) !important; }
+  .text-secondary { color: var(--bs-secondary-color) !important; }
+  .text-warning { color: #f6cd83 !important; }
+  .text-danger { color: #ff9fa6 !important; }
+  .text-info { color: var(--bs-link-color) !important; }
+  .alert { color: var(--bs-alert-color); }
+
+  img[src$='person-placeholder.svg'] {
+    filter: invert(0.88) hue-rotate(180deg);
+  }
+}
+
+.theme-toggle.btn {
+  padding-inline: 0.5rem;
+  color: var(--ds-header-icon-color);
+  border-radius: 50%;
+
+  &:hover, &[aria-pressed='true'] {
+    color: var(--ds-header-icon-color-hover);
+    background-color: var(--ufal-blue-soft);
+  }
+}
+
+// Animate only explicit switches, never first paint or a saved preference.
+// The class is removed after the transition so normal component animations
+// and navigation keep their own timing.
+@media (prefers-reduced-motion: no-preference) {
+  html.ufal-theme-changing,
+  html.ufal-theme-changing body,
+  html.ufal-theme-changing body *,
+  html.ufal-theme-changing body *::before,
+  html.ufal-theme-changing body *::after {
+    transition-property: color, background-color, border-color, box-shadow, fill, stroke;
+    transition-duration: 240ms;
+    transition-timing-function: ease-in-out;
+  }
+}

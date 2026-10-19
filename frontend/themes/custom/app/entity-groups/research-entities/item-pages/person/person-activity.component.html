@@ -1,0 +1,39 @@
+<section aria-labelledby="person-activity-heading" class="my-4">
+  <h2 id="person-activity-heading" class="h4">{{ 'person.profile.activity' | translate }}</h2>
+  <div class="activity-grid" aria-live="polite">
+    @for (summary of counts$ | async; track summary.role) {
+      <a class="activity-card" [attr.data-role]="summary.role"
+        [routerLink]="[itemPageRoute]" fragment="person-works" [queryParams]="{tab: 'RELATION.Person.' + summary.role}">
+        <span class="activity-count">
+          @if (summary.count === undefined) {
+            <span aria-hidden="true">…</span><span class="visually-hidden">{{ 'person.profile.loading' | translate }}</span>
+          } @else if (summary.count === null) {
+            <span aria-hidden="true">—</span><span class="visually-hidden">{{ 'person.profile.unavailable' | translate }}</span>
+          } @else { {{ summary.count }} }
+        </span>
+        <span>{{ ('person.profile.count.' + summary.role) | translate }}</span>
+      </a>
+    }
+  </div>
+  @if (context$ | async; as context) {
+    <div class="row mt-4">
+      @for (facet of context; track facet.field) {
+        @if (facet.values.length) {
+          <div class="col-12 col-md-4 mb-3" [attr.data-context]="facet.field">
+            <h3 class="h6">{{ ('person.profile.context.' + facet.field) | translate }}</h3>
+            <ul class="list-unstyled context-values">
+              @for (value of facet.values; track value.label) {
+                <li>
+                  <a [routerLink]="[itemPageRoute]" fragment="person-works" [queryParams]="filterParams(facet.field, value.label)">
+                    {{ value.label }} <span class="text-muted">({{ value.count }})</span>
+                  </a>
+                </li>
+              }
+            </ul>
+          </div>
+        }
+      }
+    </div>
+  }
+  <p class="small text-muted">{{ 'person.profile.context.help' | translate }}</p>
+</section>

@@ -26,7 +26,7 @@ services:
       # Public repository name returned by REST and reused in headings such as
       # "Estatísticas para <nome>". Keep it configurable without exposing the
       # Docker development placeholder to users.
-      dspace__P__name: ${DSPACE_NAME:-Repositório Institucional da UFAL}
+      dspace__P__name: ${DSPACE_NAME:-Repositório Institucional da UFAL — Campus Arapiraca}
       mail__P__admin: ${DSPACE_ADMIN_EMAIL:-${DSPACE_API_USER:-test@test.edu}}
       # OAI-PMH is served by the same Spring Boot backend at
       # ${dspace.server.url}/${oai.path}/request.

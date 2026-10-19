@@ -593,6 +593,20 @@
                     <hint>Enter the email of the person</hint>
                 </field>
             </row>
+            <row>
+                <field>
+                    <dc-schema>local</dc-schema><dc-element>person</dc-element><dc-qualifier>degree</dc-qualifier>
+                    <repeatable>false</repeatable><label>Titulação acadêmica</label><input-type>onebox</input-type>
+                    <hint>Titulação do cadastro da pessoa, por exemplo Dr., Me. ou Esp.; não é o cargo.</hint>
+                </field>
+            </row>
+            <row>
+                <field>
+                    <dc-schema>person</dc-schema><dc-element>identifier</dc-element><dc-qualifier>lattes</dc-qualifier>
+                    <repeatable>false</repeatable><label>Currículo Lattes</label><input-type>onebox</input-type>
+                    <hint>URL HTTPS do currículo no domínio lattes.cnpq.br, com identificador de 16 dígitos.</hint>
+                </field>
+            </row>
             <!--     <row>-->
             <!--     <field>-->
             <!--       <dc-schema>person</dc-schema>-->

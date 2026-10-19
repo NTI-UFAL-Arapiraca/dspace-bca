@@ -48,7 +48,7 @@ copiar o exemplo `people-authority.cfg.example` manualmente para o container.
 | `backend/config/submission-forms.xml` | Define os controles de edição e os seletores fechados de pessoas. |
 | `backend/config/registries/academic-metadata.xml` | Cadastra os campos adicionais. |
 | `backend/config/spring/api/academic-discovery.xml` | Acrescenta buscas por autoria, orientação, coorientação e banca, sem substituir as buscas oficiais. |
-| `frontend/themes/custom/` | Mostra nomes com links, curso e campus nos trabalhos e quatro abas no perfil de uma pessoa. |
+| `frontend/themes/custom/` | Mostra nomes com links, curso e campus nos trabalhos e perfil com titulação, contato, Lattes, resumo calculado e cinco abas de trabalhos. |
 
 Os arquivos do backend são montados como somente leitura nos serviços
 `dspace` e `dspace-cli`. As classes dos plugins já pertencem ao DSpace;
@@ -93,3 +93,40 @@ conciliação está descrito na [referência de pessoas da migração](../../../
 - [Authority Framework](https://wiki.lyrasis.org/spaces/DSDOC10x/pages/425331229/Authority%2Bframework%2Bfunctionalities).
 - [Formulários 10.1](https://github.com/DSpace/DSpace/blob/dspace-10.1/dspace/config/item-submission.xml).
 - [Entidades configuráveis](https://wiki.lyrasis.org/spaces/DSDOC10x/pages/408944761/Configurable%2BEntities).
+
+## Conteúdo dos perfis
+
+A extração preserva e-mail, URL Lattes e titulação em `people.json`. O
+`apply-people` cria os campos nas novas Person e enriquece cadastros existentes
+sem substituir valores divergentes de curadoria. A preparação registra
+`person.identifier.lattes` e `local.person.degree`; e-mail usa `person.email`.
+A titulação mantém o rótulo da origem (Dr., Dr.ª, Me., Ma., Esp.) e a interface
+mostra a descrição por extenso. Cargo e afiliação continuam separados.
+
+O perfil calcula as participações pelo Discovery, com as mesmas permissões
+das listas. `RELATION.Person.works` consulta os quatro campos de autoridade
+com OR: o total conta cada trabalho uma vez. As contagens por papel podem
+se sobrepor. Temas, cursos e campus vêm das facetas dos trabalhos, não de
+novos metadados de pessoa. Os links levam à aba Todos os trabalhos com o
+filtro selecionado; as listas mantêm paginação e filtros por assunto, curso,
+campus e data. A ausência de resultado não é usada para inferir afiliação,
+especialidade pessoal ou situação profissional atual.
+
+Em lotes existentes, registre os campos e use no projeto de migração:
+`uv run apply-people --refresh-profiles --dry-run`, depois
+`uv run apply-people --refresh-profiles`. Isso consulta a origem em leitura,
+confere identidades e participações e atualiza somente o manifesto de pessoas,
+sem regenerar pacotes SAF, mapfiles, arquivos ou políticas.
+
+O DSpace oculta `person.email` da API anônima por padrão. O perfil mostra
+o contato quando a API disponibiliza o campo ao visitante. Tornar esse
+metadado público exige uma decisão explícita: desativar a ocultação afeta
+todas as Person com e-mail, incluindo cadastros futuros.
+
+A troca de abas e filtros dentro do mesmo perfil Person preserva o perfil e
+atualiza a busca de trabalhos. Os cartões e os links de temas, cursos e campus
+rolam até a seção de resultados, respeitando a preferência por movimento
+reduzido. A URL continua compartilhável; Voltar restaura o filtro e a posição
+anterior. O patch `apply-person-search-navigation.mjs`, aplicado nas imagens de
+desenvolvimento e produção, coordena os resolvers, o indicador de carregamento
+e a rolagem. As demais páginas conservam o comportamento de navegação do DSpace.

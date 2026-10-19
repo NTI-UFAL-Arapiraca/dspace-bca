@@ -1,0 +1,37 @@
+<header class="institution-header">
+  <div class="container">
+    <div class="institution-header__inner d-flex flex-row justify-content-between align-items-center">
+      <a class="institution-brand my-2" routerLink="/home">
+        <img src="assets/custom/images/brasao-ufal.svg" alt="Brasão da Universidade Federal de Alagoas" />
+        <span class="institution-brand__title">
+          Repositório Institucional
+          <span class="institution-brand__campus">UFAL — Campus Arapiraca</span>
+        </span>
+      </a>
+      <div class="institution-header__actions navbar navbar-light navbar-expand-md flex-shrink-0 px-0">
+        <ds-search-navbar></ds-search-navbar>
+        <div role="toolbar" [attr.aria-label]="'nav.user.description' | translate">
+          <button class="theme-toggle btn btn-link" type="button" data-test="theme-toggle"
+            (click)="colorMode.toggle()" [attr.aria-pressed]="colorMode.isDark()"
+            [attr.aria-label]="'theme.dark' | translate"
+            [title]="(colorMode.isDark() ? 'theme.enable-light' : 'theme.enable-dark') | translate">
+            <i class="fas fa-fw" [class.fa-sun]="colorMode.isDark()" [class.fa-moon]="!colorMode.isDark()" aria-hidden="true"></i>
+          </button>
+          <ds-lang-switch></ds-lang-switch>
+          <ds-context-help-toggle></ds-context-help-toggle>
+          <ds-auth-nav-menu></ds-auth-nav-menu>
+          <ds-impersonate-navbar></ds-impersonate-navbar>
+        </div>
+        @if (isMobile$ | async) {
+          <div class="ps-2">
+            <button class="navbar-toggler px-0" type="button" (click)="toggleNavbar()"
+              aria-controls="collapsingNav"
+              [attr.aria-expanded]="(menuService.isMenuCollapsed(menuID) | async) === false" [attr.aria-label]="'nav.toggle' | translate">
+              <span class="fas fa-bars fa-fw toggler-icon" aria-hidden="true"></span>
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</header>
