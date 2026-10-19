@@ -104,6 +104,16 @@ a:focus-visible, a.nav-link:focus-visible, button:focus-visible, [tabindex]:focu
 
   > .ds-menu-toggler-wrapper {
     border-radius: inherit;
+    // Keep the label and caret inside the same padded hover surface.
+    padding: var(--ds-navbar-item-padding);
+
+    .ds-menu-item {
+      padding: 0;
+    }
+
+    > .toggle-menu-icon {
+      flex-shrink: 0;
+    }
   }
 
   &:hover > .ds-menu-toggler-wrapper,
