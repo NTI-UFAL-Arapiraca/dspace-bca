@@ -93,4 +93,5 @@ Escolha verificações proporcionais aos arquivos alterados e não trate valida�
 
 ## Commits
 
-Use sempre Conventional Commits no formato `tipo(escopo): descrição`, em português quando adequado. Tipos comuns: `feat`, `fix`, `docs`, `refactor`, `test` e `chore`. Indique mudanças incompatíveis com `!` e explique o impacto no corpo do commit. Mantenha commits coesos e sem segredos.
+- Sempre que a tarefa solicitar um commit, crie-o usando **Conventional Commits** no formato `tipo(escopo): descrição`, em português quando adequado. Tipos comuns: `feat`, `fix`, `docs`, `refactor`, `test` e `chore`. Indique mudanças incompatíveis com `!` e explique o impacto no corpo do commit. Mantenha commits coesos e sem segredos.
+- Neste ambiente, `.git` é somente leitura no sandbox padrão. Ao preparar ou criar um commit, solicite permissão escalada desde a primeira operação que escreva no Git (por exemplo, `git add` e `git commit`); não tente primeiro sem essa permissão.
