@@ -25,8 +25,10 @@ de propriedades expostas e inclui `relationship.enable-virtual-metadata`.
 
 `config/item-submission.xml` liga a seção acadêmica à submissão e à edição.
 `config/spring/api/academic-discovery.xml` estende o mapa oficial de buscas
-com os quatro papéis. `indexAlways` garante que os campos desses filtros
-sejam indexados também nos trabalhos migrados sem tipo de entidade.
+com os quatro papéis e a busca pública `academic_works_search`, usada pelos
+links de curso e campus nas páginas de trabalho. `indexAlways` garante que os
+campos desses filtros sejam indexados também nos trabalhos migrados sem tipo
+de entidade.
 
 Os mounts são iguais em REST e CLI. O registro dos campos e a criação da
 coleção são feitos por `scripts/prepare-academic.sh`, conforme o

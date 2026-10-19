@@ -66,11 +66,12 @@ Os campos do acervo ficam assim:
 | Coorientador | `dc.contributor.coadvisor` |
 | Avaliador da banca | `dc.contributor.referee` |
 
-Curso e campus são campos de texto editáveis nesta entrega. Os quatro
-campos de pessoas usam seleção de cadastro existente. Se a pessoa ainda não
-existir, a biblioteca a cadastra na coleção Pessoas e depois a seleciona no
-trabalho. Programa de pós-graduação e grau acadêmico não são deduzidos do
-nome do curso.
+Curso e campus são campos de texto editáveis nesta entrega. Na página do
+trabalho, seus valores são links para a busca pública de trabalhos filtrada
+pelo valor selecionado. Os quatro campos de pessoas usam seleção de cadastro
+existente. Se a pessoa ainda não existir, a biblioteca a cadastra na coleção
+Pessoas e depois a seleciona no trabalho. Programa de pós-graduação e grau
+acadêmico não são deduzidos do nome do curso.
 
 ## Relações e acervo existente
 

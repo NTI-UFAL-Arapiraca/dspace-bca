@@ -18,6 +18,7 @@
                         <entry key="RELATION.Person.advised" value-ref="academic_advised"/>
                         <entry key="RELATION.Person.coadvised" value-ref="academic_coadvised"/>
                         <entry key="RELATION.Person.reviewed" value-ref="academic_reviewed"/>
+                        <entry key="academic_works_search" value-ref="academic_works_search"/>
                 </map>
             </list>
         </property>
@@ -51,6 +52,46 @@
         <property name="indexFieldName" value="campus"/>
         <property name="metadataFields"><list><value>local.campus.name</value></list></property>
         <property name="facetLimit" value="10"/>
+    </bean>
+
+    <!-- General public search used by course and campus links on item pages. -->
+    <bean id="academic_works_search" class="org.dspace.discovery.configuration.DiscoveryConfiguration">
+        <property name="id" value="academic_works_search"/>
+        <property name="indexAlways" value="true"/>
+        <property name="searchFilters">
+            <list>
+                <ref bean="searchFilterTitle"/>
+                <ref bean="searchFilterAuthor"/>
+                <ref bean="searchFilterIssued"/>
+                <ref bean="searchFilterSubject"/>
+                <ref bean="searchFilterType"/>
+                <ref bean="academicFilter_course"/>
+                <ref bean="academicFilter_campus"/>
+            </list>
+        </property>
+        <property name="sidebarFacets">
+            <list>
+                <ref bean="searchFilterIssued"/>
+                <ref bean="searchFilterType"/>
+                <ref bean="searchFilterSubject"/>
+                <ref bean="academicFilter_course"/>
+                <ref bean="academicFilter_campus"/>
+            </list>
+        </property>
+        <property name="searchSortConfiguration">
+            <bean class="org.dspace.discovery.configuration.DiscoverySortConfiguration">
+                <property name="sortFields">
+                    <list><ref bean="sortDateIssued"/><ref bean="sortTitleAsc"/></list>
+                </property>
+            </bean>
+        </property>
+        <property name="defaultFilterQueries">
+            <list>
+                <value>search.resourcetype:Item AND latestVersion:true</value>
+                <value>-withdrawn:true AND -discoverable:false</value>
+            </list>
+        </property>
+        <property name="defaultRpp" value="10"/>
     </bean>
 
     <bean id="academic_works" class="org.dspace.discovery.configuration.DiscoveryRelatedItemConfiguration">

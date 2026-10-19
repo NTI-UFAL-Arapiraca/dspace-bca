@@ -27,6 +27,7 @@ import { listableObjectComponent } from '../../../../../../../app/shared/object-
 import { ThemedResultsBackButtonComponent } from '../../../../../../../app/shared/results-back-button/themed-results-back-button.component';
 import { ThemedThumbnailComponent } from '../../../../../../../app/thumbnail/themed-thumbnail.component';
 
+import { AcademicMetadataLinkComponent } from '../untyped-item/academic-metadata-link.component';
 import { LocalizedItemPageDateFieldComponent } from '../untyped-item/date/localized-item-page-date-field.component';
 
 @listableObjectComponent('Publication', ViewMode.StandalonePage, Context.Any, 'custom')
@@ -40,6 +41,7 @@ import { LocalizedItemPageDateFieldComponent } from '../untyped-item/date/locali
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     AsyncPipe,
+    AcademicMetadataLinkComponent,
     AttachmentSectionComponent,
     CollectionsComponent,
     DsoEditMenuComponent,

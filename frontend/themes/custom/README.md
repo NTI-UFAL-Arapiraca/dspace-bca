@@ -25,9 +25,12 @@ Arquivos mantidos inicialmente:
   de autoria, orientação, coorientação e banca.
 
 Os campos de pessoas mostram links a partir de seus UUIDs de autoridade.
-Curso e campus usam os novos campos locais. As abas dependem das buscas
-configuradas em `backend/config/spring/api/academic-discovery.xml` e da
-reindexação Discovery; `item.showAuthorityRelations` está ativado no YAML.
+Curso e campus usam os novos campos locais e aparecem como links para uma busca
+pública filtrada pelo valor. O componente `academic-metadata-link.component.ts`
+aponta para a configuração `academic_works_search` em
+`backend/config/spring/api/academic-discovery.xml`. As abas dependem das buscas
+configuradas nesse arquivo e da reindexação Discovery;
+`item.showAuthorityRelations` está ativado no YAML.
 
 O componente `app/home-page/home-news/home-news.component.ts` mantém a extensão
 oficial registrada, mas usa um template vazio para remover da página inicial o

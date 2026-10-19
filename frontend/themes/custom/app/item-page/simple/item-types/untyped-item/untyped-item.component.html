@@ -55,12 +55,10 @@
       [metadataFields]="['dc.contributor.referee']"
       [label]="'item.page.referees' | translate">
     </ds-metadata-representation-list>
-    <ds-generic-item-page-field [item]="object"
-      [fields]="['local.course.name']" [label]="'item.page.course'">
-    </ds-generic-item-page-field>
-    <ds-generic-item-page-field [item]="object"
-      [fields]="['local.campus.name']" [label]="'item.page.campus'">
-    </ds-generic-item-page-field>
+    <ds-academic-metadata-link [item]="object" field="local.course.name" label="item.page.course">
+    </ds-academic-metadata-link>
+    <ds-academic-metadata-link [item]="object" field="local.campus.name" label="item.page.campus">
+    </ds-academic-metadata-link>
     <ds-generic-item-page-field [item]="object"
       [fields]="['journal.title']"
       [label]="'item.page.journal-title'">
