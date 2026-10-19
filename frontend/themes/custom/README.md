@@ -36,16 +36,7 @@ em `src/themes/custom` da versão `dspace-10.1`. Por exemplo, um cabeçalho pode
 ser sobrescrito em `app/header/`. O caminho e as importações devem acompanhar a
 mesma versão definida por `DSPACE_ANGULAR_TAG`.
 
-Durante o desenvolvimento local, use o fluxo com atualização automática
-descrito no `README.md` da raiz. Para compilar a imagem usada fora desse
-ambiente, reconstrua após alterar o tema:
-
-```bash
-docker compose -p d10 \
-  -f docker-compose-dist.yml \
-  -f docker-compose-rest.yml \
-  up -d --build dspace-angular
-```
-
-Alterações em `frontend/config/config.prod.yml` exigem apenas a recriação do
-container, pois esse arquivo é montado em tempo de execução.
+O fluxo de desenvolvimento está no [guia de inicialização local](../../../docs/guias/inicializacao-local.md).
+A publicação da imagem pelo GitHub/GHCR e a recriação dos containers ficam no
+[guia de operação](../../../docs/guias/operacao.md). O YAML de runtime é
+montado separadamente da imagem compilada.

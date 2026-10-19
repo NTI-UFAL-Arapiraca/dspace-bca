@@ -30,19 +30,8 @@ sejam indexados também nos trabalhos migrados sem tipo de entidade.
 
 Os mounts são iguais em REST e CLI. O registro dos campos e a criação da
 coleção são feitos por `scripts/prepare-academic.sh`, conforme o
-[guia de operação](../docs/guia-dspace-academico.md).
+[guia de operação](../docs/guias/preparacao-academica.md).
 
-Ao atualizar a versão do DSpace, extraia novamente o arquivo da branch ou da
-imagem correspondente, reaplique somente esses overrides e execute os testes
-de `test_backend_configuration.py`.
-
-Para verificar o carregamento das propriedades, os DTDs e os beans de
-Discovery contra as classes da imagem oficial, sem banco de dados:
-
-```bash
-docker build -t dspace-bca-backend:academic-check -f tests/backend/Dockerfile .
-```
-
-Execute esse comando na raiz de `dspace-bca`. A compilação Angular usa o
-`Dockerfile.angular` habitual; os testes do helper usam o ambiente Python
-do projeto de migração.
+A validação dos overrides e os comandos de atualização ficam no
+[guia de operação](../docs/guias/operacao.md). Mudanças de versão exigem
+reaplicar somente os overrides sobre a configuração oficial correspondente.

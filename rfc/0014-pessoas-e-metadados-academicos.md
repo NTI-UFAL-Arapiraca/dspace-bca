@@ -35,7 +35,7 @@ Configurações existentes com relações virtuais exigem plano de conversão.
   importação sem alterar a montagem somente leitura da produção normal;
 - tema de trabalhos/Publication e Person, traduções e YAML do frontend;
 - `scripts/prepare-academic.sh` e `prepare_people_collection.py`;
-- `docs/guia-dspace-academico.md`.
+- `docs/guias/preparacao-academica.md`.
 
 ## Consequências e validação
 

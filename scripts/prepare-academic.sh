@@ -67,4 +67,4 @@ model="$("${compose[@]}" exec -T dspace /dspace/bin/dspace dsprop -p relationshi
 "${compose[@]}" exec -T dspace /dspace/bin/dspace registry-loader -m /dspace/config/registries/academic-metadata.xml
 "${compose[@]}" exec -T dspace /dspace/bin/dspace initialize-entities -f /dspace/config/entities/relationship-types.xml
 uv run --project "$MIGRATION_DIR" python "$SCRIPT_DIR/prepare_people_collection.py" --env-file "$MIGRATION_ENV" --write-env
-echo "Preparação concluída. Siga docs/guia-dspace-academico.md para importar e conferir os vínculos."
+echo "Preparação concluída. Siga ../dspace-migration/docs/README.md para importar e conferir os vínculos."

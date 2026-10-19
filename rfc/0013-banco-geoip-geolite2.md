@@ -25,7 +25,7 @@ alguns fluxos de estatísticas.
 
 - `dspace-docker/docker-compose-rest.yml` define a propriedade e o bind mount;
 - `.env.example` documenta a variável obrigatória;
-- `docs/4_operacao_manutencao.md` descreve atualização e diagnóstico;
+- `docs/guias/operacao.md` descreve atualização e diagnóstico;
 - testes estruturais impedem a remoção acidental da configuração.
 
 ## Consequências e validação

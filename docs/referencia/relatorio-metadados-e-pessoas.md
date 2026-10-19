@@ -19,8 +19,8 @@ passaram. Em 14/10/2026, os overrides do backend, os formulários e os perfis
 também foram integrados à implantação. O build Angular e a validação dos
 arquivos na imagem oficial da CLI passaram. A execução contra a instalação
 e a revisão do lote continuam sendo etapas operacionais. Siga o
-[guia atual de preparação e execução](guia-dspace-academico.md) e o
-[guia de pessoas e vínculos](../../dspace-migration/docs/5_pessoas_e_vinculos.md).
+[guia atual de preparação e execução](../README.md) e o
+[guia de pessoas e vínculos](../../../dspace-migration/docs/referencia/pessoas-e-vinculos.md).
 
 Os achados abaixo registram o estado anterior à implementação; o guia atual
 é a referência para os arquivos e os comandos já integrados.
@@ -32,24 +32,24 @@ dos perfis devem ser tratados como entregas relacionadas, com validações
 próprias.
 
 **O que está confirmado no projeto.** O arquivo
-[`backend/config/submission-forms.xml`](../backend/config/submission-forms.xml)
+[`backend/config/submission-forms.xml`](../../backend/config/submission-forms.xml)
 é montado nos serviços REST e CLI. Seus formulários `traditionalpageone`,
 `traditionalpagetwo` e `publicationStep` não incluem orientador,
 coorientador, banca, curso nem campus. Também faltam controles específicos
 para `dc.description.note` e `dc.format.extent`.
 
 Já a página pública customizada
-[`untyped-item.component.html`](../frontend/themes/custom/app/item-page/simple/item-types/untyped-item/untyped-item.component.html)
+[`untyped-item.component.html`](../../frontend/themes/custom/app/item-page/simple/item-types/untyped-item/untyped-item.component.html)
 exibe `dc.contributor.advisor` e `dc.contributor.referee`. Isso explica por que
 um valor importado pode aparecer na página do trabalho e não ter um controle
 no formulário de edição. A
-[`RFC 0004`](../rfc/0004-metadados-academicos-na-pagina-do-item.md)
+[`RFC 0004`](../../rfc/0004-metadados-academicos-na-pagina-do-item.md)
 registra essa alteração de exibição.
 
 Também consultei o projeto irmão de migração, especialmente
-[`metadados_customizados.md`](../../dspace-migration/docs/metadados_customizados.md),
-[`migration-metadata.xml`](../../dspace-migration/config/registries/migration-metadata.xml)
-e [`extract_metadata.sql`](../../dspace-migration/sql/extract_metadata.sql).
+[`metadados_customizados.md`](../../../dspace-migration/docs/referencia/metadados-customizados.md),
+[`migration-metadata.xml`](../../../dspace-migration/config/registries/migration-metadata.xml)
+e [`extract_metadata.sql`](../../../dspace-migration/sql/extract_metadata.sql).
 Na investigação inicial, eles estabeleciam os seguintes significados. Os
 aliases de curso e campus foram posteriormente substituídos no pipeline,
 conforme a atualização acima:
@@ -119,7 +119,7 @@ do modo escolhido.
 **Onde fazer as adaptações.** O diretório `frontend/overrides/` é uma
 convenção deste projeto: os arquivos são aplicados explicitamente pelo
 Dockerfile ou pelos patches. Ele não é um catálogo automático de campos.
-O [`Dockerfile.angular`](../Dockerfile.angular) mostra esse mecanismo.
+O [`Dockerfile.angular`](../../Dockerfile.angular) mostra esse mecanismo.
 
 | Responsabilidade | Local adequado |
 | --- | --- |
