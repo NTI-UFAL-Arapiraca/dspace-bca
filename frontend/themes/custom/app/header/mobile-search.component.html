@@ -1,7 +1,8 @@
 <button class="btn btn-link px-0" type="button" data-test="header-search-icon"
-  aria-haspopup="dialog" [attr.aria-label]="'search.header.open' | translate"
+  aria-haspopup="dialog"
   [title]="'search.header.open' | translate" (click)="open(searchDialog)">
   <i class="fas fa-search fa-lg fa-fw" aria-hidden="true"></i>
+  <span class="ms-1 small">{{ 'search.form.search' | translate }}</span>
 </button>
 
 <ng-template #searchDialog let-modal>
@@ -10,6 +11,7 @@
     <button type="button" class="mobile-search-close btn btn-link" (click)="modal.dismiss()"
       [attr.aria-label]="'search.header.close' | translate">
       <i class="fas fa-times" aria-hidden="true"></i>
+      <span class="ms-1">{{ 'repository.close' | translate }}</span>
     </button>
   </div>
   <div class="modal-body">

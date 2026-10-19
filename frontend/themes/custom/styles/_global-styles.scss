@@ -29,7 +29,7 @@ a:focus-visible, a.nav-link:focus-visible, button:focus-visible, [tabindex]:focu
 }
 
 .institution-header__inner {
-  min-height: 96px;
+  min-height: 88px;
   column-gap: 1.5rem;
 }
 
@@ -131,18 +131,22 @@ a:focus-visible, a.nav-link:focus-visible, button:focus-visible, [tabindex]:focu
   padding-block: 1rem 3rem;
 }
 
-// The existing search remains the first task on the home page.
+// Keep the official search immediately after the institutional introduction.
 ds-home-page ds-search-form {
   display: block;
-  padding: clamp(1rem, 3vw, 2rem);
-  margin-block: 0.5rem 2.5rem;
-  background: var(--ufal-blue-soft);
+  padding: clamp(1rem, 3vw, 1.75rem);
+  margin-block: 1rem 2.5rem;
+  background: var(--ufal-surface);
   border: 1px solid var(--ufal-blue-border);
-  border-top: 3px solid #{$primary};
   border-radius: var(--bs-border-radius-lg);
+  box-shadow: var(--ufal-shadow);
 
   .input-group {
-    margin-bottom: 0 !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .search-context {
+    margin: 0;
   }
 
   .form-control, .search-button {
@@ -151,6 +155,10 @@ ds-home-page ds-search-form {
 }
 
 ds-search-form .search-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   padding-inline: 1.25rem;
 }
 
@@ -200,6 +208,8 @@ ds-top-level-community-list {
       color: var(--bs-link-color);
       font-size: 1.0625rem;
       font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
     }
 
     &:focus-within {
@@ -348,7 +358,7 @@ ds-footer .bottom-footer {
   }
 }
 
-ds-footer :focus-visible {
+ds-footer .bottom-footer :focus-visible {
   outline-color: #fff;
 }
 
@@ -359,16 +369,15 @@ ds-footer :focus-visible {
 }
 
 @media (max-width: 767.98px) {
-  // Keep the upstream text as the button's accessible name. Its template
-  // supplies a text node rather than a label span, so only its font is hidden.
   .search-controls .open-sidebar {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
+    gap: 0.375rem;
+    min-width: 48px;
     min-height: 48px;
-    padding: 0;
-    font-size: 0;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
 
     i {
       font-size: 1rem;
@@ -388,22 +397,23 @@ ds-footer :focus-visible {
 
     .scope-button, .search-button {
       display: inline-flex;
-      flex: 0 0 48px;
+      flex: 0 0 auto;
+      gap: 0.5rem;
       align-items: center;
       justify-content: center;
       min-width: 48px;
       min-height: 48px;
       max-width: none;
-      padding-inline: 0;
+      padding-inline: 0.75rem;
     }
 
     .search-control-label {
-      display: none;
+      display: inline;
     }
   }
 
   ds-search-form .search-context {
-    margin-top: -0.5rem;
+    margin-top: 0;
     margin-bottom: 1rem;
     color: var(--bs-secondary-color);
     font-size: 0.875rem;
@@ -417,18 +427,21 @@ ds-footer :focus-visible {
   }
 }
 
-@media (max-width: 575.98px) {
+@media (max-width: 767.98px) {
   :root {
     --ds-header-logo-height: 52px;
   }
 
   .institution-header__inner {
+    position: relative;
     flex-wrap: wrap;
     padding-top: 0.5rem;
   }
 
   .institution-brand {
     gap: 0.75rem;
+    max-width: 100%;
+    padding-inline-end: 4.75rem;
   }
 
   .institution-brand__title {
@@ -436,9 +449,24 @@ ds-footer :focus-visible {
   }
 
   .institution-header__actions {
+    position: static;
     width: 100%;
-    justify-content: flex-end;
+    justify-content: space-between;
+    column-gap: 0.5rem;
     padding-block: 0;
+
+    [role="toolbar"] {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    // Keep the menu beside the brand; search and account tools share row two.
+    > .ps-2 {
+      position: absolute;
+      inset-inline-end: 0;
+      top: 0.75rem;
+    }
   }
 
   ds-recent-item-list ul.list-unstyled > li {
@@ -448,6 +476,49 @@ ds-footer :focus-visible {
   .nav-tabs .nav-link {
     padding: 0.625rem 0.75rem;
     font-size: 0.875rem;
+  }
+}
+
+// Reading links stay recognisable without depending on colour or hover.
+#main-content {
+  .repository-text-link,
+  .item-list-title a,
+  a.item-list-title,
+  a.lead,
+  ds-metadata-representation-list a,
+  ds-academic-metadata-link a,
+  ds-generic-item-page-field a,
+  ds-item-page-uri-field a,
+  .academic-item__access a,
+  .profile-links a,
+  .context-values a {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+
+    &:hover {
+      text-decoration-thickness: 2px;
+    }
+  }
+}
+
+.repository-text-link {
+  display: inline-block;
+  min-height: 44px;
+  padding-block: 0.5rem;
+  font-weight: 600;
+}
+
+.academic-item {
+  .simple-view-element {
+    margin-bottom: 1.5rem;
+  }
+
+  .item-page-label {
+    margin-bottom: 0.5rem;
+    color: var(--ufal-ink);
+    font-size: 1rem;
+    font-weight: 650;
   }
 }
 

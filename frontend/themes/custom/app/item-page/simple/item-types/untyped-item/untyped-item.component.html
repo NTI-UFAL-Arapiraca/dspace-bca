@@ -13,16 +13,17 @@
   </div>
 }
 
-<div class="d-flex flex-row">
+<div class="academic-item__heading d-flex align-items-start gap-3">
   <ds-item-page-title-field [item]="object" class="me-auto">
   </ds-item-page-title-field>
   <ds-dso-edit-menu></ds-dso-edit-menu>
 </div>
-<div class="row">
-  <div class="col-12 col-md-4">
+<div class="academic-item">
+  <section class="academic-item__access" [attr.aria-label]="'repository.item.document' | translate">
     @if (!(mediaViewer.image || mediaViewer.video)) {
       <ds-metadata-field-wrapper [hideIfNoTextContent]="false">
-        <ds-thumbnail [thumbnail]="object?.thumbnail | async"></ds-thumbnail>
+        <ds-thumbnail [thumbnail]="object?.thumbnail | async"
+          [defaultImage]="'assets/custom/images/document-placeholder.svg'"></ds-thumbnail>
       </ds-metadata-field-wrapper>
     }
     @if (mediaViewer.image || mediaViewer.video) {
@@ -33,58 +34,11 @@
     @if (showDownloadLinkAsAttachment !== true) {
       <ds-item-page-file-section [item]="object"></ds-item-page-file-section>
     }
-    <ds-item-page-date-field [item]="object"></ds-item-page-date-field>
-    <ds-metadata-representation-list class="ds-item-page-mixed-author-field"
-      [parentItem]="object"
-      [itemType]="'Person'"
-      [metadataFields]="['dc.contributor.author', 'dc.creator']"
-      [label]="'item.page.authors' | translate">
-    </ds-metadata-representation-list>
-    <ds-metadata-representation-list
-      [parentItem]="object" [itemType]="'Person'"
-      [metadataFields]="['dc.contributor.advisor']"
-      [label]="'item.page.advisor' | translate">
-    </ds-metadata-representation-list>
-    <ds-metadata-representation-list
-      [parentItem]="object" [itemType]="'Person'"
-      [metadataFields]="['dc.contributor.coadvisor']"
-      [label]="'item.page.coadvisor' | translate">
-    </ds-metadata-representation-list>
-    <ds-metadata-representation-list
-      [parentItem]="object" [itemType]="'Person'"
-      [metadataFields]="['dc.contributor.referee']"
-      [label]="'item.page.referees' | translate">
-    </ds-metadata-representation-list>
-    <ds-academic-metadata-link [item]="object" field="local.course.name" label="item.page.course">
-    </ds-academic-metadata-link>
-    <ds-academic-metadata-link [item]="object" field="local.campus.name" label="item.page.campus">
-    </ds-academic-metadata-link>
-    <ds-generic-item-page-field [item]="object"
-      [fields]="['journal.title']"
-      [label]="'item.page.journal-title'">
-    </ds-generic-item-page-field>
-    <ds-generic-item-page-field [item]="object"
-      [fields]="['journal.identifier.issn']"
-      [label]="'item.page.journal-issn'">
-    </ds-generic-item-page-field>
-    <ds-generic-item-page-field [item]="object"
-      [fields]="['journalvolume.identifier.name']"
-      [label]="'item.page.volume-title'">
-    </ds-generic-item-page-field>
-    <ds-generic-item-page-field [item]="object"
-      [fields]="['dc.publisher']"
-      [label]="'item.page.publisher'">
-    </ds-generic-item-page-field>
-    <ds-generic-item-page-field [item]="object"
-      [fields]="['dc.identifier.doi', 'dc.relation.hasversion']"
-      [label]="'item.page.doi'"
-      urlRegex="^https?://">
-    </ds-generic-item-page-field>
-  </div>
-  <div class="col-12 col-md-6">
     @if (showDownloadLinkAsAttachment) {
       <ds-item-page-attachment-section [item]="object"></ds-item-page-attachment-section>
     }
+  </section>
+  <section class="academic-item__content" [attr.aria-label]="'repository.item.description' | translate">
     <ds-item-page-abstract-field
       class="document-abstract"
       [item]="object">
@@ -136,9 +90,58 @@
     <ds-item-page-license-field [item]="object">
     </ds-item-page-license-field>
     <div>
-      <a class="btn btn-outline-primary" [routerLink]="[itemPageRoute + '/full']" role="button" tabindex="0">
-        <i class="fas fa-info-circle"></i> {{"item.page.link.full" | translate}}
+      <a class="repository-text-link" [routerLink]="[itemPageRoute + '/full']">
+        {{"item.page.link.full" | translate}} <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
       </a>
     </div>
-  </div>
+  </section>
+  <section class="academic-item__metadata" [attr.aria-label]="'submission.sections.academic.details' | translate">
+    <ds-item-page-date-field [item]="object"></ds-item-page-date-field>
+    <ds-metadata-representation-list class="ds-item-page-mixed-author-field"
+      [parentItem]="object"
+      [itemType]="'Person'"
+      [metadataFields]="['dc.contributor.author', 'dc.creator']"
+      [label]="'item.page.authors' | translate">
+    </ds-metadata-representation-list>
+    <ds-metadata-representation-list
+      [parentItem]="object" [itemType]="'Person'"
+      [metadataFields]="['dc.contributor.advisor']"
+      [label]="'item.page.advisor' | translate">
+    </ds-metadata-representation-list>
+    <ds-metadata-representation-list
+      [parentItem]="object" [itemType]="'Person'"
+      [metadataFields]="['dc.contributor.coadvisor']"
+      [label]="'item.page.coadvisor' | translate">
+    </ds-metadata-representation-list>
+    <ds-metadata-representation-list
+      [parentItem]="object" [itemType]="'Person'"
+      [metadataFields]="['dc.contributor.referee']"
+      [label]="'item.page.referees' | translate">
+    </ds-metadata-representation-list>
+    <ds-academic-metadata-link [item]="object" field="local.course.name" label="item.page.course">
+    </ds-academic-metadata-link>
+    <ds-academic-metadata-link [item]="object" field="local.campus.name" label="item.page.campus">
+    </ds-academic-metadata-link>
+    <ds-generic-item-page-field [item]="object"
+      [fields]="['journal.title']"
+      [label]="'item.page.journal-title'">
+    </ds-generic-item-page-field>
+    <ds-generic-item-page-field [item]="object"
+      [fields]="['journal.identifier.issn']"
+      [label]="'item.page.journal-issn'">
+    </ds-generic-item-page-field>
+    <ds-generic-item-page-field [item]="object"
+      [fields]="['journalvolume.identifier.name']"
+      [label]="'item.page.volume-title'">
+    </ds-generic-item-page-field>
+    <ds-generic-item-page-field [item]="object"
+      [fields]="['dc.publisher']"
+      [label]="'item.page.publisher'">
+    </ds-generic-item-page-field>
+    <ds-generic-item-page-field [item]="object"
+      [fields]="['dc.identifier.doi', 'dc.relation.hasversion']"
+      [label]="'item.page.doi'"
+      urlRegex="^https?://">
+    </ds-generic-item-page-field>
+  </section>
 </div>

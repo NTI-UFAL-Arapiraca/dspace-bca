@@ -1,0 +1,132 @@
+:host {
+  display: block;
+}
+
+.repository-intro {
+  padding-top: 1rem;
+}
+
+.repository-intro__surface {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(15rem, 1fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+  padding: clamp(1.5rem, 4vw, 3.25rem);
+  color: var(--ufal-ink);
+  background: linear-gradient(120deg, var(--ufal-blue-soft), var(--ufal-surface));
+  border: 1px solid var(--ufal-blue-border);
+  border-radius: 1rem;
+}
+
+.repository-intro__eyebrow {
+  margin-bottom: 1rem;
+  color: var(--bs-link-color);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  &::before {
+    display: inline-block;
+    width: 1.75rem;
+    height: 3px;
+    margin: 0 0.75rem 0.2rem 0;
+    background: var(--ufal-accent);
+    content: '';
+  }
+}
+
+h1 {
+  max-width: 22ch;
+  margin-bottom: 1.25rem;
+  font-size: clamp(1.875rem, 3.3vw, 3rem);
+  font-weight: 650;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.repository-intro__description {
+  max-width: 55ch;
+  margin: 0;
+  color: var(--bs-body-color);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+}
+
+.repository-intro__paths {
+  padding-inline-start: 1.75rem;
+  border-inline-start: 1px solid var(--ufal-blue-border);
+
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 48px;
+    padding-block: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid var(--ufal-blue-border);
+
+    span {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.25em;
+    }
+
+    &:hover {
+      color: var(--bs-link-hover-color);
+    }
+  }
+}
+
+.repository-intro__nav-title {
+  margin-bottom: 0.25rem;
+  color: var(--ufal-ink);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.repository-intro__hint {
+  margin: 1rem 0 0;
+  color: var(--bs-secondary-color);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 767.98px) {
+  h1 {
+    max-width: none;
+    font-size: 1.75rem;
+    text-wrap: wrap;
+  }
+
+  .repository-intro__surface {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+
+  .repository-intro__eyebrow {
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+  }
+
+  .repository-intro__description {
+    font-size: 0.9375rem;
+  }
+
+  .repository-intro__paths {
+    padding-inline-start: 0;
+    border-inline-start: 0;
+
+    a {
+      font-size: 0.875rem;
+      padding-block: 0.5rem;
+    }
+  }
+
+  .repository-intro__hint {
+    margin-top: 0.75rem;
+  }
+}

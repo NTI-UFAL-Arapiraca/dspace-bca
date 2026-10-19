@@ -29,7 +29,7 @@
         @for (value of values('person.identifier.lattes'); track value) {
           @if (lattesUrl(value); as href) {
             <li><a [href]="href" target="_blank" rel="noopener noreferrer" data-test="person-lattes">
-              <i class="fas fa-external-link-alt me-2" aria-hidden="true"></i>{{ 'person.profile.lattes' | translate }}
+              {{ 'person.profile.lattes' | translate }} <i class="fas fa-external-link-alt ms-1" aria-hidden="true"></i>
               <span class="visually-hidden">{{ 'person.profile.external' | translate }}</span>
             </a></li>
           }
@@ -37,8 +37,8 @@
       </ul>
     }
     <ds-item-page-orcid-field [item]="object"></ds-item-page-orcid-field>
-    <a class="btn btn-outline-primary mt-2" [routerLink]="[itemPageRoute + '/full']">
-      {{ 'item.page.link.full' | translate }}
+    <a class="repository-text-link d-inline-block mt-2" [routerLink]="[itemPageRoute + '/full']">
+      {{ 'item.page.link.full' | translate }} <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
     </a>
   </div>
   <div class="col-12 col-md-9">

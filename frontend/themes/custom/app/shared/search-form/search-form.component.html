@@ -1,6 +1,6 @@
 <form #form="ngForm" (ngSubmit)="onSubmit(form.value)" action="/search" role="search"
   [attr.aria-label]="searchPlaceholder">
-  <div class="mb-3 input-group">
+  <div class="mb-3 input-group repository-search-input">
     @if (showScopeSelector) {
       <button class="scope-button btn btn-outline-secondary text-truncate" type="button"
         [ngbTooltip]="dsoNameService.getName(selectedScope | async) || ('search.form.scope.all' | translate)"

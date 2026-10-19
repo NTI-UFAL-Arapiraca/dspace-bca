@@ -11,7 +11,7 @@
             <span aria-hidden="true">—</span><span class="visually-hidden">{{ 'person.profile.unavailable' | translate }}</span>
           } @else { {{ summary.count }} }
         </span>
-        <span>{{ ('person.profile.count.' + summary.role) | translate }}</span>
+        <span class="activity-label">{{ ('person.profile.count.' + summary.role) | translate }} <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i></span>
       </a>
     }
   </div>

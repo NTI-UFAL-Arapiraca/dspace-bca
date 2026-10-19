@@ -2,4 +2,64 @@
 // the abstract component, keeping the rule scoped to this field only.
 .document-abstract {
   text-align: justify;
+  hyphens: auto;
+}
+
+:host {
+  display: block;
+}
+
+.academic-item__heading {
+  hyphens: none;
+  margin-block: 1rem 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--bs-border-color);
+}
+
+.academic-item {
+  display: grid;
+  grid-template-columns: minmax(0, 19rem) minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  grid-template-areas: 'access content' 'metadata content';
+  gap: 1.5rem 2.5rem;
+  align-items: start;
+}
+
+.academic-item__access, .academic-item__metadata, .academic-item__content {
+  min-width: 0;
+  padding: clamp(1.25rem, 2.5vw, 2rem);
+  background: var(--ufal-surface);
+  border: 1px solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius-lg);
+  overflow-wrap: anywhere;
+}
+
+.academic-item__access {
+  grid-area: access;
+  background: var(--ufal-blue-soft);
+  border-color: var(--ufal-blue-border);
+
+  ds-thumbnail {
+    display: block;
+    max-width: 8rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.academic-item__metadata {
+  grid-area: metadata;
+}
+
+.academic-item__content {
+  grid-area: content;
+  line-height: 1.8;
+}
+
+@media (max-width: 991.98px) {
+  .academic-item {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    grid-template-areas: 'access' 'content' 'metadata';
+    gap: 1.25rem;
+  }
 }

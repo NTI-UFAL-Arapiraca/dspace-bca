@@ -17,4 +17,5 @@
 - [Relatório de metadados e pessoas](referencia/relatorio-metadados-e-pessoas.md).
 - [Configuração do backend](../backend/README.md).
 - [Personalização do tema](../frontend/themes/custom/README.md).
+- [Revisão de UX/UI e validação responsiva](referencia/revisao-ux-ui.md).
 - [RFCs](../rfc/README.md).

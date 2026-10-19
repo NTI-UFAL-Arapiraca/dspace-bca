@@ -1,0 +1,26 @@
+@media (max-width: 767.98px) {
+  // The upstream scoped rule caps the selector at 150px. Override it inside
+  // this component so the visible scope label can occupy its own mobile row.
+  .repository-search-input {
+    flex-wrap: wrap;
+
+    > .scope-button {
+      flex: 1 0 100%;
+      max-width: 100%;
+      width: 100%;
+      justify-content: flex-start;
+      margin: 0 0 0.5rem;
+      border-radius: var(--bs-border-radius) !important;
+
+      .search-control-label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    > .form-control {
+      border-start-start-radius: var(--bs-border-radius) !important;
+      border-end-start-radius: var(--bs-border-radius) !important;
+    }
+  }
+}

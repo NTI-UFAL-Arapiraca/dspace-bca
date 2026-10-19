@@ -158,7 +158,7 @@
 .theme-toggle.btn {
   padding-inline: 0.5rem;
   color: var(--ds-header-icon-color);
-  border-radius: 50%;
+  border-radius: var(--bs-border-radius);
 
   &:hover, &[aria-pressed='true'] {
     color: var(--ds-header-icon-color-hover);

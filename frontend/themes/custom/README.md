@@ -32,9 +32,10 @@ aponta para a configuração `academic_works_search` em
 configuradas nesse arquivo e da reindexação Discovery;
 `item.showAuthorityRelations` está ativado no YAML.
 
-O componente `app/home-page/home-news/home-news.component.ts` mantém a extensão
-oficial registrada, mas usa um template vazio para remover da página inicial o
-banner promocional padrão do DSpace.
+O componente `app/home-page/home-news/` usa a extensão oficial para apresentar
+o acervo institucional, com título, descrição e links para pesquisa no acervo
+e comunidades. Busca, comunidades e adições recentes continuam herdadas da home
+oficial; nenhum total ou conteúdo do acervo é inventado no tema.
 
 ## Identidade visual
 
@@ -54,13 +55,13 @@ as variáveis `--ds-*` integram os componentes do DSpace e as `--ufal-*`
 compartilham os tokens próprios com os estilos dos perfis. Os ajustes globais
 entram depois dos estilos base para preservar a precedência do tema.
 
-Em telas abaixo de 768 px, a lupa do cabeçalho abre uma janela de pesquisa
-com foco no campo e fechamento por botão, Escape ou envio da busca. Ela consulta
+Em telas abaixo de 768 px, o controle “Pesquisar” do cabeçalho abre uma janela
+de pesquisa com foco no campo e fechamento por botão, Escape ou envio da busca. Ela consulta
 todo o repositório, sem herdar filtros da página atual nem expandir sobre os
-outros controles. As barras de pesquisa mostram apenas os ícones de escopo e
-pesquisa nessa largura, assim como o botão de ferramentas de busca, mantendo os nomes
-acessíveis dos controles. No desktop, os textos dos botões e a expansão original
-da busca do cabeçalho são preservados.
+outros controles. As barras de pesquisa preservam os textos dos controles.
+No celular, o seletor de escopo ocupa uma linha própria, deixando espaço para a consulta e o botão
+“Pesquisar”. O botão de ferramentas também mantém seu texto visível. No desktop,
+a expansão original da busca do cabeçalho é preservada.
 
 Abaixo da barra, no mobile, um resumo informa a comunidade/coleção selecionada
 e os filtros aplicados, usando os rótulos fornecidos pelo Discovery. Sem
@@ -71,6 +72,18 @@ sem apresentar uma busca restrita como se fosse em todo o repositório.
 Na página `/search`, retirar o escopo consulta novamente todo o repositório,
 sem reutilizar a coleção inicial como valor padrão da paginação. Essa extensão
 não altera os escopos fixos das pesquisas em comunidades, coleções ou perfis.
+
+A página simples do trabalho, compartilhada com Publication, usa uma grade
+local: arquivos e metadados na lateral, conteúdo na área de leitura. Abaixo de
+992 px, a ordem é arquivos, conteúdo e dados acadêmicos, igual à ordem do DOM.
+Os componentes oficiais continuam responsáveis por autorização, download,
+mídia, licenças e exibição condicional de campos. O resumo permanece justificado
+conforme a RFC 0006. Links de registro completo usam semântica de navegação;
+cartões de atividade dos perfis exibem rótulos sublinhados e setas decorativas.
+
+A avaliação, as prioridades e a matriz de validação estão na
+[revisão de UX/UI](../../../docs/referencia/revisao-ux-ui.md); a decisão de
+composição está na [RFC 0015](../../../rfc/0015-experiencia-visual-do-repositorio.md).
 
 ## Tema claro e escuro
 

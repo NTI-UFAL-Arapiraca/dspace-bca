@@ -4,7 +4,7 @@
       <a class="institution-brand my-2" routerLink="/home">
         <img src="assets/custom/images/brasao-ufal.svg" alt="Brasão da Universidade Federal de Alagoas" />
         <span class="institution-brand__title">
-          Repositório Institucional
+          {{ 'repository.brand' | translate }}
           <span class="institution-brand__campus">UFAL — Campus Arapiraca</span>
         </span>
       </a>
@@ -20,6 +20,7 @@
             [attr.aria-label]="'theme.dark' | translate"
             [title]="(colorMode.isDark() ? 'theme.enable-light' : 'theme.enable-dark') | translate">
             <i class="fas fa-fw" [class.fa-sun]="colorMode.isDark()" [class.fa-moon]="!colorMode.isDark()" aria-hidden="true"></i>
+            <span class="ms-1 small">{{ 'theme.label' | translate }}</span>
           </button>
           <ds-lang-switch></ds-lang-switch>
           <ds-context-help-toggle></ds-context-help-toggle>
@@ -30,8 +31,9 @@
           <div class="ps-2">
             <button class="navbar-toggler px-0" type="button" (click)="toggleNavbar()"
               aria-controls="collapsingNav"
-              [attr.aria-expanded]="(menuService.isMenuCollapsed(menuID) | async) === false" [attr.aria-label]="'nav.toggle' | translate">
+              [attr.aria-expanded]="(menuService.isMenuCollapsed(menuID) | async) === false" [attr.aria-label]="'repository.menu' | translate">
               <span class="fas fa-bars fa-fw toggler-icon" aria-hidden="true"></span>
+              <span class="ms-1 small">{{ 'repository.menu' | translate }}</span>
             </button>
           </div>
         }

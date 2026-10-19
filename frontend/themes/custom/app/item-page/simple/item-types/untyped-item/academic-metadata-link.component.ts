@@ -1,4 +1,7 @@
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  Input,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Item } from '@dspace/core/shared/item.model';
 import { TranslateModule } from '@ngx-translate/core';
@@ -8,7 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
   template: `
     @if (values.length) {
       <div class="simple-view-element">
-        <h5 class="item-page-label">{{ label | translate }}</h5>
+        <h2 class="h5 item-page-label">{{ label | translate }}</h2>
         <ul class="list-unstyled mb-0">
           @for (metadataValue of values; track $index) {
             <li>
@@ -22,7 +25,10 @@ import { TranslateModule } from '@ngx-translate/core';
       </div>
     }
   `,
-  imports: [RouterLink, TranslateModule],
+  imports: [
+    RouterLink,
+    TranslateModule,
+  ],
 })
 export class AcademicMetadataLinkComponent {
   @Input() item: Item;

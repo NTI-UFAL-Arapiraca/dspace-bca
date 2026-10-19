@@ -1,0 +1,21 @@
+<section class="repository-intro container" aria-labelledby="repository-intro-title">
+  <div class="repository-intro__surface">
+    <div class="repository-intro__copy">
+      <p class="repository-intro__eyebrow">{{ 'repository.home.eyebrow' | translate }}</p>
+      <h1 id="repository-intro-title">{{ 'repository.home.title' | translate }}</h1>
+      <p class="repository-intro__description">{{ 'repository.home.description' | translate }}</p>
+    </div>
+    <nav class="repository-intro__paths" [attr.aria-label]="'repository.home.explore' | translate">
+      <p class="repository-intro__nav-title">{{ 'repository.home.explore' | translate }}</p>
+      <a routerLink="/search" [queryParams]="{configuration: 'academic_works_search'}">
+        <span>{{ 'repository.home.works' | translate }}</span>
+        <i class="fas fa-arrow-right" aria-hidden="true"></i>
+      </a>
+      <a routerLink="/community-list">
+        <span>{{ 'repository.home.collections' | translate }}</span>
+        <i class="fas fa-arrow-right" aria-hidden="true"></i>
+      </a>
+      <p class="repository-intro__hint">{{ 'repository.home.hint' | translate }}</p>
+    </nav>
+  </div>
+</section>
