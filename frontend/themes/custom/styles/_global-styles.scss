@@ -500,6 +500,17 @@ ds-footer .bottom-footer :focus-visible {
       text-decoration-thickness: 2px;
     }
   }
+
+  // The authority icon and its nonbreaking separator sit outside the name span.
+  .academic-item__metadata ds-metadata-link-view a {
+    text-decoration-line: none;
+
+    > span[dsEntityIcon] {
+      display: inline-block;
+      text-decoration-line: underline;
+      text-decoration-thickness: inherit;
+    }
+  }
 }
 
 .repository-text-link {
