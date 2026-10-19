@@ -51,6 +51,24 @@ as variáveis `--ds-*` integram os componentes do DSpace e as `--ufal-*`
 compartilham os tokens próprios com os estilos dos perfis. Os ajustes globais
 entram depois dos estilos base para preservar a precedência do tema.
 
+Em telas abaixo de 768 px, a lupa do cabeçalho abre uma janela de pesquisa
+com foco no campo e fechamento por botão, Escape ou envio da busca. Ela consulta
+todo o repositório, sem herdar filtros da página atual nem expandir sobre os
+outros controles. As barras de pesquisa mostram apenas os ícones de escopo e
+pesquisa nessa largura, assim como o botão de ferramentas de busca, mantendo os nomes
+acessíveis dos controles. No desktop, os textos dos botões e a expansão original
+da busca do cabeçalho são preservados.
+
+Abaixo da barra, no mobile, um resumo informa a comunidade/coleção selecionada
+e os filtros aplicados, usando os rótulos fornecidos pelo Discovery. Sem
+restrições, mostra “Pesquisando em todo o repositório”. O resumo acompanha as
+mudanças da busca; os controles existentes continuam permitindo remover filtros.
+Enquanto o Discovery carrega os rótulos, informa “Pesquisa com filtros aplicados”,
+sem apresentar uma busca restrita como se fosse em todo o repositório.
+Na página `/search`, retirar o escopo consulta novamente todo o repositório,
+sem reutilizar a coleção inicial como valor padrão da paginação. Essa extensão
+não altera os escopos fixos das pesquisas em comunidades, coleções ou perfis.
+
 ## Tema claro e escuro
 
 O botão de lua/sol no cabeçalho alterna entre os dois modos. Uma primeira

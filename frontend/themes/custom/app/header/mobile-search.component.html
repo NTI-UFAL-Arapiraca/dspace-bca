@@ -1,0 +1,30 @@
+<button class="btn btn-link px-0" type="button" data-test="header-search-icon"
+  aria-haspopup="dialog" [attr.aria-label]="'search.header.open' | translate"
+  [title]="'search.header.open' | translate" (click)="open(searchDialog)">
+  <i class="fas fa-search fa-lg fa-fw" aria-hidden="true"></i>
+</button>
+
+<ng-template #searchDialog let-modal>
+  <div class="modal-header">
+    <h2 id="mobile-search-title" class="modal-title h5">{{ 'search.header.title' | translate }}</h2>
+    <button type="button" class="mobile-search-close btn btn-link" (click)="modal.dismiss()"
+      [attr.aria-label]="'search.header.close' | translate">
+      <i class="fas fa-times" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #form="ngForm" (ngSubmit)="search(form.value.query)" role="search"
+      [attr.aria-label]="'search.header.title' | translate">
+      <div class="input-group">
+        <input ngbAutofocus type="search" name="query" ngModel class="form-control"
+          [attr.aria-label]="'home.search-form.placeholder' | translate"
+          [placeholder]="'home.search-form.placeholder' | translate" enterkeyhint="search">
+        <button type="submit" class="search-button btn btn-primary"
+          [attr.aria-label]="'search.form.search' | translate">
+          <i class="fas fa-search" aria-hidden="true"></i>
+          <span class="search-control-label">{{ 'search.form.search' | translate }}</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

@@ -10,6 +10,7 @@ import { ThemedSearchNavbarComponent } from '../../../../app/search-navbar/theme
 import { ThemedAuthNavMenuComponent } from '../../../../app/shared/auth-nav-menu/themed-auth-nav-menu.component';
 import { ImpersonateNavbarComponent } from '../../../../app/shared/impersonate-navbar/impersonate-navbar.component';
 import { ColorModeService } from '../color-mode/color-mode.service';
+import { MobileSearchComponent } from './mobile-search.component';
 
 @Component({
   selector: 'ds-themed-header',
@@ -19,6 +20,7 @@ import { ColorModeService } from '../color-mode/color-mode.service';
     AsyncPipe,
     ContextHelpToggleComponent,
     ImpersonateNavbarComponent,
+    MobileSearchComponent,
     NgbDropdownModule,
     RouterLink,
     ThemedAuthNavMenuComponent,

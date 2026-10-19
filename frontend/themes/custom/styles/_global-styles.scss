@@ -85,6 +85,10 @@ a:focus-visible, a.nav-link:focus-visible, button:focus-visible, [tabindex]:focu
   }
 }
 
+.institution-header__actions ds-search-navbar input.form-control {
+  background-color: var(--ufal-surface) !important;
+}
+
 #main-navbar .ds-menu-item-wrapper {
   border-radius: 0.375rem;
 }
@@ -138,6 +142,32 @@ ds-home-page ds-search-form {
 
 ds-search-form .search-button {
   padding-inline: 1.25rem;
+}
+
+.mobile-search-modal {
+  .modal-dialog {
+    margin: 1rem auto;
+    width: calc(100% - 1.5rem);
+    max-width: 36rem;
+  }
+
+  .modal-header {
+    gap: 0.75rem;
+  }
+
+  .mobile-search-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    min-width: 44px;
+    min-height: 44px;
+    margin-inline-start: auto;
+  }
+
+  .input-group {
+    margin-bottom: 0 !important;
+  }
 }
 
 ds-top-level-community-list {
@@ -318,6 +348,65 @@ ds-footer :focus-visible {
   }
 }
 
+@media (max-width: 767.98px) {
+  // Keep the upstream text as the button's accessible name. Its template
+  // supplies a text node rather than a label span, so only its font is hidden.
+  .search-controls .open-sidebar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    min-height: 48px;
+    padding: 0;
+    font-size: 0;
+
+    i {
+      font-size: 1rem;
+    }
+  }
+
+  ds-search-form, .mobile-search-modal {
+    .input-group {
+      flex-wrap: nowrap;
+    }
+
+    .form-control {
+      min-width: 0;
+      min-height: 48px;
+      font-size: 1rem;
+    }
+
+    .scope-button, .search-button {
+      display: inline-flex;
+      flex: 0 0 48px;
+      align-items: center;
+      justify-content: center;
+      min-width: 48px;
+      min-height: 48px;
+      max-width: none;
+      padding-inline: 0;
+    }
+
+    .search-control-label {
+      display: none;
+    }
+  }
+
+  ds-search-form .search-context {
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+    color: var(--bs-secondary-color);
+    font-size: 0.875rem;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+
+    strong {
+      color: var(--bs-body-color);
+      font-weight: 600;
+    }
+  }
+}
+
 @media (max-width: 575.98px) {
   :root {
     --ds-header-logo-height: 52px;
@@ -340,38 +429,6 @@ ds-footer :focus-visible {
     width: 100%;
     justify-content: flex-end;
     padding-block: 0;
-  }
-
-  // The header search expands from the icon without extending past the left
-  // edge of narrow screens.
-  .institution-header__actions ds-search-navbar input.form-control {
-    left: 0;
-    right: auto;
-    max-width: calc(100vw - 2rem) !important;
-  }
-
-  ds-search-form .search-button {
-    padding-inline: 0.75rem;
-  }
-
-  ds-home-page ds-search-form {
-    .scope-button, .search-button {
-      display: inline-flex;
-      flex: 0 0 48px;
-      align-items: center;
-      justify-content: center;
-      width: 48px;
-      padding-inline: 0;
-      font-size: 0;
-    }
-
-    .scope-button {
-      max-width: none;
-    }
-
-    .scope-button i, .search-button i {
-      font-size: 1rem;
-    }
   }
 
   ds-recent-item-list ul.list-unstyled > li {

@@ -9,7 +9,11 @@
         </span>
       </a>
       <div class="institution-header__actions navbar navbar-light navbar-expand-md flex-shrink-0 px-0">
-        <ds-search-navbar></ds-search-navbar>
+        @if (isMobile$ | async) {
+          <ds-mobile-search></ds-mobile-search>
+        } @else {
+          <ds-search-navbar></ds-search-navbar>
+        }
         <div role="toolbar" [attr.aria-label]="'nav.user.description' | translate">
           <button class="theme-toggle btn btn-link" type="button" data-test="theme-toggle"
             (click)="colorMode.toggle()" [attr.aria-pressed]="colorMode.isDark()"

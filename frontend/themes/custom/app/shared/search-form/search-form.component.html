@@ -1,0 +1,49 @@
+<form #form="ngForm" (ngSubmit)="onSubmit(form.value)" action="/search" role="search"
+  [attr.aria-label]="searchPlaceholder">
+  <div class="mb-3 input-group">
+    @if (showScopeSelector) {
+      <button class="scope-button btn btn-outline-secondary text-truncate" type="button"
+        [ngbTooltip]="dsoNameService.getName(selectedScope | async) || ('search.form.scope.all' | translate)"
+        [attr.aria-label]="('search.form.scope.select' | translate) + ': ' + (dsoNameService.getName(selectedScope | async) || ('search.form.scope.all' | translate))"
+        aria-haspopup="dialog" (click)="openScopeModal()">
+        <i class="fa-solid fa-filter" aria-hidden="true"></i>
+        <span class="search-control-label">{{ dsoNameService.getName(selectedScope | async) || ('search.form.scope.all' | translate) }}</span>
+      </button>
+    }
+    <input ngbAutofocus type="search" [(ngModel)]="query" name="query" class="form-control"
+      [attr.aria-label]="searchPlaceholder" [attr.data-test]="'search-box' | dsBrowserOnly"
+      [placeholder]="searchPlaceholder" enterkeyhint="search">
+    <button type="submit" class="search-button btn btn-{{brandColor}}"
+      [attr.aria-label]="'search.form.search' | translate"
+      [attr.data-test]="'search-button' | dsBrowserOnly">
+      <i class="fas fa-search" aria-hidden="true"></i>
+      <span class="search-control-label">{{ 'search.form.search' | translate }}</span>
+    </button>
+  </div>
+  @let filters = inPlaceSearch ? (contextFilters$ | async) : [];
+  @let scopeObject = selectedScope | async;
+  <p class="search-context d-md-none" role="status" aria-atomic="true">
+    @if (scope) {
+      <span class="d-block">
+        @if (scopeObject?.uuid === scope) {
+          {{ 'search.form.context.scope' | translate }} <strong>{{ dsoNameService.getName(scopeObject) }}</strong>
+        } @else {
+          {{ 'search.form.context.selected-scope' | translate }}
+        }
+      </span>
+    }
+    @if (filters === null) {
+      <span class="d-block">{{ 'search.form.context.filtered' | translate }}</span>
+    } @else if (filters?.length) {
+      <span class="d-block">
+        {{ 'search.form.context.filters' | translate }}
+        @for (filter of filters; track $index; let last = $last) {
+          <span>{{ ('search.filters.applied.f.' + filter.filter) | translate }}{{ ('search.filters.applied.operator.' + filter.operator) | translate }}:
+            <strong>{{ ('search.filters.' + filter.filter + '.' + filter.label) | translate: { default: filter.label } }}</strong></span>{{ last ? '' : '; ' }}
+        }
+      </span>
+    } @else if (!scope) {
+      {{ 'search.form.context.all' | translate }}
+    }
+  </p>
+</form>
