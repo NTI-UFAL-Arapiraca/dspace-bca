@@ -30,14 +30,30 @@ import {
   TranslateModule,
   TranslateService,
 } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
+import {
+  firstValueFrom,
+  Subject,
+  Subscription,
+  takeUntil,
+  tap,
+} from 'rxjs';
 
 import { ThemedFileDownloadLinkComponent } from '../../../../../../app/shared/file-download-link/themed-file-download-link.component';
+import { FileSizePipe } from '../../../../../../app/shared/utils/file-size-pipe';
 import {
   PDF_VIEWER_PATH,
   PdfDocument,
 } from './pdf-documents';
 import { PdfPreviewService } from './pdf-preview.service';
+import {
+  getPdfPreviewGate,
+  PdfConnectionInfo,
+  PdfPreviewGate,
+} from './pdf-preview-policy';
+import {
+  PdfViewerBridge,
+  PdfViewerWindow,
+} from './pdf-viewer-source';
 
 @Component({
   selector: 'ds-pdf-preview',
@@ -46,6 +62,7 @@ import { PdfPreviewService } from './pdf-preview.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [PdfPreviewService],
   imports: [
+    FileSizePipe,
     NgbNav,
     NgbNavContent,
     NgbNavItem,
@@ -61,13 +78,17 @@ export class PdfPreviewComponent implements OnChanges, OnDestroy {
 
   documents: PdfDocument[] = [];
   selected: PdfDocument;
-  state: 'loading' | 'ready' | 'restricted' | 'error' = 'loading';
+  state: 'deferred' | 'loading' | 'ready' | 'restricted' | 'error' = 'loading';
   catalogState: 'loading' | 'ready' | 'error' = 'loading';
   previewUrl: SafeResourceUrl;
+  gate: PdfPreviewGate;
+  loadedBytes = 0;
 
-  private objectUrl: string;
   private catalogSubscription: Subscription;
   private previewSubscription: Subscription;
+  private cancelPreview = new Subject<void>();
+  private viewer: PdfViewerBridge;
+  private selection = 0;
 
   constructor(
     private previewService: PdfPreviewService,
@@ -114,18 +135,25 @@ export class PdfPreviewComponent implements OnChanges, OnDestroy {
     if (!this.selected) {
       return;
     }
+    const navigator = this.document.defaultView?.navigator as Navigator & { connection?: PdfConnectionInfo };
+    this.gate = getPdfPreviewGate(this.selected.bitstream.sizeBytes, navigator?.connection);
+    this.state = 'deferred';
+    if (!this.gate) {
+      this.startPreview();
+    }
+  }
+
+  startPreview(): void {
+    this.clearPreview();
     this.state = 'loading';
-    this.previewSubscription = this.previewService.loadDocument(this.selected.bitstream).subscribe({
-      next: (blob) => {
-        if (blob) {
-          this.objectUrl = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+    this.previewSubscription = this.previewService.canPreview(this.selected.bitstream).subscribe({
+      next: (allowed) => {
+        if (allowed) {
           const viewer = new URL(PDF_VIEWER_PATH, this.document.baseURI);
-          viewer.searchParams.set('file', this.objectUrl);
           viewer.searchParams.set('locale', this.translate.getCurrentLang() || 'pt-BR');
           viewer.hash = 'zoom=page-width&pagemode=none';
-          // Only our local viewer and a locally created Blob URL are trusted here.
+          // Trust only our same-origin viewer. No content URL or token enters the iframe.
           this.previewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(viewer.href);
-          this.state = 'ready';
         } else {
           this.state = 'restricted';
         }
@@ -138,17 +166,78 @@ export class PdfPreviewComponent implements OnChanges, OnDestroy {
     });
   }
 
+  connectViewer(event: Event): void {
+    const frame = event.target as HTMLIFrameElement;
+    // Some browsers emit a load for the iframe's initial empty document.
+    if (frame.contentWindow?.location?.href === 'about:blank') {
+      return;
+    }
+    const viewer = (frame.contentWindow as PdfViewerWindow)?.repositoryPdfViewer;
+    if (!viewer) {
+      this.failPreview();
+      return;
+    }
+    this.viewer = viewer;
+    const selection = this.selection;
+    const bitstream = this.selected.bitstream;
+    void viewer.open({
+      length: bitstream.sizeBytes,
+      filename: this.names.getName(bitstream),
+      readRange: (begin, end) => {
+        if (selection !== this.selection) {
+          return Promise.reject(new Error('PDF preview was closed'));
+        }
+        return firstValueFrom(this.previewService.loadRange(bitstream, begin, end).pipe(
+          tap((buffer) => {
+            this.loadedBytes += buffer.byteLength;
+            this.changeDetector.markForCheck();
+          }),
+          takeUntil(this.cancelPreview),
+        ));
+      },
+      onReady: () => {
+        if (selection === this.selection) {
+          this.state = 'ready';
+          this.changeDetector.markForCheck();
+        }
+      },
+      onError: () => {
+        if (selection === this.selection) {
+          this.failPreview();
+        }
+      },
+    }).catch(() => {
+      if (selection === this.selection) {
+        this.failPreview();
+      }
+    });
+  }
+
+  stopPreview(): void {
+    this.clearPreview();
+    this.gate = 'paused';
+    this.state = 'deferred';
+  }
+
   ngOnDestroy(): void {
     this.catalogSubscription?.unsubscribe();
     this.clearPreview();
+    this.cancelPreview.complete();
   }
 
   private clearPreview(): void {
+    this.selection++;
     this.previewSubscription?.unsubscribe();
+    this.cancelPreview.next();
+    this.viewer?.close();
+    this.viewer = undefined;
     this.previewUrl = undefined;
-    if (this.objectUrl) {
-      URL.revokeObjectURL(this.objectUrl);
-      this.objectUrl = undefined;
-    }
+    this.loadedBytes = 0;
+  }
+
+  private failPreview(): void {
+    this.clearPreview();
+    this.state = 'error';
+    this.changeDetector.markForCheck();
   }
 }

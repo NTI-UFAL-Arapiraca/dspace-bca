@@ -6,6 +6,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 export const version = '6.4.299';
+export const assetVersion = `${version}-range-1`;
 const sha256 = 'c894bce53b2f4c3e13141e088c89cc051a1f7118ba4a2c02ec058798ae1303d1';
 const sourceUrl = `https://github.com/mozilla/pdf.js/releases/download/v${version}/pdfjs-${version}-legacy-dist.zip`;
 
@@ -15,7 +16,7 @@ export function configureViewer(source) {
   if (source.split(anchor).length !== 2) {
     throw new Error('Unexpected PDF.js startup; review the pinned distribution');
   }
-  return source.replace(anchor, `  // Repository: a read-only viewer, without PDF scripting or saved preferences.
+  return 'import { installRepositoryPdfViewer } from "./repository-range-viewer.mjs";\n' + source.replace(anchor, `  // Repository: a read-only viewer, without PDF scripting or saved preferences.
   AppOptions.set("disablePreferences", true);
   AppOptions.set("disableHistory", true);
   AppOptions.set("enableScripting", false);
@@ -25,10 +26,11 @@ export function configureViewer(source) {
   AppOptions.set("localeProperties", {
     lang: new URLSearchParams(location.search).get("locale") || "pt-BR"
   });
+  installRepositoryPdfViewer(PDFViewerApplication);
 ${anchor}`);
 }
 
-async function install(destination) {
+async function install(destination, bridge) {
   if (!path.isAbsolute(destination) || path.basename(destination) !== 'pdfjs') {
     throw new Error('Expected an absolute asset directory ending in /pdfjs');
   }
@@ -47,10 +49,11 @@ async function install(destination) {
     if (unzip.error || unzip.status !== 0) throw new Error('Unable to extract PDF.js');
     const viewer = path.join(extracted, 'web', 'viewer.mjs');
     await writeFile(viewer, configureViewer(await readFile(viewer, 'utf8')));
+    await writeFile(path.join(extracted, 'web', 'repository-range-viewer.mjs'), await readFile(bridge));
     await rm(path.join(extracted, 'web', 'compressed.tracemonkey-pldi-09.pdf'));
     const assets = path.join(temporary, 'assets');
     await mkdir(assets);
-    await rename(extracted, path.join(assets, version));
+    await rename(extracted, path.join(assets, assetVersion));
     await rm(destination, { recursive: true, force: true });
     await rename(assets, destination);
     console.log(`Installed local PDF.js ${version} (verified SHA-256)`);
@@ -60,5 +63,5 @@ async function install(destination) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  await install(process.argv[2] ?? '');
+  await install(process.argv[2] ?? '', process.argv[3] ?? new URL('../overrides/pdf-range-viewer.mjs', import.meta.url));
 }

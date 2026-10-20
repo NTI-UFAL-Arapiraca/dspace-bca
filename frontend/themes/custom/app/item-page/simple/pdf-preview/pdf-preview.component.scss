@@ -71,6 +71,20 @@
   font-weight: 500;
 }
 
+.pdf-preview__size {
+  margin-inline-start: .75rem;
+  font-size: .875rem;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.pdf-preview__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .75rem;
+}
+
 .pdf-preview__reader {
   background: var(--ufal-surface-muted);
 
@@ -87,6 +101,13 @@
   padding: 2rem 1.25rem;
   text-align: center;
   margin: 0;
+
+  p:last-child { margin-bottom: 0; }
+}
+
+.pdf-preview__message--loading {
+  padding: .5rem 1.25rem;
+  font-size: .875rem;
 }
 
 .pdf-preview__hint {
@@ -94,6 +115,11 @@
   padding: 1rem clamp(1rem, 2.5vw, 2rem);
   font-size: .875rem;
   border-top: 1px solid var(--bs-border-color);
+}
+
+.pdf-preview__transfer {
+  display: block;
+  margin-bottom: .25rem;
 }
 
 @media (max-width: 575.98px) {

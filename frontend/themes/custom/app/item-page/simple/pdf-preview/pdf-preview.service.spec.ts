@@ -1,4 +1,13 @@
-import { HttpClient } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpHeaderResponse,
+  provideHttpClient,
+} from '@angular/common/http';
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+} from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 import { BitstreamDataService } from '@dspace/core/data/bitstream-data.service';
 import { AuthorizationDataService } from '@dspace/core/data/feature-authorization/authorization-data.service';
 import { RemoteData } from '@dspace/core/data/remote-data';
@@ -8,7 +17,6 @@ import { Item } from '@dspace/core/shared/item.model';
 import {
   firstValueFrom,
   of,
-  throwError,
 } from 'rxjs';
 
 import { PdfPreviewService } from './pdf-preview.service';
@@ -16,6 +24,7 @@ import { PdfPreviewService } from './pdf-preview.service';
 const completed = <T>(payload: T) => ({ hasCompleted: true, hasSucceeded: true, payload } as RemoteData<T>);
 const file = (id: string, mimetype = 'application/pdf') => ({
   id,
+  sizeBytes: 1000,
   self: `https://repository.example/api/core/bitstreams/${id}`,
   _links: { content: { href: `https://repository.example/api/core/bitstreams/${id}/content` } },
   format: of(completed({ mimetype } as BitstreamFormat)),
@@ -24,18 +33,21 @@ const file = (id: string, mimetype = 'application/pdf') => ({
 describe('PdfPreviewService', () => {
   let bitstreams: jasmine.SpyObj<BitstreamDataService>;
   let authorization: jasmine.SpyObj<AuthorizationDataService>;
-  let http: jasmine.SpyObj<HttpClient>;
+  let http: HttpTestingController;
   let service: PdfPreviewService;
 
   beforeEach(() => {
+    TestBed.configureTestingModule({ providers: [provideHttpClient(), provideHttpClientTesting()] });
     bitstreams = jasmine.createSpyObj('BitstreamDataService', ['findAllByItemAndBundleName', 'findPrimaryBitstreamByItemAndName']);
     authorization = jasmine.createSpyObj('AuthorizationDataService', ['isAuthorized']);
-    http = jasmine.createSpyObj('HttpClient', ['get']);
     bitstreams.findPrimaryBitstreamByItemAndName.and.returnValue(of(null));
-    service = new PdfPreviewService(bitstreams, authorization, http);
+    service = new PdfPreviewService(bitstreams, authorization, TestBed.inject(HttpClient));
+    http = TestBed.inject(HttpTestingController);
   });
 
-  it('reads subsequent pages and selects the primary PDF even when it is on a later page', async () => {
+  afterEach(() => http.verify());
+
+  it('reads subsequent pages and promotes the primary PDF even on a later page', async () => {
     bitstreams.findAllByItemAndBundleName.and.callFake((_item, bundle, options) => {
       expect(bundle).toBe('ORIGINAL');
       return of(completed({
@@ -51,24 +63,57 @@ describe('PdfPreviewService', () => {
     expect(bitstreams.findAllByItemAndBundleName).toHaveBeenCalledTimes(2);
   });
 
-  it('does not request file content when download permission is denied', async () => {
+  it('checks permission without requesting content', async () => {
     authorization.isAuthorized.and.returnValue(of(false));
-    expect(await firstValueFrom(service.loadDocument(file('restricted')))).toBeNull();
-    expect(http.get).not.toHaveBeenCalled();
+    expect(await firstValueFrom(service.canPreview(file('restricted')))).toBeFalse();
+    http.expectNone(() => true);
   });
 
-  it('loads authorized content using the supplied HAL link and a blob response', async () => {
+  it('requests an exclusive-end range through the HAL content link', async () => {
     const document = file('public');
-    const blob = new Blob(['%PDF-1.7'], { type: 'application/pdf' });
-    authorization.isAuthorized.and.returnValue(of(true));
-    http.get.and.returnValue(of(blob));
-    expect(await firstValueFrom(service.loadDocument(document))).toBe(blob);
-    expect(http.get).toHaveBeenCalledWith(document._links.content.href, jasmine.objectContaining({ responseType: 'blob' }));
+    const result = firstValueFrom(service.loadRange(document, 100, 200));
+    const request = http.expectOne(document._links.content.href);
+    expect(request.request.headers.get('Range')).toBe('bytes=100-199');
+    expect(request.request.responseType).toBe('arraybuffer');
+    request.flush(new ArrayBuffer(100), { status: 206, statusText: 'Partial Content', headers: { 'Content-Range': 'bytes 100-199/1000' } });
+    expect((await result).byteLength).toBe(100);
   });
 
-  it('propagates network errors so the component can offer a retry', async () => {
-    authorization.isAuthorized.and.returnValue(of(true));
-    http.get.and.returnValue(throwError(() => new Error('Network unavailable')));
-    await expectAsync(firstValueFrom(service.loadDocument(file('public')))).toBeRejected();
+  it('works when CORS does not expose Content-Range, verifying status and byte count', async () => {
+    const result = firstValueFrom(service.loadRange(file('public'), 0, 100));
+    http.expectOne(() => true).flush(new ArrayBuffer(100), { status: 206, statusText: 'Partial Content' });
+    expect((await result).byteLength).toBe(100);
+  });
+
+  it('aborts at response headers when a server ignores Range', async () => {
+    const result = firstValueFrom(service.loadRange(file('public'), 0, 100));
+    const rejection = expectAsync(result).toBeRejectedWithError('Partial PDF responses are unavailable');
+    const request = http.expectOne(() => true);
+    request.event(new HttpHeaderResponse({ status: 200 }));
+    await rejection;
+    expect(request.cancelled).toBeTrue();
+  });
+
+  it('rejects truncated or mismatched ranges rather than passing corrupt bytes to PDF.js', async () => {
+    for (const [length, contentRange] of [[90, 'bytes 0-99/1000'], [100, 'bytes 100-199/1000']] as const) {
+      const result = firstValueFrom(service.loadRange(file('public'), 0, 100));
+      const rejection = expectAsync(result).toBeRejectedWithError('Unexpected partial PDF response');
+      http.expectOne(() => true).flush(new ArrayBuffer(length), {
+        status: 206, statusText: 'Partial Content', headers: { 'Content-Range': contentRange },
+      });
+      await rejection;
+    }
+  });
+
+  it('rejects invalid bounds without an HTTP request', async () => {
+    await expectAsync(firstValueFrom(service.loadRange(file('public'), 0, 1001))).toBeRejectedWithError('Invalid PDF byte range');
+    http.expectNone(() => true);
+  });
+
+  it('cancels the HTTP request on unsubscribe', () => {
+    const subscription = service.loadRange(file('public'), 0, 100).subscribe();
+    const request = http.expectOne(() => true);
+    subscription.unsubscribe();
+    expect(request.cancelled).toBeTrue();
   });
 });

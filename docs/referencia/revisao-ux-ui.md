@@ -169,6 +169,8 @@ fora desta rodada para manter apresentação e lógica de domínio separadas.
 ## Leitor integrado de PDF e tipografia compacta
 
 Extensão posterior à revisão acima, solicitada para a página da publicação.
+Esta seção registra a integração inicial; a evolução para carregamento parcial
+e abertura opcional está descrita na seção seguinte.
 O leitor ocupa uma seção própria abaixo da descrição e dos dados acadêmicos.
 Prioridades e alternativas avaliadas:
 
@@ -214,6 +216,18 @@ Validações desta extensão:
 | Instalador do PDF.js executado no container local | Distribuição 6.4.299 baixada, SHA-256 verificado e assets instalados; instalação repetida com sucesso. |
 | `node --check frontend/patches/install-pdf-viewer.mjs` | Sem erro de sintaxe. |
 | Visualização real do PDF | Desktop 1440 × 1000 e mobile 390 × 844; conteúdo e controles renderizados, texto presente na árvore acessível e zoom mobile funcional. Documento sem transbordamento horizontal. |
+| `npm run build:prod` em container temporário DSpace 10.1 | Navegador e SSR concluíram com código 0 na retomada de 20/10/2026; um worker, heap de 5 GiB e servidor de desenvolvimento parado durante a compilação. |
+| Execução do artefato de produção com o backend local | Página do trabalho respondeu HTTP 200 com título e resumo no HTML SSR; o preview permaneceu adiado. Viewer, worker e tradução pt-BR responderam HTTP 200. PDF renderizado novamente em 1440 × 1000 e 390 × 844, sem transbordamento horizontal do documento. |
+| `git diff --check` | Sem erros de whitespace após atualizar o relatório. |
+
+As tentativas anteriores de compilar SSR junto ao servidor de desenvolvimento
+foram interrompidas por falta de memória. A execução isolada completou as duas
+etapas em aproximadamente 3,4 minutos. O build emitiu os avisos conhecidos de
+CommonJS, componentes herdados não usados e orçamento inicial: 3,57 MB para
+limite de aviso de 3 MB. O orçamento não foi alterado. A revisão independente
+de autorização, seleção, cancelamento e semântica das abas não encontrou
+problemas relevantes. O servidor temporário foi removido após a inspeção e o
+ambiente normal de desenvolvimento foi restaurado.
 
 No desktop, o cabeçalho do leitor mede aproximadamente 72 px e o iframe 650 px
 no viewport de 1000 px. No mobile, o iframe mede 506 px no viewport de 844 px;
@@ -227,3 +241,75 @@ carrega o documento inteiro antes de exibir. Download por autorização especial
 de solicitação de cópia continua disponível pelo fluxo oficial; não foi
 reimplementado no preview. A instalação do viewer exige reconstruir a imagem
 Angular, conforme a RFC 0016.
+
+## Carregamento parcial e abertura opcional de PDFs
+
+O preview inicial baixava o arquivo inteiro em um Blob. A melhoria solicitada
+combina duas prioridades: abrir por partes e deixar o visitante escolher o
+carregamento quando o arquivo for grande ou houver indicação de conexão limitada.
+Ambas usam extensões locais do tema e o transporte oficial do PDF.js; não há
+novo serviço, conversão de arquivos ou mudança nas políticas do backend.
+
+| Prioridade | Benefício e implementação |
+| --- | --- |
+| Transporte parcial autenticado | `PDFDataRangeTransport` pede trechos ao HttpClient do Angular. Tokens e URLs da API permanecem na página principal. HTTP 206 e comprimento da resposta são verificados; um HTTP 200 inesperado é abortado, sem fallback silencioso para o arquivo inteiro. |
+| Abertura opcional | PDFs a partir de 20 MiB aguardam “Carregar visualização”. O mesmo ocorre com `saveData`, estimativa slow-2g/2g/3g ou velocidade positiva inferior a 1 Mbps, quando a API do navegador está disponível. Sem ela, aplica-se apenas o tamanho. |
+| Clareza e controle | Tamanho do arquivo, link “Baixar PDF”, volume transferido e controle de cancelar/fechar. Ícones decorativos acompanham texto visível. O iframe permanece visível durante a preparação para permitir interações próprias do leitor, como senha de PDF. |
+| Manutenção | Política em helper puro, ponte de mesma origem em módulo pequeno e versão dos assets com sufixo `-range-1`. Configurações e pontos de registro das páginas permanecem os existentes. |
+
+Não há teste ativo de velocidade, inferência por tela mobile ou identificação
+de franquia contratada. Os sinais da conexão são estimativas, reavaliadas a
+cada seleção de documento. Uma escolha explícita carrega o leitor mesmo na
+conexão limitada; não inicia um download completo como alternativa automática.
+Sem tamanho válido, o download oficial fica disponível sem iniciar o transporte.
+
+Arquivos desta mudança:
+
+- `frontend/themes/custom/app/item-page/simple/pdf-preview/pdf-preview-policy.ts` e `pdf-viewer-source.ts` (novos);
+- componente `pdf-preview.component.ts`, template, SCSS e spec;
+- serviço `pdf-preview.service.ts` e spec, e `pdf-documents.ts`;
+- `frontend/overrides/pdf-range-viewer.mjs` (novo);
+- `frontend/patches/install-pdf-viewer.mjs` e ambos os Dockerfiles Angular;
+- traduções `frontend/themes/custom/assets/i18n/{pt-BR,en}.json5`;
+- `tests/frontend/pdf-preview-policy.test.mjs` e `pdf-range-viewer.test.mjs` (novos), e `pdf-documents.test.mjs`;
+- README do tema, RFC 0016 e este relatório.
+
+Validação funcional e visual em 20/10/2026:
+
+| Verificação | Resultado |
+| --- | --- |
+| `node --test tests/frontend/pdf*.test.mjs` | 15 testes passaram: seleção, política de tamanho/conexão, limites de intervalos, opções do leitor, falhas e buffers de janelas diferentes. |
+| Specs Angular do leitor | 19 testes passaram na versão final: HTTP parcial, rejeição de resposta integral/truncada, autorização, paginação, abas, abertura opcional, cancelamento, callbacks antigos e visibilidade do iframe durante a preparação. |
+| ESLint oficial do DSpace nos TS/HTML do leitor | Passou após `npm run build:lint` preparar os plugins oficiais ausentes na imagem base; somente aviso existente de configuração ESLint legada. |
+| Sintaxe dos módulos e `git diff --check` | Sem erros nas verificações executadas. |
+| PDF público do backend local | HTTP 206 confirmado, com 1.024 bytes para `Range: bytes=0-1023`; o documento publicado também renderizou no leitor integrado. |
+| Desktop 1440 × 1000 | PDF sintético de 140 páginas / 28.717.241 bytes: nenhum conteúdo antes do clique; primeira página abriu com 667.833 bytes (cerca de 652 KiB, 2,33%) em três pedidos, sem continuar transferindo enquanto a leitura ficou parada. |
+| Mobile 390 × 844 | Economia de dados/conexão lenta simulada apenas em proxy de QA em loopback: zero bytes de conteúdo antes do clique; PDF renderizado após a escolha, com 929.977 bytes (cerca de 908 KiB) em quatro pedidos nessa amostra. Documento com largura de scroll 375 px, sem overflow horizontal da página. |
+| `npm run build:prod` final, em container isolado | Navegador e SSR concluídos: aproximadamente 90 s e 99 s. Um worker e heap de 5 GiB; avisos existentes de CommonJS, fontes herdadas não usadas e orçamento inicial de 3,62 MB para aviso de 3 MB. Nenhum orçamento foi alterado. |
+| Execução do artefato final de produção | HTTP 200 com título e resumo no HTML SSR, placeholder adiado presente e sem leitor renderizado no servidor. Viewer, ponte e worker responderam HTTP 200 e módulos com MIME JavaScript. PDF publicado renderizado em 1440 × 1000 e 390 × 844; iframe de 650 px e 506 px, respectivamente, sem overflow horizontal da página. |
+| Imagem de desenvolvimento | `docker compose … build dspace-angular` concluiu com o instalador verificado e todos os patches. |
+
+O cenário de arquivo grande foi servido por um proxy temporário, com tamanho
+e conteúdo sintéticos, preservando as verificações reais de autorização.
+Nenhum registro ou arquivo do banco/assetstore foi modificado. Desktop e
+mobile foram emulados no navegador integrado; não equivalem a aparelhos físicos.
+
+Uma segunda distribuição dos mesmos objetos, intercalando metadados e streams
+por todo o PDF, exigiu todos os bytes para a leitura inicial. Isso confirma que
+carregamento parcial depende da estrutura do documento, não só do seu tamanho.
+Busca textual, impressão e download também podem precisar do arquivo inteiro.
+Não se promete economia fixa ou um pedido por página. Otimização/linearização
+de PDFs e derivadas para digitalizações ficam de fora para preservar originais
+e evitar uma nova cadeia de processamento nesta entrega.
+
+No DSpace 10.1, pedidos com `Range` não geram o evento de download do
+`BitstreamRestController`. O preview parcial deixa, portanto, de contar como
+download; a ação explícita continua no fluxo oficial. Essa consequência está
+documentada na RFC 0016, sem emitir pedidos artificiais para alterar métricas.
+O proxy institucional de produção, sessões autenticadas reais, aparelhos
+físicos e documentos com senha não foram validados de ponta a ponta.
+
+Ao concluir, os containers temporários de build, SSR, proxy e QA foram
+encerrados. O ambiente `d10dev` foi restaurado com a imagem de desenvolvimento
+reconstruída: compilação local aprovada, publicação e ponte do leitor em HTTP
+200, backend/banco/Solr preservados.

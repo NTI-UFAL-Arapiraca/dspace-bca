@@ -5,7 +5,8 @@ WORKDIR /app
 
 # Keep the PDF viewer identical to the production image.
 COPY frontend/patches/install-pdf-viewer.mjs /tmp/install-pdf-viewer.mjs
-RUN node /tmp/install-pdf-viewer.mjs /app/src/assets/pdfjs
+COPY frontend/overrides/pdf-range-viewer.mjs /tmp/pdf-range-viewer.mjs
+RUN node /tmp/install-pdf-viewer.mjs /app/src/assets/pdfjs /tmp/pdf-range-viewer.mjs
 
 # Keep the first paint consistent with the saved browser preference.
 COPY frontend/overrides/color-mode-init.js /tmp/color-mode-init.js

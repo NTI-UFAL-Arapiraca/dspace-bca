@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import { PDF_VIEWER_PATH, selectPdfDocuments } from '../../frontend/themes/custom/app/item-page/simple/pdf-preview/pdf-documents.ts';
-import { configureViewer, version } from '../../frontend/patches/install-pdf-viewer.mjs';
+import { configureViewer, assetVersion } from '../../frontend/patches/install-pdf-viewer.mjs';
 
 const file = (id, mimetype = 'application/pdf') => ({ bitstream: { id }, mimetype });
 
@@ -49,7 +49,7 @@ test('rejects an unexpected viewer startup when upgrading PDF.js', () => {
 });
 
 test('uses a versioned viewer URL matching the installed distribution, including a deployment namespace', () => {
-  assert.equal(PDF_VIEWER_PATH, `assets/pdfjs/${version}/web/viewer.html`);
+  assert.equal(PDF_VIEWER_PATH, `assets/pdfjs/${assetVersion}/web/viewer.html`);
   assert.equal(new URL(PDF_VIEWER_PATH, 'https://repository.example/dspace/').pathname,
-    `/dspace/assets/pdfjs/${version}/web/viewer.html`);
+    `/dspace/assets/pdfjs/${assetVersion}/web/viewer.html`);
 });

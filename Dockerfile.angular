@@ -8,7 +8,8 @@ WORKDIR /app
 
 # Serve the version-pinned Mozilla viewer locally, including worker and locales.
 COPY frontend/patches/install-pdf-viewer.mjs /tmp/install-pdf-viewer.mjs
-RUN node /tmp/install-pdf-viewer.mjs /app/src/assets/pdfjs
+COPY frontend/overrides/pdf-range-viewer.mjs /tmp/pdf-range-viewer.mjs
+RUN node /tmp/install-pdf-viewer.mjs /app/src/assets/pdfjs /tmp/pdf-range-viewer.mjs
 
 # Restore the browser's explicit color preference before Angular or styles load.
 COPY frontend/overrides/color-mode-init.js /tmp/color-mode-init.js

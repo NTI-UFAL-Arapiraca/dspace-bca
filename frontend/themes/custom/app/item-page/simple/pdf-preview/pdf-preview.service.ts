@@ -1,4 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpEventType,
+  HttpResponse,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BitstreamDataService } from '@dspace/core/data/bitstream-data.service';
 import { AuthorizationDataService } from '@dspace/core/data/feature-authorization/authorization-data.service';
@@ -13,6 +17,7 @@ import {
   defaultIfEmpty,
   EMPTY,
   expand,
+  filter,
   forkJoin,
   map,
   Observable,
@@ -20,6 +25,7 @@ import {
   reduce,
   switchMap,
   take,
+  tap,
   throwError,
 } from 'rxjs';
 
@@ -27,6 +33,7 @@ import {
   PdfDocument,
   selectPdfDocuments,
 } from './pdf-documents';
+import { isValidPdfRange } from './pdf-preview-policy';
 
 /** Uses the same ORIGINAL bundle and download permission as the file section. */
 @Injectable()
@@ -58,13 +65,37 @@ export class PdfPreviewService {
     );
   }
 
-  /** null means restricted. The HttpClient retains DSpace's auth interceptors. */
-  loadDocument(bitstream: Bitstream): Observable<Blob | null> {
-    return this.authorization.isAuthorized(FeatureID.CanDownload, bitstream.self).pipe(
+  canPreview(bitstream: Bitstream): Observable<boolean> {
+    return this.authorization.isAuthorized(FeatureID.CanDownload, bitstream.self).pipe(take(1));
+  }
+
+  /** End is exclusive, matching PDFDataRangeTransport. Keep DSpace's auth interceptors. */
+  loadRange(bitstream: Bitstream, begin: number, end: number): Observable<ArrayBuffer> {
+    if (!isValidPdfRange(begin, end, bitstream.sizeBytes)) {
+      return throwError(() => new Error('Invalid PDF byte range'));
+    }
+    return this.http.get(bitstream._links.content.href, {
+      headers: { Range: `bytes=${begin}-${end - 1}` },
+      responseType: 'arraybuffer',
+      observe: 'events',
+      reportProgress: true,
+    }).pipe(
+      tap((event) => {
+        // Abort at headers if a proxy ignores Range, before buffering the whole file.
+        if (event?.type === HttpEventType.ResponseHeader && event.status !== 206) {
+          throw new Error('Partial PDF responses are unavailable');
+        }
+      }),
+      filter((event): event is HttpResponse<ArrayBuffer> => event?.type === HttpEventType.Response),
+      map((response) => {
+        const contentRange = response.headers.get('Content-Range');
+        if (response.status !== 206 || response.body?.byteLength !== end - begin
+          || (contentRange && contentRange !== `bytes ${begin}-${end - 1}/${bitstream.sizeBytes}`)) {
+          throw new Error('Unexpected partial PDF response');
+        }
+        return response.body;
+      }),
       take(1),
-      switchMap((allowed) => allowed
-        ? this.http.get(bitstream._links.content.href, { responseType: 'blob' })
-        : of(null)),
     );
   }
 

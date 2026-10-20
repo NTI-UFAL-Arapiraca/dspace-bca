@@ -49,35 +49,60 @@
       @if (selected.isPrimary) {
         <span class="badge ms-2">{{ 'item.page.bitstreams.primary' | translate }}</span>
       }
+      @if (selected.bitstream.sizeBytes > 0) {
+        <span class="pdf-preview__size">{{ selected.bitstream.sizeBytes | dsFileSize }}</span>
+      }
     </div>
-    <ds-file-download-link [bitstream]="selected.bitstream" [item]="item" [isBlank]="true"
-      [showAccessStatusBadge]="false" cssClasses="repository-text-link">
-      {{ 'repository.pdf.open' | translate }}
-      <i class="fas fa-arrow-up-right-from-square ms-1" aria-hidden="true"></i>
-      <span class="visually-hidden">{{ 'repository.pdf.new-tab' | translate }}</span>
-    </ds-file-download-link>
+    <div class="pdf-preview__actions">
+      @if (state === 'loading' || state === 'ready') {
+        <button type="button" class="btn btn-sm btn-outline-secondary" (click)="stopPreview()">
+          {{ (state === 'loading' ? 'repository.pdf.cancel' : 'repository.pdf.close') | translate }}
+        </button>
+      }
+      <ds-file-download-link [bitstream]="selected.bitstream" [item]="item" [isBlank]="true"
+        [showAccessStatusBadge]="false" cssClasses="repository-text-link">
+        {{ 'repository.pdf.download' | translate }}
+        <i class="fas fa-download ms-1" aria-hidden="true"></i>
+        <span class="visually-hidden">{{ 'repository.pdf.new-tab' | translate }}</span>
+      </ds-file-download-link>
+    </div>
   </div>
   <div class="pdf-preview__reader" [attr.aria-busy]="state === 'loading'">
-    @if (state === 'ready') {
-      <iframe [src]="previewUrl" referrerpolicy="no-referrer"
-        [title]="'repository.pdf.document' | translate: {name: names.getName(selected.bitstream)}">
-      </iframe>
-    } @else {
-      <div class="pdf-preview__message" role="status">
+    @if (state !== 'ready') {
+      <div class="pdf-preview__message" [class.pdf-preview__message--loading]="!!previewUrl">
         @if (state === 'loading') {
-          <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
-          {{ 'repository.pdf.loading' | translate }}
+          <p role="status">
+            <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+            {{ 'repository.pdf.loading' | translate }}
+          </p>
+        } @else if (state === 'deferred') {
+          <p role="status">{{ ('repository.pdf.gate.' + gate) | translate }}</p>
+          @if (gate !== 'unknown-size') {
+            <button type="button" class="btn btn-outline-primary" (click)="startPreview()">
+              {{ 'repository.pdf.load' | translate }}
+            </button>
+          }
         } @else if (state === 'restricted') {
           <i class="fas fa-lock mb-3" aria-hidden="true"></i>
-          <p>{{ 'repository.pdf.restricted' | translate }}</p>
+          <p role="status">{{ 'repository.pdf.restricted' | translate }}</p>
         } @else {
-          <p>{{ 'repository.pdf.error' | translate }}</p>
-          <button type="button" class="btn btn-outline-primary" (click)="selectDocument(selected.bitstream.id)">
+          <p role="status">{{ 'repository.pdf.error' | translate }}</p>
+          <button type="button" class="btn btn-outline-primary" (click)="startPreview()">
             {{ 'repository.pdf.retry' | translate }}
           </button>
         }
       </div>
     }
+    @if (previewUrl) {
+      <iframe [src]="previewUrl" (load)="connectViewer($event)" referrerpolicy="no-referrer"
+        [title]="'repository.pdf.document' | translate: {name: names.getName(selected.bitstream)}">
+      </iframe>
+    }
   </div>
-  <p class="pdf-preview__hint">{{ 'repository.pdf.fallback' | translate }}</p>
+  <p class="pdf-preview__hint">
+    @if (loadedBytes > 0) {
+      <span class="pdf-preview__transfer">{{ 'repository.pdf.transferred' | translate: {size: (loadedBytes | dsFileSize)} }}</span>
+    }
+    {{ 'repository.pdf.fallback' | translate }}
+  </p>
 </ng-template>

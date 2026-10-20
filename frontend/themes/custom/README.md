@@ -128,8 +128,17 @@ restrições e solicitações de cópia continuam com o link oficial do DSpace.
 Os dois Dockerfiles instalam o PDF.js 6.4.299 em `src/assets/pdfjs`, com versão
 e hash verificados por `frontend/patches/install-pdf-viewer.mjs`. Worker, fontes
 e traduções são locais. Scripts dos PDFs e edição ficam desativados. Nenhum
-serviço externo recebe o documento. Cada seleção transfere o PDF completo;
-a URL temporária é liberada ao trocar de arquivo ou sair da página.
+serviço externo recebe o documento. `frontend/overrides/pdf-range-viewer.mjs`
+conecta o transporte oficial por intervalos ao HttpClient do Angular, mantendo
+autorização e tokens na página principal. Apenas os trechos necessários são
+pedidos, sem antecipar o arquivo restante. Busca textual, impressão ou download
+podem exigir o PDF inteiro. Fechar, trocar o arquivo ou sair cancela os pedidos.
+
+A partir de 20 MiB, ou quando o navegador sinaliza economia de dados/conexão
+lenta, o leitor aguarda “Carregar visualização”. O download oficial permanece
+visível. A política está em `pdf-preview-policy.ts`; a API de conexão é opcional,
+não identifica franquias e não está disponível em todos os navegadores.
+O caminho de assets inclui o sufixo `-range-1` para invalidar a integração anterior.
 
 Reconstrua a imagem de desenvolvimento para instalar o viewer inicialmente;
 os componentes e estilos seguintes continuam sincronizados pelo watcher.
