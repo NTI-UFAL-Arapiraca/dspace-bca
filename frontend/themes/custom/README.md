@@ -85,6 +85,48 @@ A avaliação, as prioridades e a matriz de validação estão na
 [revisão de UX/UI](../../../docs/referencia/revisao-ux-ui.md); a decisão de
 composição está na [RFC 0015](../../../rfc/0015-experiencia-visual-do-repositorio.md).
 
+## Rodapé institucional
+
+`app/footer/` personaliza o componente oficial do rodapé. A versão local mantém
+os links de acessibilidade, cookies, privacidade, acordo de usuário e COAR
+quando habilitados, remove o crédito/copyright de DSpace e LYRASIS e o link de
+envio de feedback. As logos da Biblioteca UFAL e do NTI ficam alinhadas à direita
+no desktop e centralizadas em telas pequenas. Elas são servidas dos assets do
+tema; alterações exigem recompilar a imagem Angular de produção.
+
+## Leitura integrada de PDFs
+
+`app/item-page/simple/pdf-preview/` adiciona uma área de leitura abaixo dos
+metadados de UntypedItem e Publication. O componente é importado diretamente
+pelas duas páginas e carregado quando entra na tela. PDFs do bundle ORIGINAL
+usam o principal configurado ou a ordem existente, com abas para arquivos
+adicionais. A permissão de download é verificada antes de buscar o conteúdo;
+restrições e solicitações de cópia continuam com o link oficial do DSpace.
+
+Os dois Dockerfiles instalam o PDF.js 6.4.299 em `src/assets/pdfjs`, com versão
+e hash verificados por `frontend/patches/install-pdf-viewer.mjs`. Worker, fontes
+e traduções são locais. Scripts dos PDFs e edição ficam desativados. Nenhum
+serviço externo recebe o documento. Cada seleção transfere o PDF completo;
+a URL temporária é liberada ao trocar de arquivo ou sair da página.
+
+Reconstrua a imagem de desenvolvimento para instalar o viewer inicialmente;
+os componentes e estilos seguintes continuam sincronizados pelo watcher.
+Produção exige nova imagem. A decisão está na
+[RFC 0016](../../../rfc/0016-preview-integrado-de-pdfs.md). Os títulos usam peso
+500 e o cabeçalho do leitor tem tamanho e espaçamento compactos.
+
+Testes rápidos (Node 22.18 ou posterior, com remoção nativa de tipos TS):
+
+```bash
+node --test tests/frontend/*.test.mjs
+```
+
+Na árvore Angular preparada, os specs direcionados podem ser executados com:
+
+```bash
+npm test -- --include='src/themes/custom/app/item-page/simple/pdf-preview/*.spec.ts'
+```
+
 ## Tema claro e escuro
 
 O botão de lua/sol no cabeçalho alterna entre os dois modos. Uma primeira

@@ -1,0 +1,55 @@
+:host {
+  .bottom-footer {
+    gap: 1rem;
+  }
+
+  .content-container {
+    min-width: 0;
+    margin-right: auto;
+  }
+
+  .notify-enabled {
+    position: static;
+    align-self: center !important;
+    margin-top: 0;
+  }
+
+  .institutional-logos {
+    flex-shrink: 0;
+    gap: 0.75rem;
+    margin-left: auto;
+  }
+
+  .institutional-logo {
+    display: block;
+    height: 3.25rem;
+    width: auto;
+    padding: 0.25rem 0.4rem;
+    background-color: #fff;
+    border-radius: 0.25rem;
+    object-fit: contain;
+  }
+
+  .library-logo {
+    max-width: 12rem;
+  }
+
+  .nti-logo {
+    max-width: 4.75rem;
+  }
+
+  @media (max-width: 767.98px) {
+    .content-container {
+      width: 100%;
+      margin-right: 0;
+    }
+
+    .institutional-logos {
+      margin-left: 0;
+    }
+
+    .institutional-logo {
+      height: 2.75rem;
+    }
+  }
+}

@@ -26,7 +26,7 @@ import { MetadataFieldWrapperComponent } from '../../../../../../../app/shared/m
 import { listableObjectComponent } from '../../../../../../../app/shared/object-collection/shared/listable-object/listable-object.decorator';
 import { ThemedResultsBackButtonComponent } from '../../../../../../../app/shared/results-back-button/themed-results-back-button.component';
 import { ThemedThumbnailComponent } from '../../../../../../../app/thumbnail/themed-thumbnail.component';
-
+import { PdfPreviewComponent } from '../../pdf-preview/pdf-preview.component';
 import { AcademicMetadataLinkComponent } from '../untyped-item/academic-metadata-link.component';
 import { LocalizedItemPageDateFieldComponent } from '../untyped-item/date/localized-item-page-date-field.component';
 
@@ -40,19 +40,20 @@ import { LocalizedItemPageDateFieldComponent } from '../untyped-item/date/locali
   templateUrl: '../untyped-item/untyped-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    AsyncPipe,
     AcademicMetadataLinkComponent,
+    AsyncPipe,
     AttachmentSectionComponent,
     CollectionsComponent,
     DsoEditMenuComponent,
     GenericItemPageFieldComponent,
     GeospatialItemPageFieldComponent,
     ItemPageAbstractFieldComponent,
-    LocalizedItemPageDateFieldComponent,
     ItemPageLicenseFieldComponent,
     ItemPageUriFieldComponent,
+    LocalizedItemPageDateFieldComponent,
     MetadataFieldWrapperComponent,
     MiradorViewerComponent,
+    PdfPreviewComponent,
     RouterLink,
     ThemedFileSectionComponent,
     ThemedItemPageTitleFieldComponent,

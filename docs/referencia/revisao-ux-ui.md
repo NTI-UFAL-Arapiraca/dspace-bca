@@ -165,3 +165,65 @@ O rodapé institucional, novas formas de explorar pessoas e eventual catálogo
 de cursos merecem uma etapa editorial própria: exigem destinos e conteúdo
 institucional confirmados. Novos recursos de citação e personalização ficaram
 fora desta rodada para manter apresentação e lógica de domínio separadas.
+
+## Leitor integrado de PDF e tipografia compacta
+
+Extensão posterior à revisão acima, solicitada para a página da publicação.
+O leitor ocupa uma seção própria abaixo da descrição e dos dados acadêmicos.
+Prioridades e alternativas avaliadas:
+
+| Ideia | Benefício | Custo / decisão |
+| --- | --- | --- |
+| Leitor integrado com PDF principal e abas | Iniciar a leitura sem perder o contexto do trabalho | Prioridade alta; componente e serviço locais, reutilizados em UntypedItem e Publication. |
+| Incorporação nativa do PDF da API | Pouco código adicional | Descartada após inspeção: `X-Frame-Options: DENY` e área vazia no navegador com Blob nativo. Cabeçalhos preservados. |
+| PDF.js oficial servido junto à interface | Texto selecionável, pesquisa, zoom e paginação consistentes | Implementado com versão e SHA-256 fixos; arquivos grandes exigem transferir o conteúdo completo. |
+| Serviço externo de visualização | Evitaria distribuir o leitor | Descartado: envio do documento a terceiros e incompatibilidade com a autorização da sessão. |
+| Cabeçalhos e faixa de abas compactos | Menos peso visual e mais espaço útil para leitura | Implementado conforme feedback: títulos em peso 500; metadados de 16 px; título do leitor de 18 px; abas com altura mínima de 40 px. |
+
+O componente carrega quando entra no viewport. PDFs são identificados pelo
+formato registrado, sem confiar na extensão do nome. O principal configurado
+vem primeiro; sem principal PDF, mantém-se a ordem original. O serviço percorre
+a paginação e verifica `CanDownload` antes de buscar o conteúdo. Um arquivo
+restrito preserva o link oficial para acesso/solicitação de cópia. Erros têm
+estado próprio e nova tentativa; sem PDFs, a seção desaparece. A troca cancela
+pedidos anteriores e libera a URL temporária. Desabilitar a animação do NgbNav
+evita manter dois iframes durante a transição de abas.
+
+Arquivos criados:
+
+- `frontend/themes/custom/app/item-page/simple/pdf-preview/pdf-documents.ts`;
+- `frontend/themes/custom/app/item-page/simple/pdf-preview/pdf-preview.service.ts` e seu spec;
+- `frontend/themes/custom/app/item-page/simple/pdf-preview/pdf-preview.component.ts`, HTML, SCSS e spec;
+- `frontend/patches/install-pdf-viewer.mjs`;
+- `tests/frontend/pdf-documents.test.mjs`;
+- [RFC 0016](../../rfc/0016-preview-integrado-de-pdfs.md).
+
+Arquivos modificados: os dois Dockerfiles Angular, os componentes UntypedItem
+e Publication, template/SCSS compartilhados, catálogos pt-BR/en, estilos globais
+e variáveis Sass, SCSS da introdução da home, README do tema, índice das RFCs e
+este relatório. A lógica de citação, configurações acadêmicas e políticas de
+acesso não foram modificadas.
+
+Validações desta extensão:
+
+| Verificação | Resultado |
+| --- | --- |
+| `node --test tests/frontend/*.test.mjs` | 12 testes passaram: seleção/ordem/formato, configuração do viewer, contrato de versão/namespace e os cinco testes de cor existentes. |
+| `npm test -- --include='src/themes/custom/app/item-page/simple/pdf-preview/*.spec.ts'` | 9 testes Angular passaram; executados no navegador integrado conectado ao Karma via proxy temporário em loopback. Abrangem abas, um único iframe, paginação, ausência de PDFs, permissão negada sem pedido de conteúdo, erros/retry e cancelamento. |
+| ESLint oficial direcionado aos TS/HTML alterados | Sem erros; aviso existente sobre configuração ESLint legada. |
+| Instalador do PDF.js executado no container local | Distribuição 6.4.299 baixada, SHA-256 verificado e assets instalados; instalação repetida com sucesso. |
+| `node --check frontend/patches/install-pdf-viewer.mjs` | Sem erro de sintaxe. |
+| Visualização real do PDF | Desktop 1440 × 1000 e mobile 390 × 844; conteúdo e controles renderizados, texto presente na árvore acessível e zoom mobile funcional. Documento sem transbordamento horizontal. |
+
+No desktop, o cabeçalho do leitor mede aproximadamente 72 px e o iframe 650 px
+no viewport de 1000 px. No mobile, o iframe mede 506 px no viewport de 844 px;
+a barra de arquivo quebra para acomodar o link visível. A inspeção usa o
+registro fictício com um PDF; os casos com múltiplos PDFs e restrições foram
+validados com fixtures nos testes Angular, sem modificar dados do acervo.
+
+Limites: não foram testados aparelhos físicos, PDFs protegidos por senha,
+documentos extensos nem um registro Publication com arquivos reais. O Blob
+carrega o documento inteiro antes de exibir. Download por autorização especial
+de solicitação de cópia continua disponível pelo fluxo oficial; não foi
+reimplementado no preview. A instalação do viewer exige reconstruir a imagem
+Angular, conforme a RFC 0016.

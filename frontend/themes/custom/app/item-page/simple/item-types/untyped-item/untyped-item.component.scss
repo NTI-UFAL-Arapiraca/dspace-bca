@@ -11,8 +11,8 @@
 
 .academic-item__heading {
   hyphens: none;
-  margin-block: 1rem 2rem;
-  padding-bottom: 1.5rem;
+  margin-block: 1rem 1.5rem;
+  padding-bottom: 1rem;
   border-bottom: 1px solid var(--bs-border-color);
 }
 
@@ -53,6 +53,10 @@
 .academic-item__content {
   grid-area: content;
   line-height: 1.8;
+}
+
+.academic-item__preview-placeholder {
+  min-height: 1px;
 }
 
 @media (max-width: 991.98px) {

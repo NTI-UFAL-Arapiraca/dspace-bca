@@ -1,0 +1,92 @@
+<footer>
+  @if (showTopFooter) {
+    <div class="top-footer">
+      @if (footerMetadataValue$ | async; as footerMetadataValue) {
+        <ds-markdown-viewer [value]="footerMetadataValue"></ds-markdown-viewer>
+      }
+      @else {
+        <div class="container p-4">
+          <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+              <h5 class="text-uppercase">Footer Content</h5>
+              <ul class="list-unstyled mb-0">
+                <li><a routerLink="./">Lorem ipsum</a></li>
+                <li><a routerLink="./">Ut facilisis</a></li>
+                <li><a routerLink="./">Aenean sit</a></li>
+              </ul>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+              <h5 class="text-uppercase">Footer Content</h5>
+              <ul class="list-unstyled mb-0">
+                <li><a routerLink="./" role="link" tabindex="0">Suspendisse potenti</a></li>
+              </ul>
+            </div>
+            <div class="col-lg-4 col-md-12 mb-4 mb-md-0">
+              <h5 class="text-uppercase">Footer Content</h5>
+              <p>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste atque ea quis
+                molestias. Fugiat pariatur maxime quis culpa corporis vitae repudiandae aliquam
+                voluptatem veniam, est atque cumque eum delectus sint!
+              </p>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <div class="bottom-footer p-1 d-flex flex-column flex-md-row justify-content-between align-items-center text-white">
+    <div class="content-container">
+      <ul class="footer-info list-unstyled d-flex justify-content-center justify-content-md-start mb-0">
+        @if (showCookieSettings) {
+          <li>
+            <button class="btn btn-link text-white" type="button" (click)="openCookieSettings()" role="button" tabindex="0">
+              {{ 'footer.link.cookies' | translate }}
+            </button>
+          </li>
+        }
+        <li>
+          <a class="btn text-white" routerLink="info/accessibility" role="link" tabindex="0">
+            {{ 'footer.link.accessibility' | translate }}
+          </a>
+        </li>
+        @if (showPrivacyPolicy) {
+          <li>
+            <a class="btn text-white" routerLink="info/privacy" role="link" tabindex="0">
+              {{ 'footer.link.privacy-policy' | translate }}
+            </a>
+          </li>
+        }
+        @if (showEndUserAgreement) {
+          <li>
+            <a class="btn text-white" routerLink="info/end-user-agreement" role="link" tabindex="0">
+              {{ 'footer.link.end-user-agreement' | translate }}
+            </a>
+          </li>
+        }
+      </ul>
+    </div>
+
+    @if (coarLdnEnabled$ | async) {
+      <div class="notify-enabled text-white align-self-end">
+        <a class="coar-notify-support-route" routerLink="info/coar-notify-support" role="link" tabindex="0">
+          <img class="n-coar" src="assets/images/n-coar.svg" [attr.alt]="'menu.header.image.logo' | translate" />
+          {{ 'footer.link.coar-notify-support' | translate }}
+        </a>
+      </div>
+    }
+
+    <div class="institutional-logos d-flex align-items-center justify-content-center">
+      <img
+        class="institutional-logo library-logo"
+        src="assets/custom/images/logo-biblioteca-ufal.svg"
+        [attr.alt]="'footer.logo.library' | translate"
+      />
+      <img
+        class="institutional-logo nti-logo"
+        src="assets/custom/images/nti_logo.png"
+        [attr.alt]="'footer.logo.nti' | translate"
+      />
+    </div>
+  </div>
+</footer>

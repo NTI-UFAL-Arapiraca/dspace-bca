@@ -6,6 +6,10 @@ FROM docker.io/dspace/dspace-angular:${DSPACE_ANGULAR_TAG} AS build
 
 WORKDIR /app
 
+# Serve the version-pinned Mozilla viewer locally, including worker and locales.
+COPY frontend/patches/install-pdf-viewer.mjs /tmp/install-pdf-viewer.mjs
+RUN node /tmp/install-pdf-viewer.mjs /app/src/assets/pdfjs
+
 # Restore the browser's explicit color preference before Angular or styles load.
 COPY frontend/overrides/color-mode-init.js /tmp/color-mode-init.js
 COPY frontend/patches/apply-color-mode-init.mjs /tmp/apply-color-mode-init.mjs

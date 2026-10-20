@@ -18,6 +18,7 @@
   </ds-item-page-title-field>
   <ds-dso-edit-menu></ds-dso-edit-menu>
 </div>
+
 <div class="academic-item">
   <section class="academic-item__access" [attr.aria-label]="'repository.item.document' | translate">
     @if (!(mediaViewer.image || mediaViewer.video)) {
@@ -145,3 +146,9 @@
     </ds-generic-item-page-field>
   </section>
 </div>
+
+@defer (on viewport) {
+  <ds-pdf-preview [item]="object"></ds-pdf-preview>
+} @placeholder {
+  <div class="academic-item__preview-placeholder" aria-hidden="true"></div>
+}

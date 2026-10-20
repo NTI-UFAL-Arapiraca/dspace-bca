@@ -21,6 +21,7 @@ de contexto para reaplicar e revisar essas diferenças ao atualizar as imagens.
 | [0013](0013-banco-geoip-geolite2.md) | Configurar o GeoLite2 City para estatísticas geográficas. |
 | [0014](0014-pessoas-e-metadados-academicos.md) | Integrar pessoas, formulários acadêmicos e perfis por papel. |
 | [0015](0015-experiencia-visual-do-repositorio.md) | Orientar a descoberta e organizar a leitura no tema institucional. |
+| [0016](0016-preview-integrado-de-pdfs.md) | Integrar a leitura de PDFs com abas e visualizador local. |
 
 Uma nova alteração por override deve incluir sua RFC neste índice no mesmo
 commit. Cada RFC deve identificar arquivos, consequência operacional e testes.

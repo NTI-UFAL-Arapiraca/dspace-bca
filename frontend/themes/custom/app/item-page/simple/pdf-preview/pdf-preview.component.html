@@ -1,0 +1,83 @@
+@if (catalogState !== 'ready' || documents.length > 0) {
+  <section class="pdf-preview" [attr.aria-labelledby]="'pdf-heading-' + item.id">
+    <header class="pdf-preview__header">
+      <h2 [id]="'pdf-heading-' + item.id">{{ 'repository.pdf.title' | translate }}</h2>
+      <p>{{ 'repository.pdf.description' | translate }}</p>
+    </header>
+
+    @if (catalogState === 'loading') {
+      <p class="pdf-preview__message" role="status">{{ 'repository.pdf.loading-files' | translate }}</p>
+    } @else if (catalogState === 'error') {
+      <div class="pdf-preview__message">
+        <p role="status">{{ 'repository.pdf.files-error' | translate }}</p>
+        <button class="btn btn-outline-primary" type="button" (click)="loadDocuments()">
+          {{ 'repository.pdf.retry' | translate }}
+        </button>
+      </div>
+    } @else if (documents.length > 1) {
+      <ul ngbNav #nav="ngbNav" class="nav-tabs pdf-preview__tabs"
+          [animation]="false"
+          [activeId]="selected.bitstream.id" (activeIdChange)="selectDocument($event)"
+          [attr.aria-label]="'repository.pdf.files' | translate">
+        @for (document of documents; track document.bitstream.id) {
+          <li [ngbNavItem]="document.bitstream.id">
+            <button ngbNavLink type="button">
+              <i class="far fa-file-pdf me-2" aria-hidden="true"></i>
+              {{ names.getName(document.bitstream) }}
+              @if (document.isPrimary) {
+                <span class="badge ms-2">{{ 'item.page.bitstreams.primary' | translate }}</span>
+              }
+            </button>
+            <ng-template ngbNavContent>
+              <ng-container [ngTemplateOutlet]="reader"></ng-container>
+            </ng-template>
+          </li>
+        }
+      </ul>
+      <div [ngbNavOutlet]="nav"></div>
+    } @else {
+      <ng-container [ngTemplateOutlet]="reader"></ng-container>
+    }
+  </section>
+}
+
+<ng-template #reader>
+  <div class="pdf-preview__toolbar">
+    <div class="pdf-preview__filename">
+      <i class="far fa-file-pdf me-2" aria-hidden="true"></i>
+      <span>{{ names.getName(selected.bitstream) }}</span>
+      @if (selected.isPrimary) {
+        <span class="badge ms-2">{{ 'item.page.bitstreams.primary' | translate }}</span>
+      }
+    </div>
+    <ds-file-download-link [bitstream]="selected.bitstream" [item]="item" [isBlank]="true"
+      [showAccessStatusBadge]="false" cssClasses="repository-text-link">
+      {{ 'repository.pdf.open' | translate }}
+      <i class="fas fa-arrow-up-right-from-square ms-1" aria-hidden="true"></i>
+      <span class="visually-hidden">{{ 'repository.pdf.new-tab' | translate }}</span>
+    </ds-file-download-link>
+  </div>
+  <div class="pdf-preview__reader" [attr.aria-busy]="state === 'loading'">
+    @if (state === 'ready') {
+      <iframe [src]="previewUrl" referrerpolicy="no-referrer"
+        [title]="'repository.pdf.document' | translate: {name: names.getName(selected.bitstream)}">
+      </iframe>
+    } @else {
+      <div class="pdf-preview__message" role="status">
+        @if (state === 'loading') {
+          <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+          {{ 'repository.pdf.loading' | translate }}
+        } @else if (state === 'restricted') {
+          <i class="fas fa-lock mb-3" aria-hidden="true"></i>
+          <p>{{ 'repository.pdf.restricted' | translate }}</p>
+        } @else {
+          <p>{{ 'repository.pdf.error' | translate }}</p>
+          <button type="button" class="btn btn-outline-primary" (click)="selectDocument(selected.bitstream.id)">
+            {{ 'repository.pdf.retry' | translate }}
+          </button>
+        }
+      </div>
+    }
+  </div>
+  <p class="pdf-preview__hint">{{ 'repository.pdf.fallback' | translate }}</p>
+</ng-template>
