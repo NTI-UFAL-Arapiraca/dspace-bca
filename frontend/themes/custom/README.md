@@ -37,6 +37,28 @@ o acervo institucional, com título, descrição e links para pesquisa no acervo
 e comunidades. Busca, comunidades e adições recentes continuam herdadas da home
 oficial; nenhum total ou conteúdo do acervo é inventado no tema.
 
+## Estatísticas
+
+`app/statistics-page/` substitui a apresentação das quatro páginas oficiais de
+estatísticas (repositório, item, coleção e comunidade). A busca dos relatórios,
+as rotas e a restrição administrativa continuam sob responsabilidade do DSpace.
+O relatório do repositório é exibido como ranking de registros, incluindo
+trabalhos e perfis quando retornados pela API; seus pontos não são somados para
+criar um total global. Um número de visualizações para item,
+coleção ou comunidade aparece somente quando o relatório contém um ponto do
+mesmo tipo e UUID do objeto consultado. O cartão de arquivos soma apenas os
+pontos de bitstream retornados em `TotalDownloads` para o item; como o relatório
+pode limitar a lista, o rótulo deixa claro que não é necessariamente um total de
+todos os arquivos. Aceita `downloads` e o `views` usado pelo backend local, nessa
+ordem. Meses com valor zero são mantidos, e localização aparece somente quando
+houver dados.
+
+As barras incluem números legíveis e os relatórios completos ficam disponíveis
+em tabelas expansíveis. Tipos futuros de relatório recebem a tabela mesmo sem
+visualização própria. Os valores indicam eventos de uso, não visitantes únicos.
+Os rótulos são mesclados nos catálogos pt-BR e en existentes. Como essa extensão
+é compilada no tema, a produção requer uma nova imagem Angular.
+
 ## Identidade visual
 
 O azul institucional (`#006da5`) identifica links e ações principais. O vermelho

@@ -1,0 +1,33 @@
+.statistics-page {
+  padding-block: clamp(1.5rem, 4vw, 3rem);
+}
+
+.statistics-page__header {
+  max-width: 52rem;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+
+  h1 {
+    margin-block: 0 0.8rem;
+    color: var(--ufal-ink);
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 500;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+
+  > p:last-child {
+    max-width: 65ch;
+    margin: 0;
+    color: var(--bs-secondary-color);
+    line-height: 1.6;
+  }
+}
+
+.statistics-page__eyebrow {
+  margin-bottom: 0.7rem;
+  color: var(--bs-link-color);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}

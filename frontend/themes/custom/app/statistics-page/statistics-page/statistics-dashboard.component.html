@@ -1,0 +1,147 @@
+@if (dashboard; as data) {
+  @if (!data.hasData) {
+    <p class="statistics-empty">{{ 'statistics.page.no-data' | translate }}</p>
+  } @else {
+    @if (scope !== 'site' && (data.visits !== null || data.downloads !== null)) {
+      <section class="statistics-summary" aria-labelledby="statistics-summary-title">
+        <div class="statistics-section-heading">
+          <h2 id="statistics-summary-title">{{ 'repository.statistics.summary' | translate }}</h2>
+          <p>{{ 'repository.statistics.events-help' | translate }}</p>
+        </div>
+        <div class="statistics-summary__grid">
+          @if (data.visits !== null) {
+            <div class="statistics-stat">
+              <strong>{{ data.visits | number }}</strong>
+              <span>{{ 'repository.statistics.record-views' | translate }}</span>
+            </div>
+          }
+          @if (data.downloads !== null) {
+            <div class="statistics-stat">
+              <strong>{{ data.downloads | number }}</strong>
+              <span>{{ 'repository.statistics.file-accesses' | translate }}</span>
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+    @if (data.ranking.length) {
+      <section class="statistics-panel" aria-labelledby="statistics-ranking-title">
+        <div class="statistics-section-heading">
+          <h2 id="statistics-ranking-title">{{ 'repository.statistics.ranking' | translate }}</h2>
+          <p>{{ 'repository.statistics.ranking-help' | translate }}</p>
+        </div>
+        <ol class="statistics-bars statistics-bars--ranking">
+          @for (entry of data.ranking; track entry.id) {
+            <li>
+              <div class="statistics-bars__line">
+                <a [routerLink]="itemRoute(entry.id)">{{ entry.label }}</a>
+                <strong>{{ entry.value | number }}</strong>
+              </div>
+              <div class="statistics-bars__track" aria-hidden="true">
+                <span [style.width.%]="entry.percentage"></span>
+              </div>
+            </li>
+          }
+        </ol>
+      </section>
+    }
+
+    @if (data.months.length) {
+      <section class="statistics-panel" aria-labelledby="statistics-months-title">
+        <div class="statistics-section-heading">
+          <h2 id="statistics-months-title">{{ 'repository.statistics.monthly' | translate }}</h2>
+          <p>{{ 'repository.statistics.monthly-help' | translate }}</p>
+        </div>
+        <ul class="statistics-bars statistics-bars--months">
+          @for (entry of data.months; track entry.id) {
+            <li>
+              <div class="statistics-bars__line">
+                <span>
+                  @if (entry.monthKey) {
+                    {{ entry.monthKey | translate }} {{ entry.year }}
+                  } @else {
+                    {{ entry.label }}
+                  }
+                </span>
+                <strong>{{ entry.value | number }}</strong>
+              </div>
+              <div class="statistics-bars__track" aria-hidden="true">
+                <span [style.width.%]="entry.percentage"></span>
+              </div>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+
+    @if (data.countries.length || data.cities.length) {
+      <section class="statistics-panel" aria-labelledby="statistics-places-title">
+        <div class="statistics-section-heading">
+          <h2 id="statistics-places-title">{{ 'repository.statistics.places' | translate }}</h2>
+          <p>{{ 'repository.statistics.places-help' | translate }}</p>
+        </div>
+        <div class="statistics-places">
+          @if (data.countries.length) {
+            <div>
+              <h3>{{ 'repository.statistics.countries' | translate }}</h3>
+              <ol class="statistics-bars">
+                @for (entry of data.countries; track entry.id) {
+                  <li>
+                    <div class="statistics-bars__line"><span>{{ entry.label }}</span><strong>{{ entry.value | number }}</strong></div>
+                    <div class="statistics-bars__track" aria-hidden="true"><span [style.width.%]="entry.percentage"></span></div>
+                  </li>
+                }
+              </ol>
+            </div>
+          }
+          @if (data.cities.length) {
+            <div>
+              <h3>{{ 'repository.statistics.cities' | translate }}</h3>
+              <ol class="statistics-bars">
+                @for (entry of data.cities; track entry.id) {
+                  <li>
+                    <div class="statistics-bars__line"><span>{{ entry.label }}</span><strong>{{ entry.value | number }}</strong></div>
+                    <div class="statistics-bars__track" aria-hidden="true"><span [style.width.%]="entry.percentage"></span></div>
+                  </li>
+                }
+              </ol>
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+    <details class="statistics-details">
+      <summary>{{ 'repository.statistics.details' | translate }}</summary>
+      <p>{{ 'repository.statistics.details-help' | translate }}</p>
+      @for (table of data.tables; track table.title) {
+        <section>
+          <h2>{{ table.titleKey ? (table.titleKey | translate) : table.title }}</h2>
+          <div class="statistics-details__scroll">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">{{ 'repository.statistics.label' | translate }}</th>
+                  @for (header of table.headers; track header) {
+                    <th scope="col">{{ headerKey(header) ? (headerKey(header) | translate) : header }}</th>
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of table.rows; track row) {
+                  <tr>
+                    <th scope="row">{{ row.label }}</th>
+                    @for (value of row.values; track $index) {
+                      <td>{{ value }}</td>
+                    }
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </section>
+      }
+    </details>
+  }
+}

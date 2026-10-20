@@ -1,0 +1,16 @@
+<div class="container statistics-page">
+  @if (scope$ | async; as scope) {
+    <header class="statistics-page__header">
+      <p class="statistics-page__eyebrow">{{ 'repository.statistics.eyebrow' | translate }}</p>
+      <h1>{{ 'statistics.header' | translate: { scope: getName(scope) } }}</h1>
+      <p>{{ 'repository.statistics.intro' | translate }}</p>
+    </header>
+    @if (reports$ | async; as reports) {
+      <ds-statistics-dashboard [reports]="reports" [scope]="scopeKind" [scopeId]="scope.id" />
+    } @else {
+      <ds-loading />
+    }
+  } @else {
+    <ds-loading />
+  }
+</div>
