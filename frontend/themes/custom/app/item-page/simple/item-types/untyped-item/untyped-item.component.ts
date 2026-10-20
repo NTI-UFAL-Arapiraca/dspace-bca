@@ -2,8 +2,11 @@ import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  inject,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AuthorizationDataService } from '@dspace/core/data/feature-authorization/authorization-data.service';
+import { FeatureID } from '@dspace/core/data/feature-authorization/feature-id';
 import { Context } from '@dspace/core/shared/context.model';
 import { Item } from '@dspace/core/shared/item.model';
 import { ViewMode } from '@dspace/core/shared/view-mode.model';
@@ -66,4 +69,5 @@ import { LocalizedItemPageDateFieldComponent } from './date/localized-item-page-
   ],
 })
 export class UntypedItemComponent extends BaseComponent {
+  readonly isAdmin$ = inject(AuthorizationDataService).isAuthorized(FeatureID.AdministratorOf);
 }

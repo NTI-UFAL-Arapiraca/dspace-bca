@@ -1,6 +1,6 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject, Input, OnChanges } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { PaginationComponentOptions } from '@dspace/core/pagination/pagination-component-options.model';
 import { HALEndpointService } from '@dspace/core/shared/hal-endpoint.service';
 import { Item } from '@dspace/core/shared/item.model';
@@ -9,7 +9,7 @@ import { PaginatedSearchOptions } from '@dspace/core/shared/search/models/pagina
 import { SearchFilterConfig } from '@dspace/core/shared/search/models/search-filter-config.model';
 import { TranslateModule } from '@ngx-translate/core';
 import { combineLatest, Observable, of } from 'rxjs';
-import { catchError, map, shareReplay, startWith, switchMap, take } from 'rxjs/operators';
+import { catchError, filter, map, shareReplay, startWith, switchMap, take } from 'rxjs/operators';
 
 import { SearchService } from '../../../../../../../app/shared/search/search.service';
 
@@ -29,8 +29,19 @@ export class PersonActivityComponent implements OnChanges {
   @Input() itemPageRoute: string;
   private search = inject(SearchService);
   private hal = inject(HALEndpointService);
+  private router = inject(Router);
   counts$: Observable<{ role: string; count: number | null | undefined }[]>;
   context$: Observable<{ field: string; values: { label: string; count: number }[] }[]>;
+  activeRole$ = this.router.events.pipe(
+    filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+    startWith(null),
+    map(() => {
+      const tab = this.router.parseUrl(this.router.url).queryParams.tab;
+      return typeof tab === 'string' && tab.startsWith('RELATION.Person.')
+        ? tab.slice('RELATION.Person.'.length)
+        : 'works';
+    }),
+  );
 
   ngOnChanges(): void {
     if (!this.item?.uuid) return;

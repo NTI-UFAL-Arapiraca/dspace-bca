@@ -1,6 +1,8 @@
 import { AsyncPipe } from '@angular/common';
 import { afterNextRender, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AuthorizationDataService } from '@dspace/core/data/feature-authorization/authorization-data.service';
+import { FeatureID } from '@dspace/core/data/feature-authorization/feature-id';
 import { Context } from '@dspace/core/shared/context.model';
 import { ViewMode } from '@dspace/core/shared/view-mode.model';
 import { TranslateModule } from '@ngx-translate/core';
@@ -34,6 +36,7 @@ import { degreeTranslation, lattesUrl } from './person-profile.helpers';
 })
 export class PersonComponent extends BaseComponent {
   private readonly searchNavigation = inject(PersonSearchNavigationService);
+  readonly isAdmin$ = inject(AuthorizationDataService).isAuthorized(FeatureID.AdministratorOf);
   // The theme loads this component asynchronously, after the initial router Scroll.
   private readonly initialAnchor = afterNextRender(() => {
     if (this.router.parseUrl(this.router.url).fragment === 'person-works') {

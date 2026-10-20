@@ -41,6 +41,10 @@ RUN node /tmp/apply-person-search-navigation.mjs /app/src/app
 # origin into this EJS template and serves it at the top-level /robots.txt.
 COPY frontend/overrides/robots.txt.ejs /app/src/robots.txt.ejs
 
+# Replace the generic DSpace privacy template with the UFAL repository notice.
+COPY frontend/overrides/privacy-content.component.html \
+    /app/src/app/info/privacy/privacy-content/privacy-content.component.html
+
 # Merge the locally maintained theme and its component registries into the
 # official source tree. Files not overridden here remain inherited from the
 # version-matched base image.

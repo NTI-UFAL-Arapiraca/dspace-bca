@@ -12,7 +12,7 @@ placeholder técnico aos usuários.
 
 ## Decisão
 
-Configurar `dspace.name` como `Repositório Institucional da UFAL` por padrão e
+Configurar `dspace.name` como `Repositório Institucional Campus Arapiraca` por padrão e
 permitir sua substituição pela variável `DSPACE_NAME`. O nome permanece em uma
 única fonte no backend; o frontend apenas consome o valor publicado pela API.
 
@@ -26,7 +26,7 @@ permitir sua substituição pela variável `DSPACE_NAME`. O nome permanece em um
 
 A alteração exige apenas recriar o container `dspace`; não requer rebuild do
 frontend nem reindexação do Solr. A raiz da API REST deve retornar
-`"dspaceName": "Repositório Institucional da UFAL"`, e as páginas de
+`"dspaceName": "Repositório Institucional Campus Arapiraca"`, e as páginas de
 estatísticas passam a usar esse nome. O teste
 `test_public_repository_name_is_institutional_and_configurable` impede o
 retorno do placeholder oficial.

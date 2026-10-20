@@ -32,6 +32,8 @@ COPY frontend/patches/apply-person-search-navigation.mjs /tmp/apply-person-searc
 RUN node /tmp/apply-person-search-navigation.mjs /app/src/app
 
 COPY frontend/overrides/robots.txt.ejs /app/src/robots.txt.ejs
+COPY frontend/overrides/privacy-content.component.html \
+    /app/src/app/info/privacy/privacy-content/privacy-content.component.html
 COPY frontend/dev/live-theme.mjs /app/dev/live-theme.mjs
 
 # The official source image starts npm serve. The local entrypoint first copies

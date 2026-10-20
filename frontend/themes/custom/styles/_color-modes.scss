@@ -160,9 +160,8 @@
   color: var(--ds-header-icon-color);
   border-radius: var(--bs-border-radius);
 
-  &:hover, &[aria-pressed='true'] {
+  &:hover {
     color: var(--ds-header-icon-color-hover);
-    background-color: var(--ufal-blue-soft);
   }
 }
 

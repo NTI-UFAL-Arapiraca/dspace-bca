@@ -90,11 +90,13 @@
     </ds-item-page-uri-field>
     <ds-item-page-license-field [item]="object">
     </ds-item-page-license-field>
-    <div>
-      <a class="repository-text-link" [routerLink]="[itemPageRoute + '/full']">
-        {{"item.page.link.full" | translate}} <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
-      </a>
-    </div>
+    @if (isAdmin$ | async) {
+      <div>
+        <a class="repository-text-link" [routerLink]="[itemPageRoute + '/full']">
+          {{"item.page.link.full" | translate}} <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
+        </a>
+      </div>
+    }
   </section>
   <section class="academic-item__metadata" [attr.aria-label]="'submission.sections.academic.details' | translate">
     <ds-item-page-date-field [item]="object"></ds-item-page-date-field>

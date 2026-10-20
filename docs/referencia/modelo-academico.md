@@ -119,10 +119,20 @@ Em lotes existentes, registre os campos e use no projeto de migração:
 confere identidades e participações e atualiza somente o manifesto de pessoas,
 sem regenerar pacotes SAF, mapfiles, arquivos ou políticas.
 
-O DSpace oculta `person.email` da API anônima por padrão. O perfil mostra
-o contato quando a API disponibiliza o campo ao visitante. Tornar esse
-metadado público exige uma decisão explícita: desativar a ocultação afeta
-todas as Person com e-mail, incluindo cadastros futuros.
+`person.email` é um metadado de `Person`; a migração não cria contas `EPerson`.
+O `dspace.cfg` padrão do DSpace 10.1 oculta esse campo da API e da interface
+para usuários não administradores ([configuração oficial](https://github.com/DSpace/DSpace/blob/dspace-10.1/dspace/config/dspace.cfg#L1199-L1215)).
+O perfil não aplica uma ocultação apenas visual: só mostra o campo quando a
+API o disponibiliza. Além disso,
+`apply-people` grava os e-mails migrados com `securityLevel: 2` (regra por
+valor para administradores e proprietário) e aplica essa regra aos e-mails de
+origem já presentes em Person reutilizadas. A regra global `metadata.hide` tem
+precedência sobre a visibilidade por valor; consulte a [configuração oficial
+de segurança de metadados](https://wiki.lyrasis.org/spaces/DSDOC10x/pages/438698074/Metadata%2Bsecurity%2Bconfiguration).
+
+Tornar `person.email` público exige uma decisão explícita: desativar a
+ocultação da API e alterar os níveis dos valores afeta todas as Person com
+e-mail, incluindo cadastros futuros.
 
 A troca de abas e filtros dentro do mesmo perfil Person preserva o perfil e
 atualiza a busca de trabalhos. Os cartões e os links de temas, cursos e campus

@@ -20,7 +20,6 @@
             [attr.aria-label]="'theme.dark' | translate"
             [title]="(colorMode.isDark() ? 'theme.enable-light' : 'theme.enable-dark') | translate">
             <i class="fas fa-fw" [class.fa-sun]="colorMode.isDark()" [class.fa-moon]="!colorMode.isDark()" aria-hidden="true"></i>
-            <span class="ms-1 small">{{ 'theme.label' | translate }}</span>
           </button>
           <ds-lang-switch></ds-lang-switch>
           <ds-context-help-toggle></ds-context-help-toggle>

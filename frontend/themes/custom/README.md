@@ -102,6 +102,10 @@ Os componentes oficiais continuam responsáveis por autorização, download,
 mídia, licenças e exibição condicional de campos. O resumo permanece justificado
 conforme a RFC 0006. Links de registro completo usam semântica de navegação;
 cartões de atividade dos perfis exibem rótulos sublinhados e setas decorativas.
+Os links e a rota de metadados completos exigem o privilégio de administrador;
+acessos diretos à rota recebem um aviso e um link para a página pública do item.
+Isso controla a apresentação Angular: não altera as respostas da API REST nem
+substitui as regras `metadata.hide.*` do backend.
 
 A avaliação, as prioridades e a matriz de validação estão na
 [revisão de UX/UI](../../../docs/referencia/revisao-ux-ui.md); a decisão de
@@ -114,7 +118,12 @@ os links de acessibilidade, cookies, privacidade, acordo de usuário e COAR
 quando habilitados, remove o crédito/copyright de DSpace e LYRASIS e o link de
 envio de feedback. As logos da Biblioteca UFAL e do NTI ficam alinhadas à direita
 no desktop e centralizadas em telas pequenas. Elas são servidas dos assets do
-tema; alterações exigem recompilar a imagem Angular de produção.
+tema; alterações exigem recompilar a imagem Angular de produção. O conteúdo da
+rota `info/privacy` substitui o modelo genérico do DSpace por um aviso em
+português do Brasil, específico para o repositório e complementar às políticas
+institucionais da UFAL. O override está em `frontend/overrides/` e é aplicado nos
+Dockerfiles de desenvolvimento e produção; alterações exigem reconstruir a imagem
+Angular correspondente.
 
 ## Leitura integrada de PDFs
 

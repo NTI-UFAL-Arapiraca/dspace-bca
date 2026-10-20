@@ -94,8 +94,40 @@ a:focus-visible, a.nav-link:focus-visible, button:focus-visible, [tabindex]:focu
   background-color: var(--ufal-surface) !important;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .institution-header__actions .theme-toggle,
+  .institution-header__actions
+    :is(ds-search-navbar, ds-mobile-search, ds-lang-switch, ds-context-help-toggle, ds-auth-nav-menu, ds-impersonate-navbar)
+    :is(a:not(.dropdown-item), button) {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    background-size: 0 2px;
+    transition: background-size 220ms ease-in-out;
+
+    &:hover,
+    &:focus-visible {
+      background-size: 100% 2px;
+      text-decoration: none;
+    }
+  }
+
+  .institution-header__actions .theme-toggle {
+    transition: color 180ms ease-in-out, background-size 220ms ease-in-out;
+  }
+}
+
 #main-navbar .ds-menu-item-wrapper {
   border-radius: 0.375rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  #main-navbar .ds-menu-item-wrapper,
+  #main-navbar .ds-menu-toggler-wrapper,
+  #main-navbar .ds-menu-item,
+  #main-navbar .dropdown-item {
+    transition: color 180ms ease-in-out, background-color 180ms ease-in-out;
+  }
 }
 
 // DSpace identifies expandable wrappers explicitly. Avoid :has(), whose
@@ -196,6 +228,17 @@ ds-search-form .search-button {
 ds-top-level-community-list {
   display: block;
 
+  ds-object-list ul.list-unstyled {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+
+    > li {
+      min-width: 0;
+      margin-block: 0 !important;
+    }
+  }
+
   .lead {
     font-size: 1rem;
     color: var(--bs-secondary-color);
@@ -220,6 +263,22 @@ ds-top-level-community-list {
     &:focus-within {
       border-color: var(--bs-link-color);
     }
+  }
+}
+
+:root:not([data-bs-theme='dark']) #admin-sidebar #sidebar-header-container h4 {
+  color: #fff;
+}
+
+@media (max-width: 767.98px) {
+  ds-top-level-community-list ds-object-list ul.list-unstyled {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 575.98px) {
+  ds-top-level-community-list ds-object-list ul.list-unstyled {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -347,6 +406,19 @@ ds-thumbnail .outer .thumbnail-placeholder {
 .dropdown-menu {
   padding: 0.5rem;
   box-shadow: var(--ufal-shadow);
+}
+
+ds-lang-switch #language-menu-list {
+  max-width: calc(100vw - 1rem);
+  max-height: min(24rem, calc(100vh - 2rem));
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  .dropdown-item {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
 }
 
 .dropdown-item {

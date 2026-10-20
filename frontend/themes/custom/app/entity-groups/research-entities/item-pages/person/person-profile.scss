@@ -37,7 +37,14 @@
   font-size: 0.875rem;
   text-decoration: none;
 
-  &[data-role="works"] {
+  @media (prefers-reduced-motion: no-preference) {
+    transition:
+      background-color 180ms ease-in-out,
+      border-color 180ms ease-in-out,
+      color 180ms ease-in-out;
+  }
+
+  &.is-active {
     background: var(--ufal-blue-soft);
     border-top: 3px solid var(--bs-primary);
   }
@@ -61,8 +68,6 @@
 
 .activity-label {
   color: var(--bs-link-color);
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
 }
 
 .context-values li {
