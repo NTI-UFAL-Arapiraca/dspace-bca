@@ -1,0 +1,43 @@
+<section aria-labelledby="home-recent-title">
+  <header class="section-heading">
+    <p class="section-eyebrow">{{ 'repository.home.recent.eyebrow' | translate }}</p>
+    <h2 id="home-recent-title">{{ 'repository.home.recent.title' | translate }}</h2>
+    <p>{{ 'repository.home.recent.help' | translate }}</p>
+  </header>
+  @if (itemRD$ | async; as records) {
+    @if (records.hasSucceeded) {
+      <ul class="record-list">
+        @for (item of records.payload?.page; track item.id) {
+          <li>
+            <a class="record-link" [routerLink]="itemRoute(item)">
+              <div class="record-copy">
+                <span class="record-kind">{{ (item.firstMetadataValue('dspace.entity.type') === 'Person'
+                  ? 'repository.home.record.person' : 'repository.home.record.item') | translate }}</span>
+                <h3>{{ item.name || ('repository.home.record.untitled' | translate) }}</h3>
+                @if (item.firstMetadataValue('local.course.name'); as course) {
+                  <span class="record-detail">{{ course }}</span>
+                }
+              </div>
+              <i class="fas fa-arrow-right" aria-hidden="true"></i>
+            </a>
+          </li>
+        } @empty {
+          <li class="empty-state">{{ 'repository.home.recent.empty' | translate }}</li>
+        }
+      </ul>
+      @if (records.payload?.page.length > 0) {
+        <button type="button" class="section-link btn btn-link" (click)="onLoadMore()">
+          {{ 'repository.home.recent.all' | translate }} <i class="fas fa-arrow-right" aria-hidden="true"></i>
+        </button>
+      }
+    }
+    @if (records.hasFailed) {
+      <ds-error [message]="'error.recent-submissions' | translate"></ds-error>
+    }
+    @if (records.isLoading) {
+      <ds-loading [message]="'loading.recent-submissions' | translate"></ds-loading>
+    }
+  } @else {
+    <ds-loading [message]="'loading.recent-submissions' | translate"></ds-loading>
+  }
+</section>

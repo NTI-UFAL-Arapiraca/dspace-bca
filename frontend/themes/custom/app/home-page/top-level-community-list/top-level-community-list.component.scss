@@ -1,0 +1,37 @@
+@import '../home-sections';
+:host {
+  display: block;
+}
+section {
+  padding: 1.5rem;
+  background: var(--ufal-blue-soft);
+  border: 1px solid var(--ufal-blue-border);
+  border-radius: 1rem;
+}
+.community-links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.community-links a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 56px;
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--ufal-blue-border);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  text-decoration: none;
+  span {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  i {
+    flex-shrink: 0;
+    font-size: 0.875rem;
+  }
+}

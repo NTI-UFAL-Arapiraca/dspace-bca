@@ -168,26 +168,24 @@ a:focus-visible, a.nav-link:focus-visible, button:focus-visible, [tabindex]:focu
   padding-block: 1rem 3rem;
 }
 
-// Keep the official search immediately after the institutional introduction.
-ds-home-page ds-search-form {
+// The home section owns its surface; keep the shared form visually quiet here.
+ds-home-page .home-search ds-search-form {
   display: block;
-  padding: clamp(1rem, 3vw, 1.75rem);
-  margin-block: 1rem 2.5rem;
-  background: var(--ufal-surface);
-  border: 1px solid var(--ufal-blue-border);
-  border-radius: var(--bs-border-radius-lg);
-  box-shadow: var(--ufal-shadow);
+  margin-top: 1.25rem;
+  .input-group { margin-bottom: 0 !important; }
+  .search-context { margin-top: 0.75rem; }
+  .form-control, .search-button { min-height: 52px; }
+}
 
-  .input-group {
-    margin-bottom: 0.75rem !important;
-  }
+@media (max-width: 575.98px) {
+  ds-home-page .home-search .repository-search-input {
+    gap: 0.625rem;
 
-  .search-context {
-    margin: 0;
-  }
-
-  .form-control, .search-button {
-    min-height: 52px;
+    > .form-control, > .search-button {
+      width: 100%;
+      margin-inline-start: 0;
+      border-radius: var(--bs-border-radius) !important;
+    }
   }
 }
 

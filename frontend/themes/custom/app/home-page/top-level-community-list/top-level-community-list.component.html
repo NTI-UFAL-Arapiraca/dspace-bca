@@ -1,0 +1,31 @@
+<section aria-labelledby="home-communities-title">
+  <header class="section-heading">
+    <p class="section-eyebrow">{{ 'repository.home.communities.eyebrow' | translate }}</p>
+    <h2 id="home-communities-title">{{ 'repository.home.communities.title' | translate }}</h2>
+    <p>{{ 'repository.home.communities.help' | translate }}</p>
+  </header>
+  @if (communitiesRD$ | async; as communities) {
+    @if (communities.hasSucceeded) {
+      <ul class="community-links">
+        @for (community of communities.payload?.page; track community.id) {
+          <li><a [routerLink]="['/communities', community.id]">
+            <i class="far fa-folder" aria-hidden="true"></i>
+            <span>{{ community.name }}</span>
+            <i class="fas fa-arrow-right" aria-hidden="true"></i>
+          </a></li>
+        } @empty {
+          <li class="empty-state">{{ 'repository.home.communities.empty' | translate }}</li>
+        }
+      </ul>
+    }
+    @if (communities.hasFailed) {
+      <ds-error [message]="'error.top-level-communities' | translate"></ds-error>
+    }
+    @if (communities.isLoading) {
+      <ds-loading [message]="'loading.top-level-communities' | translate"></ds-loading>
+    }
+  }
+  <a class="section-link" routerLink="/community-list">
+    {{ 'repository.home.communities.all' | translate }} <i class="fas fa-arrow-right" aria-hidden="true"></i>
+  </a>
+</section>

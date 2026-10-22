@@ -65,3 +65,35 @@ Compilar com DSpace Angular 10.1, verificar os testes existentes de inicializaç
 do tema e revisar foco, links, busca, perfis e página do trabalho em larguras
 mobile, tablet e desktop. Resultados e limites da execução estão na
 [revisão de UX/UI](../docs/referencia/revisao-ux-ui.md).
+
+## Evolução da home — 22/10/2026
+
+A abertura `home-news` fica integralmente preservada. A composição passa a usar
+uma extensão `HomePageComponent`, com três prioridades: pesquisar, descobrir
+registros recentes e navegar por comunidades. Busca ocupa uma seção própria;
+recentes e comunidades ficam lado a lado a partir de 992 px e em coluna abaixo
+disso. A home pesquisa todo o repositório, sem seletor de escopo; o refinamento
+continua disponível na página de resultados.
+
+`HomeRecentRecordsComponent` herda a consulta, ordenação, tamanho configurado e
+navegação para mais resultados do componente oficial `RecentItemListComponent`.
+A prévia mostra título completo, distinção entre perfil de pessoa e registro do
+acervo, e curso quando disponível. O título usa a resolução oficial de rotas de
+entidades. Não mostra miniaturas vazias nem resumos longos. A consulta inclui
+Person; por isso o texto fala em registros, sem apresentar todos como trabalhos.
+
+A extensão `TopLevelCommunityListComponent` herda o carregamento oficial e mostra
+uma prévia da página de comunidades retornada, com nomes e links. Descrições,
+contagem de paginação e RSS deixam de ocupar a home; o link “Ver todas as
+comunidades” leva ao catálogo completo. Não há promessa de exibir toda a árvore
+na prévia. As duas listas possuem estados de carregamento, erro e vazio.
+
+Os registros eager incluem a home e a lista de comunidades; o componente de
+recentes é importado diretamente pela home. CMS, COAR, sugestões e o ramo
+`showDiscoverFilters` são mantidos. Novos textos têm versões pt-BR e inglês,
+e as superfícies usam os tokens existentes para temas claro e escuro.
+
+Esta evolução substitui a afirmação anterior de que não há novos registros de
+componentes. Não muda consultas REST, políticas, metadados persistidos ou
+implantação. Produção exige nova imagem Angular; o watcher aplica os arquivos
+em desenvolvimento. Validação e limites estão na revisão de UX/UI.

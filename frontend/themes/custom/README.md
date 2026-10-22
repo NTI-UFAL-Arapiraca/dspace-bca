@@ -292,3 +292,23 @@ O fluxo de desenvolvimento está no [guia de inicialização local](../../../doc
 A publicação da imagem pelo GitHub/GHCR e a recriação dos containers ficam no
 [guia de operação](../../../docs/guias/operacao.md). O YAML de runtime é
 montado separadamente da imagem compilada.
+
+## Composição da home
+
+A extensão `app/home-page/home-page.component.*` mantém a abertura institucional
+em `home-news` e organiza busca, novidades e comunidades. Em desktop, as
+novidades ocupam a coluna principal; abaixo de 992 px, as seções ficam em coluna.
+A busca inicial abrange todo o repositório e o refinamento fica nos resultados.
+
+`recent-records/` herda o carregamento oficial, inclusive tamanho, ordenação e
+navegação para mais registros. Os cartões exibem título, tipo de apresentação
+(perfil de pessoa ou registro) e curso quando disponível. `top-level-community-list/`
+mostra a página retornada pelo serviço como uma prévia com acesso ao catálogo
+completo. Ambas mantêm carregamento, erro e vazio; não há nova consulta ou filtro.
+CMS, COAR, sugestões e a opção de filtros Discovery continuam na composição.
+
+Home e comunidades entram no registro eager; recentes é importado diretamente.
+Os estilos compartilhados ficam em `_home-sections.scss`; o formulário recebe
+ajustes globais limitados a `.home-search`. O pipeline Sass do DSpace injeta
+variáveis antes do SCSS, por isso o parcial usa `@import`, como o tema existente.
+Produção exige nova imagem Angular. A decisão está na RFC 0015.

@@ -422,3 +422,56 @@ aviso preexistente de `RouterLink` não usado na página de privacidade.
 
 Não foi repetido o build otimizado de produção/SSR para essa alteração de
 apresentação. Publicar o fundo exige uma nova imagem Angular pelo workflow.
+
+## Redesign da composição da home — 22/10/2026
+
+Análise do componente oficial DSpace 10.1, tema e página local: a busca não tinha
+orientação própria; comunidades e seus controles de listagem
+precediam a descoberta; adições recentes traziam miniaturas vazias e cadastros
+de pessoas. A abertura “Explore o conhecimento produzido em Arapiraca.” foi
+preservada integralmente a pedido do usuário.
+
+Plano implementado:
+
+1. Busca com título e orientação por título, autor ou assunto, sem seletor de
+   escopo na entrada; os filtros ficam disponíveis nos resultados.
+2. Novidades com cartões compactos, título completo, indicação de perfil/registro
+   e curso quando disponível. O cartão inteiro é um link e tem estado de foco.
+3. Comunidades em painel secundário, com nomes, ícones decorativos e acesso ao
+   catálogo completo. A prévia mantém o tamanho configurado, sem controles de
+   paginação ou RSS na home.
+4. Duas colunas a partir de 992 px e fluxo único em telas menores, respeitando
+   a ordem do DOM. Superfícies, bordas e cores usam os tokens claro/escuro.
+
+A implementação mantém serviços oficiais, configurações de tamanho/ordenação,
+CMS, COAR e sugestões; não modifica backend nem filtra pessoas silenciosamente.
+A seção foi nomeada “Novidades no acervo” e explica que inclui trabalhos e perfis.
+O refinamento editorial para uma seção exclusivamente de trabalhos depende da
+consulta acadêmica já apontada como pendência operacional nesta revisão.
+A decisão e os novos pontos de extensão estão na RFC 0015.
+
+Verificações desta rodada: `git diff --check` sem erros; 37 testes Node do
+frontend aprovados; lint oficial dos novos TS/HTML e registro eager aprovado.
+A recompilação de desenvolvimento passou. A busca “Biblioteca” enviada pela home
+levou a `/search?spc.page=1&query=Biblioteca` e retornou o trabalho fictício esperado.
+A inspeção em 320, 390, 768 e 1440 px não identificou overflow horizontal; modos
+claro e escuro foram conferidos. Abaixo de 576 px, o botão de busca ocupa uma
+linha própria para ampliar o espaço de digitação.
+
+Limites: dados fictícios locais, sem testes em aparelho físico ou leitor de tela.
+Estados de erro/vazio, CMS/COAR e a opção `showDiscoverFilters=true` foram
+preservados no código e compilados, mas não exercitados com cenários dedicados.
+Não houve publicação em produção; é necessária uma nova imagem Angular.
+
+O comando `docker exec -e NG_BUILD_MAX_WORKERS=2 d10dev-dspace-angular npm run
+build:prod` concluiu navegador e SSR com código 0. Emitiu avisos de CommonJS,
+arquivos não usados e orçamento inicial (3,68 MB para aviso de 3 MB). Durante
+essa execução foram feitos os últimos ajustes de CSS mobile, formatação Sass
+e troca do contêiner de título de `span` por `div`; esses ajustes finais foram
+validados pela recompilação de desenvolvimento e inspeção visual, sem repetir
+o build otimizado inteiro. O lint final inclui a correção semântica do template.
+
+Navegação adicional conferida: cartão de pessoa abre o perfil correto; “Ver mais
+registros” mantém `dc.date.accessioned` em ordem descendente na pesquisa;
+“Ver todas as comunidades” abre o catálogo. Tema claro e viewport padrão foram
+restaurados após os testes. O componente `home-news` não possui alterações no diff.

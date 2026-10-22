@@ -1,0 +1,39 @@
+:host {
+  display: block;
+}
+.home-search {
+  margin-block: 1.5rem 2.75rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  background: var(--ufal-surface);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 1rem;
+}
+.home-search__heading {
+  h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+  p {
+    margin: 0;
+    color: var(--bs-secondary-color);
+    font-size: 0.9375rem;
+  }
+}
+.home-discovery {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(16rem, 1fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: start;
+  > * {
+    min-width: 0;
+  }
+}
+.home-discovery--communities-only {
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (max-width: 991.98px) {
+  .home-discovery {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
