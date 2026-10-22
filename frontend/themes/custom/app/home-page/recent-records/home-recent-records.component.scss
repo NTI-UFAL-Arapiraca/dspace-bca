@@ -19,6 +19,9 @@
   background: var(--ufal-surface);
   border: 1px solid var(--bs-border-color);
   border-radius: 0.75rem;
+  @media (prefers-reduced-motion: no-preference) {
+    transition: background-color 180ms ease-in-out, border-color 180ms ease-in-out;
+  }
   text-decoration: none;
   &:hover, &:focus-visible {
     border-color: var(--bs-link-color);
@@ -55,5 +58,15 @@
 @media (max-width: 575.98px) {
   .record-link {
     padding: 1rem;
+  }
+}
+.section-link > i {
+  text-decoration: none;
+}
+.section-link {
+  text-decoration: none;
+  .section-link-label {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 }
