@@ -34,6 +34,8 @@
   "theme.enable-dark": "Switch to dark theme",
   "theme.enable-light": "Switch to light theme",
   "item.page.advisor": "Advisor",
+  "item.page.publication-year": "Publication year",
+  "item.page.defense-date": "Defense date",
   "item.page.referees": "Examination committee members",
   "item.page.coadvisor": "Co-advisor",
   "item.page.course": "Course",

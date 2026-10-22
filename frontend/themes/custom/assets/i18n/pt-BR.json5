@@ -34,6 +34,8 @@
   "theme.enable-dark": "Ativar tema escuro",
   "theme.enable-light": "Ativar tema claro",
   "item.page.advisor": "Orientador",
+  "item.page.publication-year": "Ano de publicação",
+  "item.page.defense-date": "Data de defesa",
   "item.page.referees": "Membros avaliadores da banca",
   "item.page.coadvisor": "Coorientador",
   "item.page.course": "Curso",

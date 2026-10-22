@@ -18,7 +18,8 @@ Arquivos mantidos inicialmente:
 - `app/header/`: cabeçalho institucional com o brasão da UFAL e identificação
   do Campus Arapiraca;
 - `app/item-page/simple/item-types/untyped-item/`: página usada pelos itens
-  migrados, incluindo orientador e membros avaliadores abaixo dos autores.
+  migrados, incluindo ano de publicação, data de defesa, orientador e membros
+  avaliadores abaixo dos autores.
 - `app/item-page/simple/item-types/publication/`: reutiliza a apresentação
   acadêmica para trabalhos com tipo Publication;
 - `app/entity-groups/research-entities/item-pages/person/`: perfis com abas

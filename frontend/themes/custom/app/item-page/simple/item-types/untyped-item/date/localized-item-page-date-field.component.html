@@ -1,9 +1,18 @@
 <div class="item-page-field">
-  @if (dateValues$ | async; as dateValues) {
-    <ds-metadata-values
-      [mdValues]="dateValues"
-      [separator]="separator"
-      [label]="label">
-    </ds-metadata-values>
+  @if (dateValues$ | async; as dates) {
+    @if (dates.publicationYears.length > 0) {
+      <ds-metadata-values
+        [mdValues]="dates.publicationYears"
+        [separator]="separator"
+        [label]="'item.page.publication-year'">
+      </ds-metadata-values>
+    }
+    @if (dates.defenseDates.length > 0) {
+      <ds-metadata-values
+        [mdValues]="dates.defenseDates"
+        [separator]="separator"
+        [label]="'item.page.defense-date'">
+      </ds-metadata-values>
+    }
   }
 </div>

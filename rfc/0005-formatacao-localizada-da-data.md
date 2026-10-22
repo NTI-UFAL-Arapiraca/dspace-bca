@@ -5,14 +5,17 @@
 
 ## Contexto
 
-`dc.date.issued` chegava em ISO e era mostrado dessa forma mesmo quando a
-interface estava em português do Brasil.
+Datas completas chegavam em ISO e eram mostradas dessa forma mesmo quando a
+interface estava em português do Brasil. A RFC 0020 define `dc.date.issued`
+como ano de publicação e mantém a data completa de defesa em
+`local.date.defense`.
 
 ## Decisão
 
-Substituir o campo de data da página simples por um componente que formata
-`YYYY-MM-DD` como `DD/MM/YYYY` e `YYYY-MM` como `MM/YYYY` somente em `pt-BR`.
-Outros idiomas, anos isolados e datas inválidas permanecem inalterados.
+Substituir o campo de data genérico por um componente que formata valores de
+data completos `YYYY-MM-DD` como `DD/MM/YYYY` e valores `YYYY-MM` como
+`MM/YYYY` somente em `pt-BR`. O ano de publicação é exibido como ano isolado;
+outros idiomas e datas inválidas permanecem inalterados.
 
 ## Implementação
 
@@ -21,6 +24,5 @@ registro do componente em `untyped-item.component.ts`.
 
 ## Consequências e validação
 
-O valor persistido continua ISO; a mudança é apenas de apresentação. A spec
-Angular do componente cobre datas completas, parciais, inválidas e idiomas, e
-`test_frontend_customization.py` confirma seu uso na página.
+O valor persistido continua ISO; a mudança é apenas de apresentação. A data de
+defesa usa a formatação localizada; o ano de publicação não ganha mês ou dia.

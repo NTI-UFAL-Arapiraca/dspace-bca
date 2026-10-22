@@ -61,6 +61,8 @@ Os campos do acervo ficam assim:
 | --- | --- |
 | Curso | `local.course.name` |
 | Campus | `local.campus.name` |
+| Ano de publicação | `dc.date.issued` |
+| Data de defesa | `local.date.defense` |
 | Autor | `dc.contributor.author` |
 | Orientador | `dc.contributor.advisor` |
 | Coorientador | `dc.contributor.coadvisor` |
@@ -72,6 +74,10 @@ pelo valor selecionado. Os quatro campos de pessoas usam seleção de cadastro
 existente. Se a pessoa ainda não existir, a biblioteca a cadastra na coleção
 Pessoas e depois a seleciona no trabalho. Programa de pós-graduação e grau
 acadêmico não são deduzidos do nome do curso.
+
+O item distingue `dc.date.issued`, apresentado como ano de publicação, de
+`local.date.defense`, apresentado como data de defesa. A data de defesa não é
+usada como data de publicação nem como data de entrada do registro no DSpace.
 
 ## Relações e acervo existente
 

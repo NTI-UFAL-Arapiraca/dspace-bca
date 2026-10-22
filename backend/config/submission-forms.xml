@@ -131,13 +131,11 @@
                     <dc-element>date</dc-element>
                     <dc-qualifier>issued</dc-qualifier>
                     <repeatable>false</repeatable>
-                    <label>Date of Issue</label>
+                    <label>Ano de publicação</label>
                     <style>col-md-4</style>
                     <input-type>date</input-type>
-                    <hint>Please give the date of previous publication or public distribution.
-                        You can leave out the day and/or month if they aren't applicable.
-                    </hint>
-                    <required>You must enter at least the year.</required>
+                    <hint>Informe o ano de publicação. Não use a data de defesa neste campo.</hint>
+                    <required>Informe pelo menos o ano de publicação.</required>
                 </field>
 
                 <field>
@@ -349,13 +347,11 @@
                     <dc-element>date</dc-element>
                     <dc-qualifier>issued</dc-qualifier>
                     <repeatable>false</repeatable>
-                    <label>Date of Issue</label>
+                    <label>Ano de publicação</label>
                     <style>col-md-4</style>
                     <input-type>date</input-type>
-                    <hint>Please give the date of previous publication or public distribution.
-                        You can leave out the day and/or month if they aren't applicable.
-                    </hint>
-                    <required>You must enter at least the year.</required>
+                    <hint>Informe o ano de publicação. Não use a data de defesa neste campo.</hint>
+                    <required>Informe pelo menos o ano de publicação.</required>
                 </field>
 
                 <field>
@@ -455,6 +451,18 @@
         <!-- Form which defines the metadata page/section for depositing Person Entities -->
         <!-- Academic details shared by submission and EditItem. -->
         <form name="academicDetails">
+            <row>
+                <field>
+                    <dc-schema>local</dc-schema>
+                    <dc-element>date</dc-element>
+                    <dc-qualifier>defense</dc-qualifier>
+                    <repeatable>false</repeatable>
+                    <label>Data de defesa</label>
+                    <input-type>date</input-type>
+                    <hint>Informe a data em que o trabalho foi defendido.</hint>
+                    <required></required>
+                </field>
+            </row>
             <row>
                 <field>
                     <dc-schema>local</dc-schema>
@@ -1049,13 +1057,11 @@
                     <dc-element>date</dc-element>
                     <dc-qualifier>issued</dc-qualifier>
                     <repeatable>false</repeatable>
-                    <label>Date of Issue</label>
+                    <label>Ano de publicação</label>
                     <style>col-sm-4</style>
                     <input-type>date</input-type>
-                    <hint>Please give the date of previous publication or public distribution.
-                        You can leave out the day and/or month if they aren't applicable.
-                    </hint>
-                    <required>You must enter at least the year.</required>
+                    <hint>Informe o ano de publicação. Não use a data de defesa neste campo.</hint>
+                    <required>Informe pelo menos o ano de publicação.</required>
                 </field>
 
                 <field>
@@ -1167,14 +1173,11 @@
                     <dc-element>date</dc-element>
                     <dc-qualifier>issued</dc-qualifier>
                     <repeatable>false</repeatable>
-                    <label>Date of Issue</label>
+                    <label>Ano de publicação</label>
                     <style>col-md-4</style>
                     <input-type>date</input-type>
-                    <hint>Please give the date of previous publication or public distribution.
-                        You can leave out the day
-                        and/or month if they aren't applicable.
-                    </hint>
-                    <required>You must enter at least the year.</required>
+                    <hint>Informe o ano de publicação. Não use a data de defesa neste campo.</hint>
+                    <required>Informe pelo menos o ano de publicação.</required>
                 </field>
             </row>
             <row>

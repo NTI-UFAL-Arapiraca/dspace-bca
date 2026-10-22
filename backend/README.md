@@ -12,7 +12,9 @@ Overrides mantidos pelo projeto:
 - `pt` e `en` são oferecidos para corresponder aos qualifiers dos abstracts;
 - `dc.language.iso` permanece independente e recebe `pt_BR` na migração.
 - a seção `academicDetails` adiciona curso, campus, orientação, coorientação,
-  banca, número de páginas e observações de acervo;
+  banca, data de defesa, número de páginas e observações de acervo;
+- `dc.date.issued` é rotulado como ano de publicação; a data de defesa usa
+  `local.date.defense`;
 - os formulários tradicional e Publication usam seleção fechada de pessoas;
 - o formulário Person inclui nome de exibição;
 - três campos herdados tiveram apenas a ordem de seus elementos ajustada
