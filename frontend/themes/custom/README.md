@@ -37,6 +37,14 @@ o acervo institucional, com título, descrição e links para pesquisa no acervo
 e comunidades. Busca, comunidades e adições recentes continuam herdadas da home
 oficial; nenhum total ou conteúdo do acervo é inventado no tema.
 
+A abertura usa a foto da biblioteca em `assets/images/biblioteca-arapiraca.webp`
+como fundo decorativo de toda a superfície. A derivada WebP tem 1920 × 1440 px,
+sem metadados da câmera. O SCSS mantém 25% de saturação, contraste de 85% e
+opacidade de 20% sobre o gradiente do tema, preservando a leitura nos modos
+claro e escuro. `object-fit: cover` adapta o recorte à largura da tela; o texto
+e os links não recebem filtros. Alterar a foto ou o tratamento exige uma nova
+imagem Angular em produção.
+
 ## Estatísticas
 
 `app/statistics-page/` substitui a apresentação das quatro páginas oficiais de
