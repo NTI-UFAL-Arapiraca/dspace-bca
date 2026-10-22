@@ -1,0 +1,42 @@
+<ng-container *ngVar="(breadcrumbs$ | async) as breadcrumbs">
+  @if ((showBreadcrumbs$ | async)) {
+    <nav aria-label="breadcrumb" class="nav-breadcrumb">
+      <ol class="container breadcrumb my-0">
+        <ng-container
+          *ngTemplateOutlet="breadcrumbs?.length > 0 ? breadcrumb : activeBreadcrumb; context: {text: 'home.breadcrumbs', url: '/home'}"></ng-container>
+        @if (breadcrumbs?.length > 1) {
+          <li class="breadcrumb-item breadcrumb-omission" aria-hidden="true">…</li>
+        }
+        @for (bc of breadcrumbs; track bc; let last = $last) {
+          @if (last) {
+            <ng-container *ngTemplateOutlet="activeBreadcrumb; context: bc"></ng-container>
+          } @else {
+            <li class="breadcrumb-item breadcrumb-intermediate">
+              <ng-container *ngTemplateOutlet="breadcrumbLink; context: bc"></ng-container>
+            </li>
+          }
+        }
+      </ol>
+    </nav>
+  }
+
+  <ng-template #breadcrumb let-text="text" let-url="url">
+    <li class="breadcrumb-item">
+      <ng-container *ngTemplateOutlet="breadcrumbLink; context: {text: text, url: url}"></ng-container>
+    </li>
+  </ng-template>
+
+  <ng-template #breadcrumbLink let-text="text" let-url="url">
+    <div class="breadcrumb-item-limiter">
+      <a [routerLink]="url" class="text-truncate" [ngbTooltip]="text | translate" placement="bottom">{{ text | translate }}</a>
+    </div>
+  </ng-template>
+
+  <ng-template #activeBreadcrumb let-text="text">
+    <li class="breadcrumb-item active" aria-current="page">
+      <div class="breadcrumb-item-limiter">
+        <div class="text-truncate" [title]="text | translate">{{ text | translate }}</div>
+      </div>
+    </li>
+  </ng-template>
+</ng-container>

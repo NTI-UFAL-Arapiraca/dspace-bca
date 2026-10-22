@@ -1,0 +1,30 @@
+import {
+  AsyncPipe,
+  NgTemplateOutlet,
+} from '@angular/common';
+import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
+
+import { BreadcrumbsComponent as BaseComponent } from '../../../../app/breadcrumbs/breadcrumbs.component';
+import { VarDirective } from '../../../../app/shared/utils/var.directive';
+
+@Component({
+  selector: 'ds-themed-breadcrumbs',
+  templateUrl: './breadcrumbs.component.html',
+  styleUrls: [
+    '../../../../app/breadcrumbs/breadcrumbs.component.scss',
+    './breadcrumbs.component.scss',
+  ],
+  imports: [
+    AsyncPipe,
+    NgbTooltip,
+    NgTemplateOutlet,
+    RouterLink,
+    TranslateModule,
+    VarDirective,
+  ],
+})
+export class BreadcrumbsComponent extends BaseComponent {
+}

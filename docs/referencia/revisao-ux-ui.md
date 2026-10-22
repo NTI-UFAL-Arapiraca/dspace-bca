@@ -3,6 +3,29 @@
 Revisão de 19 de outubro de 2026, sobre o tema customizado do DSpace 10.1.
 A decisão de implementação está na [RFC 0015](../../rfc/0015-experiencia-visual-do-repositorio.md).
 
+## Breadcrumb no mobile
+
+Em 22/10/2026, o tema passa a compactar o caminho de navegação abaixo de
+768 px. Início e página atual ficam em uma linha; níveis intermediários são
+omitidos e representados por reticências decorativas somente quando existem.
+O título atual pode ser truncado visualmente, preservando o texto completo
+para tecnologias assistivas e no atributo `title`. No desktop, todos os níveis
+e links são mantidos.
+
+A extensão `app/breadcrumbs/` reutiliza os observables do componente oficial
+DSpace 10.1 e entra no registro eager do tema. O CSS define a apresentação por
+largura, sem medir a janela em JavaScript nem alterar rotas. A publicação
+requer uma nova imagem Angular.
+
+Validação: recompilação de desenvolvimento DSpace 10.1 e lint oficial dos
+TS/HTML alterados aprovados; `git diff --check` sem erros. Inspeção no navegador
+integrado em 320 e 390 px com comunidade, coleção e título extenso de trabalho
+fictício: breadcrumb em uma linha e sem overflow horizontal. Em 768 e 1440 px,
+todos os níveis reaparecem. A lista de comunidades, com apenas início e página
+atual, não recebe indicador de omissão. O link Início retorna à home, que
+continua sem breadcrumb. Não foi repetido o build otimizado de produção/SSR;
+a verificação visual usa emulação de viewport, sem teste em aparelho físico.
+
 ## Base examinada
 
 Foram lidos README, AGENTS, documentação de implantação, desenvolvimento local

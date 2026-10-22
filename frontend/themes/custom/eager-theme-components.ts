@@ -1,4 +1,5 @@
 /* eslint-disable dspace-angular-ts/themed-component-usages */
+import { BreadcrumbsComponent } from './app/breadcrumbs/breadcrumbs.component';
 import { FooterComponent } from './app/footer/footer.component';
 import { HeaderComponent } from './app/header/header.component';
 import { HomeNewsComponent } from './app/home-page/home-news/home-news.component';
@@ -10,6 +11,7 @@ import { ItemStatisticsPageComponent } from './app/statistics-page/item-statisti
 import { SiteStatisticsPageComponent } from './app/statistics-page/site-statistics-page/site-statistics-page.component';
 
 export const COMPONENTS = [
+  BreadcrumbsComponent,
   HeaderComponent,
   FooterComponent,
   HomeNewsComponent,

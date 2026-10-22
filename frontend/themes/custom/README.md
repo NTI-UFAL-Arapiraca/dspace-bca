@@ -86,6 +86,14 @@ comunidades, listas, filtros e cartões dos perfis compartilham espaçamentos,
 bordas e raios. O cabeçalho se reorganiza em telas pequenas e os controles
 mantêm indicação de foco para uso por teclado.
 
+O breadcrumb usa a extensão oficial em `app/breadcrumbs/`, registrada no bundle
+eager. Abaixo de 768 px, mantém início e página atual em uma única linha;
+quando há níveis intermediários, oculta seus links e indica a omissão com
+reticências decorativas. Títulos longos usam o espaço restante com truncamento
+visual, preservando o texto completo no DOM e no título nativo da página atual.
+A partir de 768 px, todos os níveis e links continuam visíveis. O componente
+herda o serviço e a visibilidade oficiais; produção exige nova imagem Angular.
+
 Nas comunidades, a partir de 768 px, apenas os filtros têm rolagem vertical
 independente, com a barra de rolagem oculta e sem rolagem horizontal. A altura
 máxima fica limitada à janela, com espaço de 2 rem. A lateral permanece visível

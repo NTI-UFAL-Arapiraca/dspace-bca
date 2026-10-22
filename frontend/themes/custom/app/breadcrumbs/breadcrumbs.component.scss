@@ -1,0 +1,39 @@
+li.breadcrumb-omission {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .breadcrumb {
+    flex-wrap: nowrap;
+  }
+
+  li.breadcrumb-item {
+    min-width: 0;
+
+    &::before {
+      flex-shrink: 0;
+    }
+  }
+
+  li.breadcrumb-intermediate {
+    display: none;
+  }
+
+  li.breadcrumb-omission {
+    display: flex;
+  }
+
+  li.breadcrumb-item:first-child,
+  li.breadcrumb-omission {
+    flex-shrink: 0;
+  }
+
+  li.breadcrumb-item.active {
+    flex: 1 1 auto;
+  }
+
+  .breadcrumb-item-limiter {
+    min-width: 0;
+    max-width: 100%;
+  }
+}
