@@ -1,57 +1,63 @@
 @if (showBackButton$ | async) {
   <ds-results-back-button [back]="back"></ds-results-back-button>
 }
-<div class="d-flex align-items-start gap-3 mb-4">
-  <div class="me-auto">
-    <p class="text-muted mb-1">{{ 'person.profile.label' | translate }}</p>
-    <h1>{{ displayName }}</h1>
-    @for (degree of values('local.person.degree'); track degree) {
-      <span class="badge rounded-pill text-bg-light border me-2 profile-degree">
-        @if (degreeTranslation(degree); as key) { {{ key | translate }} } @else { {{ degree }} }
-      </span>
-    }
-  </div>
-  <ds-dso-edit-menu></ds-dso-edit-menu>
-</div>
-<div class="row g-4">
-  <div class="col-12 col-md-3 profile-identity">
-    <ds-metadata-field-wrapper [hideIfNoTextContent]="false">
-      <ds-thumbnail [thumbnail]="object?.thumbnail | async"
-        [defaultImage]="'assets/images/person-placeholder.svg'" [alt]="'thumbnail.person.alt'"
-        [placeholder]="'thumbnail.person.placeholder'"></ds-thumbnail>
-    </ds-metadata-field-wrapper>
-    @if (values('person.email').length || values('person.identifier.lattes').length) {
-      <h2 class="h6 mt-3">{{ 'person.profile.contact' | translate }}</h2>
-      <ul class="list-unstyled profile-links">
-        @for (email of values('person.email'); track email) {
-          <li><a [href]="'mailto:' + email"><i class="fas fa-envelope me-2" aria-hidden="true"></i>{{ email }}</a></li>
-        }
-        @for (value of values('person.identifier.lattes'); track value) {
-          @if (lattesUrl(value); as href) {
-            <li><a [href]="href" target="_blank" rel="noopener noreferrer" data-test="person-lattes">
-              {{ 'person.profile.lattes' | translate }} <i class="fas fa-external-link-alt ms-1" aria-hidden="true"></i>
-              <span class="visually-hidden">{{ 'person.profile.external' | translate }}</span>
-            </a></li>
+<div class="person-profile__layout">
+  <div class="person-profile__primary">
+    <div class="person-profile__title">
+      <p class="text-muted mb-1">{{ 'person.profile.label' | translate }}</p>
+      <h1 class="person-profile__name">{{ displayName }}</h1>
+      @for (degree of values('local.person.degree'); track degree) {
+        <span class="badge rounded-pill text-bg-light border me-2 profile-degree">
+          @if (degreeTranslation(degree); as key) { {{ key | translate }} } @else { {{ degree }} }
+        </span>
+      }
+    </div>
+    <div class="profile-identity">
+      <ds-metadata-field-wrapper [hideIfNoTextContent]="false">
+        <ds-thumbnail [thumbnail]="object?.thumbnail | async"
+          [defaultImage]="'assets/images/person-placeholder.svg'" [alt]="'thumbnail.person.alt'"
+          [placeholder]="'thumbnail.person.placeholder'"></ds-thumbnail>
+      </ds-metadata-field-wrapper>
+      @if (values('person.email').length || values('person.identifier.lattes').length) {
+        <h2 class="h6 mt-3">{{ 'person.profile.contact' | translate }}</h2>
+        <ul class="list-unstyled profile-links">
+          @for (email of values('person.email'); track email) {
+            <li><a [href]="'mailto:' + email"><i class="fas fa-envelope me-2" aria-hidden="true"></i>{{ email }}</a></li>
           }
-        }
-      </ul>
-    }
-    <ds-item-page-orcid-field [item]="object"></ds-item-page-orcid-field>
-    @if (isAdmin$ | async) {
-      <a class="repository-text-link d-inline-block mt-2" [routerLink]="[itemPageRoute + '/full']">
-        {{ 'item.page.link.full' | translate }} <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
-      </a>
-    }
+          @for (value of values('person.identifier.lattes'); track value) {
+            @if (lattesUrl(value); as href) {
+              <li><a [href]="href" target="_blank" rel="noopener noreferrer" data-test="person-lattes">
+                {{ 'person.profile.lattes' | translate }} <i class="fas fa-external-link-alt ms-1" aria-hidden="true"></i>
+                <span class="visually-hidden">{{ 'person.profile.external' | translate }}</span>
+              </a></li>
+            }
+          }
+        </ul>
+      }
+      <ds-item-page-orcid-field [item]="object"></ds-item-page-orcid-field>
+      @if (isAdmin$ | async) {
+        <a class="repository-text-link d-inline-block mt-2" [routerLink]="[itemPageRoute + '/full']">
+          {{ 'item.page.link.full' | translate }} <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
+        </a>
+      }
+    </div>
   </div>
-  <div class="col-12 col-md-9">
-    <ds-generic-item-page-field [item]="object" [fields]="['person.jobTitle']" [label]="'person.page.jobtitle'"></ds-generic-item-page-field>
-    <ds-generic-item-page-field [item]="object" [fields]="['person.affiliation.name']" [label]="'person.profile.affiliation'"></ds-generic-item-page-field>
-    <ds-generic-item-page-field [item]="object" [fields]="['dc.description.abstract']" [label]="'person.profile.about'"></ds-generic-item-page-field>
-    <ds-related-items [parentItem]="object" [relationType]="'isProjectOfPerson'" [label]="'item.page.projects' | translate"></ds-related-items>
-    <ds-related-items [parentItem]="object" [relationType]="'isOrgUnitOfPerson'" [label]="'item.page.org-units' | translate"></ds-related-items>
-    @if (areAuthorityRelationsEnabled) {
-      <ds-person-activity [item]="object" [itemPageRoute]="itemPageRoute"></ds-person-activity>
-    }
+  <div class="person-profile__main">
+    <div class="person-profile__about-layout">
+      <div class="person-profile__about-content">
+        <ds-generic-item-page-field [item]="object" [fields]="['dc.description.abstract']" [label]="'person.profile.about'"></ds-generic-item-page-field>
+      </div>
+      <ds-dso-edit-menu></ds-dso-edit-menu>
+    </div>
+    <div class="person-profile__details">
+      <ds-generic-item-page-field [item]="object" [fields]="['person.jobTitle']" [label]="'person.page.jobtitle'"></ds-generic-item-page-field>
+      <ds-generic-item-page-field [item]="object" [fields]="['person.affiliation.name']" [label]="'person.profile.affiliation'"></ds-generic-item-page-field>
+      <ds-related-items [parentItem]="object" [relationType]="'isProjectOfPerson'" [label]="'item.page.projects' | translate"></ds-related-items>
+      <ds-related-items [parentItem]="object" [relationType]="'isOrgUnitOfPerson'" [label]="'item.page.org-units' | translate"></ds-related-items>
+      @if (areAuthorityRelationsEnabled) {
+        <ds-person-activity [item]="object" [itemPageRoute]="itemPageRoute"></ds-person-activity>
+      }
+    </div>
   </div>
 </div>
 <section id="person-works" class="mt-5" tabindex="-1" [attr.aria-label]="'person.profile.count.works' | translate">

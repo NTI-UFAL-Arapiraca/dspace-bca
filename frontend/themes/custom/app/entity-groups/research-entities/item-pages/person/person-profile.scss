@@ -2,6 +2,72 @@
   display: block;
 }
 
+.person-profile__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.person-profile__primary,
+.person-profile__main {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.person-profile__primary {
+  gap: 1.5rem;
+}
+
+.person-profile__title,
+.person-profile__about-content,
+.person-profile__details {
+  min-width: 0;
+}
+
+.person-profile__name {
+  overflow-wrap: anywhere;
+}
+
+.person-profile__about-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.person-profile__about-content {
+  flex: 1 1 auto;
+}
+
+@media (max-width: 767.98px) {
+  .person-profile__layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .person-profile__primary,
+  .person-profile__main {
+    display: contents;
+  }
+
+  .person-profile__title {
+    order: 1;
+  }
+
+  .person-profile__about-layout {
+    order: 2;
+  }
+
+  .profile-identity {
+    order: 3;
+  }
+
+  .person-profile__details {
+    order: 4;
+  }
+}
+
 .profile-degree {
   font-size: 0.875rem;
   font-weight: 500;
