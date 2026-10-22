@@ -8,7 +8,7 @@ A migração do acervo legado é feita no projeto irmão [`dspace-migration`](..
 
 As capturas mostram a página inicial e a página de um trabalho. Os registros exibidos são fictícios e servem apenas para demonstração e testes locais.
 
-![Página inicial do repositório](docs/imagens/home.jpg)
+![Página inicial do repositório](docs/imagens/home.png)
 
 *Página inicial.*
 
