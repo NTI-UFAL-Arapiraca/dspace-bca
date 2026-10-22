@@ -334,6 +334,28 @@ ds-thumbnail .outer .thumbnail-placeholder {
   overflow-wrap: normal;
 }
 
+// Only community filters scroll independently; results follow the page.
+// Preserve the upstream mobile off-canvas layout.
+@include media-breakpoint-up(md) {
+  .community-page ds-page-with-sidebar .row-with-sidebar > .sidebar-content {
+    position: sticky;
+    top: 1rem;
+    max-height: calc(100vh - 2rem);
+    max-height: calc(100dvh - 2rem);
+    min-height: 0;
+    min-width: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    margin-top: 0;
+    padding-top: 0;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
 #main-content ds-search-filter .facet-filter {
   background: var(--ufal-surface);
   border-color: var(--bs-border-color);

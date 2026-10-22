@@ -86,6 +86,13 @@ comunidades, listas, filtros e cartões dos perfis compartilham espaçamentos,
 bordas e raios. O cabeçalho se reorganiza em telas pequenas e os controles
 mantêm indicação de foco para uso por teclado.
 
+Nas comunidades, a partir de 768 px, apenas os filtros têm rolagem vertical
+independente, com a barra de rolagem oculta e sem rolagem horizontal. A altura
+máxima fica limitada à janela, com espaço de 2 rem. A lateral permanece visível
+durante a rolagem da página, que inclui os resultados. Em telas menores,
+permanece o painel de filtros móvel oficial. As regras ficam em
+`styles/_global-styles.scss`; produção exige uma nova imagem Angular.
+
 As cores e medidas do Bootstrap são definidas no arquivo de variáveis Sass;
 as variáveis `--ds-*` integram os componentes do DSpace e as `--ufal-*`
 compartilham os tokens próprios com os estilos dos perfis. Os ajustes globais
