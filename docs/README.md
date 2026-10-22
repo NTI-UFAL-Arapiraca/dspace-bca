@@ -18,4 +18,5 @@
 - [Configuração do backend](../backend/README.md).
 - [Personalização do tema](../frontend/themes/custom/README.md).
 - [Revisão de UX/UI e validação responsiva](referencia/revisao-ux-ui.md).
+- [Revisão técnica do repositório — 22/10/2026](referencia/revisao-tecnica-2026-10-22.md).
 - [RFCs](../rfc/README.md).
