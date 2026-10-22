@@ -32,6 +32,11 @@ links de curso e campus nas páginas de trabalho. `indexAlways` garante que os
 campos desses filtros sejam indexados também nos trabalhos migrados sem tipo
 de entidade.
 
+O Compose REST define `user.registration=false` para bloquear o cadastro
+público de contas por senha/e-mail. Contas existentes continuam podendo fazer
+login; novas contas devem ser criadas por um administrador. O primeiro
+administrador é criado pela CLI.
+
 Os mounts são iguais em REST e CLI. O registro dos campos e a criação da
 coleção são feitos por `scripts/prepare-academic.sh`, conforme o
 [guia de operação](../docs/guias/preparacao-academica.md).

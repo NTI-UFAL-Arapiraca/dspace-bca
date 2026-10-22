@@ -114,6 +114,15 @@ Os binds de produção exigem que `DSPACE_SAF_HOST_DIR` e o arquivo de
 Porta, TLS e autenticação usam as propriedades `mail.*` do DSpace no
 ambiente do backend, conforme as exigências do provedor.
 
+## Contas e autenticação
+
+O serviço REST define `user.registration=false`, bloqueando a criação pública
+de contas por senha e e-mail, inclusive por chamadas diretas à API. Isso não
+desativa o login de contas existentes nem a criação de contas por um
+administrador. O primeiro administrador continua sendo criado pela CLI. A
+opção é aplicada tanto na produção quanto no ambiente local porque ambos usam
+`docker-compose-rest.yml`; após atualizar o checkout, recrie o serviço `dspace`.
+
 ## Versões, publicação e runtime
 
 Backend, Solr, CLI e Angular usam `dspace-10.1`. `DSPACE_VER` e

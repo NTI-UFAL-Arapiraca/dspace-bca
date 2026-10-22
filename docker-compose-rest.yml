@@ -20,6 +20,8 @@ services:
       # dspace__P__dir: /dspace
       dspace__P__server__P__url: ${DSPACE_SERVER_URL:-http://localhost:8080/server}
       dspace__P__ui__P__url: ${DSPACE_UI_URL:-http://localhost:4000}
+      # Disable public self-registration; existing accounts can still log in.
+      user__P__registration: "false"
       # Set SSR URL to the Docker container name so that UI can contact container directly in Production mode.
       # (This is necessary for docker-compose-dist.yml)
       dspace__P__server__P__ssr__P__url: ${dspace__P__server__P__ssr__P__url:-http://dspace:8080/server}

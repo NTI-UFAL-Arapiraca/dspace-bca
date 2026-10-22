@@ -81,6 +81,10 @@ e da API. Somente o proxy deve publicar a porta 80.
 
 ## 6. Criar o administrador, se necessário
 
+O cadastro público de contas está desativado. Crie a conta administrativa
+diretamente no backend com o comando abaixo; contas existentes continuam
+podendo fazer login.
+
 ```bash
 docker compose --env-file .env -p d10 \
   -f docker-compose-dist.yml -f docker-compose-rest.yml -f docker-compose-prod.yml \
