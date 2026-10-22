@@ -2,7 +2,7 @@
 
 Este repositório reúne a implantação Docker e as personalizações do **DSpace 10.1** usado pela Biblioteca da UFAL — Campus Arapiraca. Mantém o backend, a interface Angular, o proxy e a documentação operacional.
 
-A migração do acervo legado é feita no projeto irmão [`dspace-migration`](../dspace-migration). Este projeto prepara configurações e metadados acadêmicos, mas não extrai nem importa trabalhos.
+A migração do acervo legado é feita no projeto irmão [`dspace-migration`](https://github.com/NTI-UFAL-Arapiraca/dspace-migration). Este projeto prepara configurações e metadados acadêmicos, mas não extrai nem importa trabalhos.
 
 ## Interface
 
