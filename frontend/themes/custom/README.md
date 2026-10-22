@@ -121,6 +121,24 @@ acessos diretos à rota recebem um aviso e um link para a página pública do it
 Isso controla a apresentação Angular: não altera as respostas da API REST nem
 substitui as regras `metadata.hide.*` do backend.
 
+Na área de informações, `app/item-page/simple/abstracts/` consulta o item com
+`projection=allLanguages` e usa somente os valores de `dc.description.abstract`.
+Assim, todos os resumos disponíveis aparecem sem trocar o idioma da página:
+português primeiro (Resumo), inglês depois (Abstract), seguidos dos demais na
+ordem original. Espanhol, francês, alemão e italiano usam títulos próprios;
+outros idiomas usam “Resumo (Língua)”, com o nome obtido por `Intl.DisplayNames`
+e fallback para o qualifier. Valores sem idioma usam “Resumo”. Nenhum idioma é
+deduzido de `dc.language.iso`.
+
+Cada texto tem uma prévia de até **10 linhas**, no desktop e no celular, e
+“Ver mais”/“Ver menos” independente quando há transbordamento real. A medição
+acompanha mudanças de largura. O conteúdo completo permanece no HTML, com
+Markdown sanitizado e atributo `lang`. Em falha de rede, o resumo já disponível
+permanece visível, acompanhado de aviso e botão para tentar novamente. Os
+demais campos e as buscas continuam usando a resposta localizada. Essa mudança
+requer nova imagem Angular em produção; o watcher local sincroniza o tema.
+Consulte a [RFC 0018](../../../rfc/0018-resumos-publicos-em-todos-os-idiomas.md).
+
 A avaliação, as prioridades e a matriz de validação estão na
 [revisão de UX/UI](../../../docs/referencia/revisao-ux-ui.md); a decisão de
 composição está na [RFC 0015](../../../rfc/0015-experiencia-visual-do-repositorio.md).
@@ -149,12 +167,17 @@ adicionais. A permissão de download é verificada antes de buscar o conteúdo;
 restrições e solicitações de cópia continuam com o link oficial do DSpace.
 As abas reservam três espaços e dividem a mesma linha igualmente entre todos
 os arquivos quando houver mais de três, inclusive em telas pequenas. Os títulos
-ficam centralizados. No celular, ícones e selo de principal ficam apenas na
-identificação do arquivo selecionado para liberar espaço nas abas. Os nomes
-ocupam uma linha,
-com reticências no meio e final/extensão preservados. O helper `pdf-filename.ts`
+ficam centralizados. No celular, ícones e selo de principal são ocultados para
+liberar espaço nas abas. Os nomes ocupam uma linha, com reticências no meio e
+final/extensão preservados. O helper `pdf-filename.ts`
 separa o texto sem modificar o nome do arquivo. O nome completo permanece no
-rótulo acessível, no título nativo da aba e na identificação do arquivo selecionado.
+rótulo acessível, no título nativo da aba e no título acessível do iframe.
+A aba ativa identifica o PDF selecionado; não há uma faixa adicional com o nome.
+Cancelar/fechar visualização e “Baixar PDF” ficam junto à introdução “Leia o
+trabalho”, no cabeçalho, com botões de mesmo tamanho e estilo contornado e quebra
+de linha em telas pequenas. O link de download é recriado por arquivo para
+manter URL e autorização correspondentes à seleção.
+O tamanho do arquivo aparece na abertura opcional, antes de carregar o conteúdo.
 
 Os dois Dockerfiles instalam o PDF.js 6.4.299 em `src/assets/pdfjs`, com versão
 e hash verificados por `frontend/patches/install-pdf-viewer.mjs`. Worker, fontes
@@ -165,7 +188,19 @@ autorização e tokens na página principal. Apenas os trechos necessários são
 pedidos em blocos de 64 KiB, sem antecipar o arquivo restante. A estrutura interna
 do PDF também pode exigir muitos trechos, até o arquivo completo; não há garantia
 de um pedido por página. Busca textual, impressão ou download
-podem exigir o PDF inteiro. Fechar, trocar o arquivo ou sair cancela os pedidos.
+podem exigir o PDF inteiro. Fechar ou trocar o arquivo cancela os pedidos
+pendentes e desmonta o leitor, preservando os trechos completos já recebidos.
+Ao voltar para um PDF, o serviço reaproveita esses bytes e pede somente os
+intervalos que faltam, sem somá-los novamente ao contador de transferência.
+Pedidos simultâneos de um mesmo intervalo compartilham a requisição HTTP.
+
+O cache fica apenas na memória do componente, separado por UUID, URL de conteúdo,
+tamanho e checksum do arquivo. O limite compartilhado entre os PDFs do item é
+64 MiB; ao excedê-lo, os trechos menos usados são descartados e podem precisar
+ser baixados novamente. Sair da página, recarregar o catálogo ou mudar de usuário
+limpa o cache. A autorização continua sendo verificada pelo serviço oficial do
+DSpace, que possui seu próprio cache. A escolha de abrir um PDF grande vale
+durante a visita, evitando pedir confirmação novamente a cada troca de aba.
 
 A partir de 20 MiB, ou quando o navegador sinaliza economia de dados/conexão
 lenta, o leitor aguarda “Carregar visualização”. O download oficial permanece
@@ -178,6 +213,9 @@ os componentes e estilos seguintes continuam sincronizados pelo watcher.
 Produção exige nova imagem. A decisão está na
 [RFC 0016](../../../rfc/0016-preview-integrado-de-pdfs.md). Os títulos usam peso
 500 e o cabeçalho do leitor tem tamanho e espaçamento compactos.
+O reaproveitamento de bytes entre abas está descrito na
+[RFC 0019](../../../rfc/0019-cache-de-intervalos-dos-pdfs.md) e não exige mudar os
+assets do PDF.js; o watcher aplica os ajustes locais do tema.
 
 Testes rápidos (Node 22.18 ou posterior, com remoção nativa de tipos TS):
 

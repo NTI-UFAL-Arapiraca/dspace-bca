@@ -1,8 +1,29 @@
 @if (catalogState !== 'ready' || documents.length > 0) {
   <section class="pdf-preview" [attr.aria-labelledby]="'pdf-heading-' + item.id">
     <header class="pdf-preview__header">
-      <h2 [id]="'pdf-heading-' + item.id">{{ 'repository.pdf.title' | translate }}</h2>
-      <p>{{ 'repository.pdf.description' | translate }}</p>
+      <div class="pdf-preview__intro">
+        <h2 [id]="'pdf-heading-' + item.id">{{ 'repository.pdf.title' | translate }}</h2>
+        <p>{{ 'repository.pdf.description' | translate }}</p>
+      </div>
+      @if (catalogState === 'ready' && selected) {
+        <div class="pdf-preview__actions">
+          @if (state === 'loading' || state === 'ready') {
+            <button type="button" class="btn btn-sm btn-outline-secondary mb-1" (click)="stopPreview()">
+              {{ (state === 'loading' ? 'repository.pdf.cancel' : 'repository.pdf.close') | translate }}
+            </button>
+          }
+          <!-- The official link initializes its URL and permissions once per instance. -->
+          @for (document of [selected]; track document.bitstream.id) {
+            <ds-file-download-link [bitstream]="document.bitstream" [item]="item" [isBlank]="true"
+              [showAccessStatusBadge]="false" cssClasses="btn btn-sm btn-outline-secondary">
+              {{ 'repository.pdf.download' | translate }}
+              <span class="visually-hidden"> — {{ names.getName(document.bitstream) }}</span>
+              <i class="fas fa-download ms-1" aria-hidden="true"></i>
+              <span class="visually-hidden">{{ 'repository.pdf.new-tab' | translate }}</span>
+            </ds-file-download-link>
+          }
+        </div>
+      }
     </header>
 
     @if (catalogState === 'loading') {
@@ -49,31 +70,6 @@
 }
 
 <ng-template #reader>
-  <div class="pdf-preview__toolbar">
-    <div class="pdf-preview__filename">
-      <i class="far fa-file-pdf me-2" aria-hidden="true"></i>
-      <span>{{ names.getName(selected.bitstream) }}</span>
-      @if (selected.isPrimary) {
-        <span class="badge ms-2">{{ 'item.page.bitstreams.primary' | translate }}</span>
-      }
-      @if (selected.bitstream.sizeBytes > 0) {
-        <span class="pdf-preview__size">{{ selected.bitstream.sizeBytes | dsFileSize }}</span>
-      }
-    </div>
-    <div class="pdf-preview__actions">
-      @if (state === 'loading' || state === 'ready') {
-        <button type="button" class="btn btn-sm btn-outline-secondary" (click)="stopPreview()">
-          {{ (state === 'loading' ? 'repository.pdf.cancel' : 'repository.pdf.close') | translate }}
-        </button>
-      }
-      <ds-file-download-link [bitstream]="selected.bitstream" [item]="item" [isBlank]="true"
-        [showAccessStatusBadge]="false" cssClasses="repository-text-link">
-        {{ 'repository.pdf.download' | translate }}
-        <i class="fas fa-download ms-1" aria-hidden="true"></i>
-        <span class="visually-hidden">{{ 'repository.pdf.new-tab' | translate }}</span>
-      </ds-file-download-link>
-    </div>
-  </div>
   <div class="pdf-preview__reader" [attr.aria-busy]="state === 'loading'">
     @if (state !== 'ready') {
       <div class="pdf-preview__message" [class.pdf-preview__message--loading]="!!previewUrl">
@@ -83,6 +79,9 @@
             {{ 'repository.pdf.loading' | translate }}
           </p>
         } @else if (state === 'deferred') {
+          @if (selected.bitstream.sizeBytes > 0) {
+            <p class="pdf-preview__size">{{ selected.bitstream.sizeBytes | dsFileSize }}</p>
+          }
           <p role="status">{{ ('repository.pdf.gate.' + gate) | translate }}</p>
           @if (gate !== 'unknown-size') {
             <button type="button" class="btn btn-outline-primary" (click)="startPreview()">

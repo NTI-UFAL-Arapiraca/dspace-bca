@@ -17,6 +17,7 @@ import {
   DomSanitizer,
   SafeResourceUrl,
 } from '@angular/platform-browser';
+import { AuthService } from '@dspace/core/auth/auth.service';
 import { DSONameService } from '@dspace/core/breadcrumbs/dso-name.service';
 import { Item } from '@dspace/core/shared/item.model';
 import {
@@ -31,7 +32,9 @@ import {
   TranslateService,
 } from '@ngx-translate/core';
 import {
+  distinctUntilChanged,
   firstValueFrom,
+  skip,
   Subject,
   Subscription,
   takeUntil,
@@ -87,10 +90,12 @@ export class PdfPreviewComponent implements OnChanges, OnDestroy {
   readonly filenameParts = splitPdfFilename;
 
   private catalogSubscription: Subscription;
+  private sessionSubscription: Subscription;
   private previewSubscription: Subscription;
   private cancelPreview = new Subject<void>();
   private viewer: PdfViewerBridge;
   private selection = 0;
+  private readonly openedDocuments = new Set<string>();
 
   constructor(
     private previewService: PdfPreviewService,
@@ -100,7 +105,13 @@ export class PdfPreviewComponent implements OnChanges, OnDestroy {
     public names: DSONameService,
     @Inject(DOCUMENT) private document: Document,
     @Inject(PLATFORM_ID) private platformId: object,
-  ) {}
+    auth: AuthService,
+  ) {
+    this.sessionSubscription = auth.getAuthenticatedUserIdFromStore().pipe(
+      distinctUntilChanged(),
+      skip(1),
+    ).subscribe(() => this.loadDocuments());
+  }
 
   ngOnChanges(): void {
     this.loadDocuments();
@@ -109,6 +120,8 @@ export class PdfPreviewComponent implements OnChanges, OnDestroy {
   loadDocuments(): void {
     this.catalogSubscription?.unsubscribe();
     this.clearPreview();
+    this.previewService.clearCache();
+    this.openedDocuments.clear();
     this.documents = [];
     this.selected = undefined;
     this.catalogState = 'loading';
@@ -137,20 +150,23 @@ export class PdfPreviewComponent implements OnChanges, OnDestroy {
     if (!this.selected) {
       return;
     }
+    this.loadedBytes = this.previewService.transferredBytes(this.selected.bitstream);
     const navigator = this.document.defaultView?.navigator as Navigator & { connection?: PdfConnectionInfo };
     this.gate = getPdfPreviewGate(this.selected.bitstream.sizeBytes, navigator?.connection);
     this.state = 'deferred';
-    if (!this.gate) {
+    if (!this.gate || this.openedDocuments.has(id)) {
       this.startPreview();
     }
   }
 
   startPreview(): void {
     this.clearPreview();
+    this.loadedBytes = this.previewService.transferredBytes(this.selected.bitstream);
     this.state = 'loading';
     this.previewSubscription = this.previewService.canPreview(this.selected.bitstream).subscribe({
       next: (allowed) => {
         if (allowed) {
+          this.openedDocuments.add(this.selected.bitstream.id);
           const viewer = new URL(PDF_VIEWER_PATH, this.document.baseURI);
           viewer.searchParams.set('locale', this.translate.getCurrentLang() || 'pt-BR');
           viewer.hash = 'zoom=page-width&pagemode=none';
@@ -190,8 +206,8 @@ export class PdfPreviewComponent implements OnChanges, OnDestroy {
           return Promise.reject(new Error('PDF preview was closed'));
         }
         return firstValueFrom(this.previewService.loadRange(bitstream, begin, end).pipe(
-          tap((buffer) => {
-            this.loadedBytes += buffer.byteLength;
+          tap(() => {
+            this.loadedBytes = this.previewService.transferredBytes(bitstream);
             this.changeDetector.markForCheck();
           }),
           takeUntil(this.cancelPreview),
@@ -223,7 +239,9 @@ export class PdfPreviewComponent implements OnChanges, OnDestroy {
 
   ngOnDestroy(): void {
     this.catalogSubscription?.unsubscribe();
+    this.sessionSubscription?.unsubscribe();
     this.clearPreview();
+    this.previewService.clearCache();
     this.cancelPreview.complete();
   }
 

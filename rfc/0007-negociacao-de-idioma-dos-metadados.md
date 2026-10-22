@@ -1,6 +1,6 @@
 # RFC 0007 — Negociação de idioma dos metadados
 
-- Status: aceita
+- Status: aceita; exibição dos resumos na página simples substituída pela [RFC 0018](0018-resumos-publicos-em-todos-os-idiomas.md)
 - Escopo: frontend, backend e migração
 
 ## Contexto

@@ -15,14 +15,17 @@ import { getFirstCompletedRemoteData } from '@dspace/core/shared/operators';
 import {
   catchError,
   defaultIfEmpty,
+  defer,
   EMPTY,
   expand,
   filter,
+  finalize,
   forkJoin,
   map,
   Observable,
   of,
   reduce,
+  shareReplay,
   switchMap,
   take,
   tap,
@@ -34,10 +37,16 @@ import {
   selectPdfDocuments,
 } from './pdf-documents';
 import { isValidPdfRange } from './pdf-preview-policy';
+import { PdfRangeCache } from './pdf-range-cache';
 
 /** Uses the same ORIGINAL bundle and download permission as the file section. */
 @Injectable()
 export class PdfPreviewService {
+  private readonly rangeCache = new PdfRangeCache();
+  private readonly pendingRanges = new Map<string, Observable<ArrayBuffer>>();
+  private readonly transferred = new Map<string, number>();
+  private generation = 0;
+
   constructor(
     private bitstreams: BitstreamDataService,
     private authorization: AuthorizationDataService,
@@ -74,7 +83,47 @@ export class PdfPreviewService {
     if (!isValidPdfRange(begin, end, bitstream.sizeBytes)) {
       return throwError(() => new Error('Invalid PDF byte range'));
     }
-    return this.http.get(bitstream._links.content.href, {
+    return defer(() => {
+      const key = this.documentKey(bitstream);
+      const parts = this.rangeCache.plan(key, begin, end);
+      return forkJoin(parts.map((part) => part.bytes
+        ? of(part.bytes)
+        : this.requestRange(bitstream, part.begin, part.end).pipe(map((buffer) => new Uint8Array(buffer))),
+      )).pipe(map((buffers) => {
+        const result = new Uint8Array(end - begin);
+        buffers.forEach((buffer, index) => result.set(buffer, parts[index].begin - begin));
+        return result.buffer;
+      }));
+    });
+  }
+
+  transferredBytes(bitstream: Bitstream): number {
+    return this.transferred.get(this.documentKey(bitstream)) ?? 0;
+  }
+
+  clearCache(): void {
+    this.generation++;
+    this.rangeCache.clear();
+    this.pendingRanges.clear();
+    this.transferred.clear();
+  }
+
+  private documentKey(bitstream: Bitstream): string {
+    return JSON.stringify([
+      bitstream.id, bitstream._links.content.href, bitstream.sizeBytes,
+      bitstream.checkSum?.checkSumAlgorithm, bitstream.checkSum?.value,
+    ]);
+  }
+
+  private requestRange(bitstream: Bitstream, begin: number, end: number): Observable<ArrayBuffer> {
+    const document = this.documentKey(bitstream);
+    const key = JSON.stringify([this.generation, document, begin, end]);
+    const pending = this.pendingRanges.get(key);
+    if (pending) {
+      return pending;
+    }
+    const generation = this.generation;
+    const request = this.http.get(bitstream._links.content.href, {
       headers: { Range: `bytes=${begin}-${end - 1}` },
       responseType: 'arraybuffer',
       observe: 'events',
@@ -96,7 +145,18 @@ export class PdfPreviewService {
         return response.body;
       }),
       take(1),
+      tap((buffer) => {
+        if (generation === this.generation) {
+          this.rangeCache.store(document, begin, buffer);
+          this.transferred.set(document, (this.transferred.get(document) ?? 0) + buffer.byteLength);
+        }
+      }),
+      finalize(() => this.pendingRanges.delete(key)),
+      // Cancel unfinished HTTP when the last viewer subscriber goes away.
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
+    this.pendingRanges.set(key, request);
+    return request;
   }
 
   private loadPage(item: Item, currentPage: number): Observable<PaginatedList<Bitstream>> {

@@ -140,10 +140,19 @@ ser 2.24.4 ou posterior para aceitar `!override`.
 
 ## Metadados, idioma e nome público
 
-O backend negocia os metadados públicos por `Accept-Language`. Os resumos
-usam os qualifiers `pt` e `en`; `dc.language.iso` usa `pt_BR`. O editor
-administrativo solicita a projeção `allLanguages` para preservar traduções.
-A normalização legada afeta somente qualifiers de resumos.
+O backend negocia os metadados públicos por `Accept-Language`. Na página simples
+do trabalho (UntypedItem e Publication), o componente de resumos faz uma consulta
+adicional com `projection=allLanguages` e exibe cada `dc.description.abstract`
+disponível. Os demais campos e as buscas continuam localizados. Cada resumo
+mostra até 10 linhas e oferece expansão individual quando necessário. A API
+mantém as regras de autorização e de ocultação de metadados nessa projeção.
+
+Os qualifiers usuais são `pt` e `en`, mas a exibição aceita outros idiomas e
+variantes regionais; `dc.language.iso` continua independente e usa `pt_BR` no
+legado. O editor administrativo solicita `allLanguages` para preservar todas
+as traduções, inclusive nas respostas de PATCH. A normalização legada afeta
+somente qualifiers de resumos. A decisão de exibição está na
+[RFC 0018](../../rfc/0018-resumos-publicos-em-todos-os-idiomas.md).
 
 `DSPACE_NAME` define o nome público; seu padrão é
 `Repositório Institucional da UFAL — Campus Arapiraca`. O backend expõe

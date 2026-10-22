@@ -23,6 +23,8 @@ de contexto para reaplicar e revisar essas diferenças ao atualizar as imagens.
 | [0015](0015-experiencia-visual-do-repositorio.md) | Orientar a descoberta e organizar a leitura no tema institucional. |
 | [0016](0016-preview-integrado-de-pdfs.md) | Integrar a leitura de PDFs com abas e visualizador local. |
 | [0017](0017-registro-completo-so-para-administradores.md) | Restringir a visualização de metadados completos à administração no Angular. |
+| [0018](0018-resumos-publicos-em-todos-os-idiomas.md) | Exibir todos os idiomas dos resumos, com prévias de 10 linhas e expansão individual. |
+| [0019](0019-cache-de-intervalos-dos-pdfs.md) | Reutilizar trechos já baixados dos PDFs ao alternar entre abas. |
 
 Uma nova alteração por override deve incluir sua RFC neste índice no mesmo
 commit. Cada RFC deve identificar arquivos, consequência operacional e testes.

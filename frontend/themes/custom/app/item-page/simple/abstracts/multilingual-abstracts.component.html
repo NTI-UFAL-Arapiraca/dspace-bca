@@ -1,0 +1,18 @@
+@if (state$ | async; as state) {
+  <div [attr.aria-busy]="state.loading">
+    @for (abstract of state.abstracts; track abstract.value + abstract.language + $index) {
+      <ds-expandable-abstract
+        [abstract]="abstract"
+        [contentId]="'abstract-' + state.itemId + '-' + $index">
+      </ds-expandable-abstract>
+    }
+    @if (state.failed) {
+      <p class="small text-muted" role="status">
+        {{ 'repository.item.abstract.unavailable' | translate }}
+        <button type="button" class="btn btn-link p-0" (click)="retry()">
+          {{ 'repository.item.abstract.retry' | translate }}
+        </button>
+      </p>
+    }
+  </div>
+}

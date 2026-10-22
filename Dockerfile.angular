@@ -23,8 +23,8 @@ COPY frontend/patches/apply-default-anonymous-language.mjs \
 RUN node /tmp/apply-default-anonymous-language.mjs \
     /app/src/app/core/locale/locale.service.ts
 
-# Public responses are locale-filtered by DSpace REST. Keep allLanguages
-# restricted to the administrative metadata editor and its PATCH responses.
+# Public routes use localized metadata; the abstracts component separately loads
+# every language. The administrative editor also preserves all languages on PATCH.
 COPY frontend/overrides/edit-item-all-languages.resolver.ts \
     /app/src/app/item-page/edit-item-page/edit-item-all-languages.resolver.ts
 COPY frontend/patches/apply-item-all-languages.mjs /tmp/apply-item-all-languages.mjs

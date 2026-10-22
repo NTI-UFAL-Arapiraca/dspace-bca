@@ -116,4 +116,71 @@ describe('PdfPreviewService', () => {
     subscription.unsubscribe();
     expect(request.cancelled).toBeTrue();
   });
+
+  it('reuses A and B across repeated switches without new content requests or inflated transfer totals', async () => {
+    const a = file('A'), b = file('B');
+    for (const [document, value] of [[a, 1], [b, 2]] as const) {
+      const result = firstValueFrom(service.loadRange(document, 0, 100));
+      http.expectOne(document._links.content.href).flush(new Uint8Array(100).fill(value).buffer, {
+        status: 206, statusText: 'Partial Content',
+      });
+      await result;
+    }
+    for (let i = 0; i < 4; i++) {
+      expect(new Uint8Array(await firstValueFrom(service.loadRange(a, 0, 100)))[0]).toBe(1);
+      expect(new Uint8Array(await firstValueFrom(service.loadRange(b, 0, 100)))[0]).toBe(2);
+    }
+    http.expectNone(() => true);
+    expect(service.transferredBytes(a)).toBe(100);
+    expect(service.transferredBytes(b)).toBe(100);
+  });
+
+  it('requests only missing bytes when a new range overlaps cached data', async () => {
+    const document = file('A');
+    const first = firstValueFrom(service.loadRange(document, 100, 200));
+    http.expectOne(() => true).flush(new Uint8Array(100).fill(1).buffer, { status: 206, statusText: 'Partial Content' });
+    await first;
+    const combined = firstValueFrom(service.loadRange(document, 50, 250));
+    for (const range of ['bytes=50-99', 'bytes=200-249']) {
+      http.expectOne(request => request.headers.get('Range') === range).flush(new Uint8Array(50).fill(2).buffer, {
+        status: 206, statusText: 'Partial Content',
+      });
+    }
+    const data = new Uint8Array(await combined);
+    expect([...data.slice(0, 50)]).toEqual(Array(50).fill(2));
+    expect([...data.slice(50, 150)]).toEqual(Array(100).fill(1));
+    expect([...data.slice(150)]).toEqual(Array(50).fill(2));
+    expect(service.transferredBytes(document)).toBe(200);
+  });
+
+  it('shares identical in-flight requests and keeps them alive until the last subscriber leaves', async () => {
+    const document = file('A');
+    const first = service.loadRange(document, 0, 100).subscribe();
+    const second = firstValueFrom(service.loadRange(document, 0, 100));
+    const request = http.expectOne(() => true);
+    first.unsubscribe();
+    expect(request.cancelled).toBeFalse();
+    request.flush(new ArrayBuffer(100), { status: 206, statusText: 'Partial Content' });
+    await second;
+    expect(service.transferredBytes(document)).toBe(100);
+  });
+
+  it('retries canceled requests and isolates changed file checksums and cache lifetimes', async () => {
+    const document = file('A');
+    const subscription = service.loadRange(document, 0, 100).subscribe();
+    const aborted = http.expectOne(() => true);
+    subscription.unsubscribe();
+    expect(aborted.cancelled).toBeTrue();
+    const fetch = async () => {
+      const result = firstValueFrom(service.loadRange(document, 0, 100));
+      http.expectOne(() => true).flush(new ArrayBuffer(100), { status: 206, statusText: 'Partial Content' });
+      await result;
+    };
+    await fetch();
+    document.checkSum = { checkSumAlgorithm: 'MD5', value: 'changed' };
+    await fetch();
+    service.clearCache();
+    expect(service.transferredBytes(document)).toBe(0);
+    await fetch();
+  });
 });

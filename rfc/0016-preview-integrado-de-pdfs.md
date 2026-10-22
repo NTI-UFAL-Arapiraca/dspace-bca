@@ -36,6 +36,8 @@ ponte entre janelas de mesma origem; URLs da API e tokens não entram no iframe.
 Copiar cada trecho para um buffer do iframe antes de entregá-lo ao worker,
 pois o PDF.js valida o realm de `ArrayBuffer`. Não há Blob do arquivo completo.
 Trocar de aba, fechar a visualização ou sair da página cancela os pedidos e o leitor.
+Conforme a [RFC 0019](0019-cache-de-intervalos-dos-pdfs.md), os trechos completos
+permanecem em memória entre trocas de aba e ao fechar/reabrir na mesma visita.
 Não se alteram políticas, cabeçalhos, exposição de metadados ou contratos REST.
 Arquivos restritos continuam usando o fluxo oficial de download/solicitação de
 cópia por `ThemedFileDownloadLinkComponent`. Autorizações especiais de cópia
@@ -63,6 +65,18 @@ Não emitir pedidos extras de conteúdo apenas para produzir eventos de uso.
 Os títulos do tema usam peso 500; o cabeçalho do leitor usa 18 px e espaçamento
 compacto, seguindo o pedido de uma apresentação menos pesada.
 
+As ações de cancelar/fechar a visualização e baixar o PDF ficam no cabeçalho
+“Leia o trabalho”, junto à descrição introdutória. A faixa com o nome do arquivo
+selecionado é removida; a aba ativa identifica a seleção. O nome completo
+permanece acessível na aba, no iframe e no link de download. No celular, as
+ações podem ocupar outra linha dentro do mesmo cabeçalho. Os dois controles
+usam o mesmo tamanho e estilo de botão contornado. O tamanho do arquivo aparece
+na abertura opcional para apoiar a escolha de carregar o arquivo.
+
+Recriar o link oficial de download ao mudar de PDF: o componente DSpace 10.1
+define URL e autorização em `ngOnInit`. No cabeçalho, a troca de aba não destrói
+esse componente automaticamente como ocorria dentro do painel anterior.
+
 ### PDFs grandes e economia de dados
 
 O limite inicial de abertura automática é **20 MiB** (`20 * 1024 * 1024` bytes),
@@ -75,7 +89,9 @@ Quando disponível, `navigator.connection` também exige essa escolha se houver
 `saveData`, `effectiveType` slow-2g/2g/3g ou estimativa positiva de `downlink`
 inferior a 1 Mbps. Esses sinais são estimativas e não identificam franquia
 contratada. Não inferir limitação pelo tamanho da tela ou pela rede celular;
-não fazer teste ativo de velocidade. A política é reavaliada a cada seleção.
+não fazer teste ativo de velocidade. Aplicar a política antes da primeira
+abertura de cada arquivo; a escolha fica preservada durante a visita,
+conforme a RFC 0019.
 Sem essa API, usar o tamanho do PDF. Sem tamanho válido, oferecer apenas o
 download, evitando iniciar um transporte parcial com comprimento desconhecido.
 
@@ -95,7 +111,8 @@ as verificações do parser. Não se garante a mesma economia para outros PDFs.
 Busca textual, impressão e download podem exigir o documento completo.
 Mostrar bytes efetivamente transferidos, sem uma porcentagem que sugira que
 o arquivo inteiro precisa ser carregado. Cancelar/fechar desmonta o iframe
-e aborta os pedidos HTTP. Reabrir inicia uma nova sessão de leitura.
+e aborta os pedidos HTTP. Reabrir inicia outro leitor, reutilizando os trechos
+completos guardados no cache da página, conforme a RFC 0019.
 
 Exigir HTTP 206 e conferir o comprimento de cada resposta. Se `Content-Range`
 estiver exposto, validar também seus limites e o tamanho total. O DSpace local

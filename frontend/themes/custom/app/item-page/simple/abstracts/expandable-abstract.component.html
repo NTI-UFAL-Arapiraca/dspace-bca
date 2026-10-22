@@ -1,0 +1,19 @@
+<ds-metadata-field-wrapper [label]="abstract.title" [hideIfNoTextContent]="false">
+  <div #text class="abstract-text"
+    [class.is-expanded]="expanded"
+    [class.is-truncated]="hasOverflow && !expanded"
+    [id]="contentId"
+    [attr.lang]="abstract.language"
+    [dsMarkdown]="abstract.value">
+  </div>
+  @if (hasOverflow) {
+    <button type="button" class="btn btn-link repository-text-link p-0 mt-2"
+      [attr.aria-expanded]="expanded"
+      [attr.aria-controls]="contentId"
+      [attr.aria-label]="(expanded ? 'repository.item.abstract.less-label' : 'repository.item.abstract.more-label') | translate: { title: abstract.title }"
+      (click)="toggle()">
+      {{ (expanded ? 'repository.item.abstract.less' : 'repository.item.abstract.more') | translate }}
+      <span class="fas ms-1" [class.fa-chevron-up]="expanded" [class.fa-chevron-down]="!expanded" aria-hidden="true"></span>
+    </button>
+  }
+</ds-metadata-field-wrapper>

@@ -11,8 +11,8 @@ import { Observable } from 'rxjs';
 
 /**
  * Reload an item with every metadata language exclusively inside the
- * administrative edit area. Public item and search requests remain filtered
- * by the locale negotiated with the REST backend.
+ * administrative edit area. Public routes and searches remain localized;
+ * the public abstracts component separately requests every abstract language.
  */
 export const editItemAllLanguagesResolver: ResolveFn<RemoteData<Item>> = (
   route: ActivatedRouteSnapshot,

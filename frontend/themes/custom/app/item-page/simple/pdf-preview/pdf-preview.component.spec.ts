@@ -2,6 +2,8 @@ import {
   ComponentFixture,
   TestBed,
 } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { AuthService } from '@dspace/core/auth/auth.service';
 import { DSONameService } from '@dspace/core/breadcrumbs/dso-name.service';
 import { LocaleService } from '@dspace/core/locale/locale.service';
 import { Bitstream } from '@dspace/core/shared/bitstream.model';
@@ -9,6 +11,7 @@ import { Item } from '@dspace/core/shared/item.model';
 import { TranslateModule } from '@ngx-translate/core';
 import { MockComponent } from 'ng-mocks';
 import {
+  BehaviorSubject,
   Observable,
   of,
   throwError,
@@ -24,6 +27,8 @@ describe('PdfPreviewComponent', () => {
   let service: jasmine.SpyObj<PdfPreviewService>;
   let bridge: { open: jasmine.Spy; close: jasmine.Spy };
   let source: PdfViewerSource;
+  let user: BehaviorSubject<string>;
+  let connection: PropertyDescriptor | undefined;
   const documents = ['main', 'appendix'].map((id, index) => ({
     bitstream: { id, name: `${id}.pdf`, sizeBytes: 1000 } as Bitstream,
     isPrimary: index === 0,
@@ -33,10 +38,16 @@ describe('PdfPreviewComponent', () => {
   } as unknown as Event);
 
   beforeEach(async () => {
-    service = jasmine.createSpyObj('PdfPreviewService', ['findDocuments', 'canPreview', 'loadRange']);
+    connection = Object.getOwnPropertyDescriptor(navigator, 'connection');
+    Object.defineProperty(navigator, 'connection', {
+      configurable: true, value: { saveData: false, effectiveType: '4g', downlink: 10 },
+    });
+    user = new BehaviorSubject<string>(null);
+    service = jasmine.createSpyObj('PdfPreviewService', ['findDocuments', 'canPreview', 'loadRange', 'clearCache', 'transferredBytes']);
     service.findDocuments.and.returnValue(of(documents));
     service.canPreview.and.returnValue(of(true));
     service.loadRange.and.returnValue(of(new ArrayBuffer(100)));
+    service.transferredBytes.and.returnValue(0);
     bridge = {
       open: jasmine.createSpy('open').and.callFake(async (value: PdfViewerSource) => {
         source = value;
@@ -47,6 +58,7 @@ describe('PdfPreviewComponent', () => {
     await TestBed.configureTestingModule({
       imports: [PdfPreviewComponent, TranslateModule.forRoot()],
       providers: [
+        { provide: AuthService, useValue: { getAuthenticatedUserIdFromStore: () => user } },
         { provide: DSONameService, useValue: { getName: (bitstream) => bitstream.name } },
         { provide: LocaleService, useValue: { getCurrentLanguageCode: () => of('pt-BR') } },
       ],
@@ -64,7 +76,14 @@ describe('PdfPreviewComponent', () => {
     fixture.componentRef.setInput('item', { id: 'item' } as Item);
   });
 
-  afterEach(() => fixture?.destroy());
+  afterEach(() => {
+    fixture?.destroy();
+    if (connection) {
+      Object.defineProperty(navigator, 'connection', connection);
+    } else {
+      Reflect.deleteProperty(navigator, 'connection');
+    }
+  });
 
   it('shows filename tabs and closes the old viewer when switching', () => {
     fixture.detectChanges();
@@ -73,12 +92,16 @@ describe('PdfPreviewComponent', () => {
     expect(tabs.length).toBe(2);
     expect(tabs[0].textContent).toContain('main.pdf');
     expect(tabs[0].getAttribute('aria-selected')).toBe('true');
+    const firstDownload = fixture.debugElement.query(By.css('header ds-file-download-link')).componentInstance;
     tabs[1].click();
     fixture.detectChanges();
     expect(fixture.componentInstance.selected.bitstream.id).toBe('appendix');
     expect(bridge.close).toHaveBeenCalled();
     expect(fixture.nativeElement.querySelectorAll('iframe').length).toBe(1);
     expect(tabs[1].getAttribute('aria-selected')).toBe('true');
+    const selectedDownload = fixture.debugElement.query(By.css('header ds-file-download-link')).componentInstance;
+    expect(selectedDownload.bitstream).toBe(documents[1].bitstream);
+    expect(selectedDownload).not.toBe(firstDownload);
   });
 
   it('hides the section when there are no PDFs', () => {
@@ -152,9 +175,48 @@ describe('PdfPreviewComponent', () => {
   it('counts bytes actually transferred through the authenticated service', async () => {
     fixture.detectChanges();
     connect();
+    service.transferredBytes.and.returnValue(100);
     await source.readRange(0, 100);
     expect(service.loadRange).toHaveBeenCalledWith(documents[0].bitstream, 0, 100);
     expect(fixture.componentInstance.loadedBytes).toBe(100);
+  });
+
+  it('retains the byte cache across A/B switches and clears it on item change and teardown', () => {
+    fixture.detectChanges();
+    service.clearCache.calls.reset();
+    fixture.componentInstance.selectDocument('appendix');
+    fixture.componentInstance.selectDocument('main');
+    fixture.componentInstance.selectDocument('appendix');
+    expect(service.clearCache).not.toHaveBeenCalled();
+    fixture.componentRef.setInput('item', { id: 'other-item' } as Item);
+    fixture.detectChanges();
+    expect(service.clearCache).toHaveBeenCalledTimes(1);
+    fixture.destroy();
+    expect(service.clearCache).toHaveBeenCalledTimes(2);
+  });
+
+  it('clears cached bytes and closes the active reader when the authenticated user changes', () => {
+    fixture.detectChanges();
+    connect();
+    service.clearCache.calls.reset();
+    user.next('another-user');
+    expect(bridge.close).toHaveBeenCalled();
+    expect(service.clearCache).toHaveBeenCalledTimes(1);
+    user.next(null);
+    expect(service.clearCache).toHaveBeenCalledTimes(2);
+  });
+
+  it('does not ask for a large PDF to be opened again after switching away and back', () => {
+    service.findDocuments.and.returnValue(of(documents.map((document) => ({
+      ...document, bitstream: { ...document.bitstream, sizeBytes: 30 * 1024 * 1024 } as Bitstream,
+    }))));
+    fixture.detectChanges();
+    fixture.componentInstance.startPreview();
+    fixture.componentInstance.selectDocument('appendix');
+    expect(fixture.componentInstance.state).toBe('deferred');
+    fixture.componentInstance.selectDocument('main');
+    expect(fixture.componentInstance.previewUrl).toBeDefined();
+    expect(fixture.componentInstance.state).toBe('loading');
   });
 
   it('cancels active ranges and ignores stale viewer callbacks when closing', async () => {

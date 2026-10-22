@@ -1,0 +1,22 @@
+:host {
+  display: block;
+}
+
+.abstract-text {
+  // Keep a substantial reading column alongside the academic metadata.
+  line-height: 1.8;
+  max-block-size: 18em;
+  overflow: hidden;
+
+  &.is-expanded {
+    max-block-size: none;
+  }
+
+  &.is-truncated {
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 1.8em), transparent);
+  }
+}
+
+button {
+  text-align: start;
+}
