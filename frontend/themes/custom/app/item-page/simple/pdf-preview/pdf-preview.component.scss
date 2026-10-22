@@ -39,8 +39,11 @@
 .pdf-preview__tabs {
   display: grid;
   grid-template-columns: repeat(var(--pdf-tab-count, 3), minmax(0, 1fr));
-  padding: .25rem .5rem 0;
-  gap: .125rem;
+  margin: 0;
+  padding: .5rem;
+  gap: .375rem;
+  background: var(--ufal-surface-muted);
+  border-bottom: 1px solid var(--bs-border-color);
 
   li { min-width: 0; }
 
@@ -49,21 +52,43 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    min-height: 2.5rem;
-    padding: .375rem .75rem;
+    min-height: 2.75rem;
+    padding: .5rem .75rem;
     font-size: .875rem;
+    font-weight: 500;
+    line-height: 1.4;
     text-align: center;
-    color: var(--bs-link-color);
+    cursor: pointer;
+    color: var(--bs-secondary-color);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--bs-border-radius-sm);
+
+    &:hover {
+      color: var(--bs-link-color);
+      background: var(--ufal-blue-soft);
+      border-color: var(--ufal-blue-border);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ufal-focus);
+      outline-offset: 2px;
+    }
   }
 
   .nav-link > i,
   .badge { flex-shrink: 0; }
 
   .nav-link.active {
-    border-top: 3px solid #ed1c24;
     font-weight: 600;
-    color: var(--ufal-ink);
-    background: var(--ufal-surface);
+    color: #fff;
+    background: var(--bs-primary);
+    border-color: var(--bs-primary);
+
+    .badge {
+      color: var(--bs-primary);
+      background: #fff;
+    }
   }
 }
 

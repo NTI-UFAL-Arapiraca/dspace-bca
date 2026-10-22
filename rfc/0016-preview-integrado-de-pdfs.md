@@ -70,8 +70,15 @@ As ações de cancelar/fechar a visualização e baixar o PDF ficam no cabeçalh
 selecionado é removida; a aba ativa identifica a seleção. O nome completo
 permanece acessível na aba, no iframe e no link de download. No celular, as
 ações podem ocupar outra linha dentro do mesmo cabeçalho. Os dois controles
-usam o mesmo tamanho e estilo de botão contornado. O tamanho do arquivo aparece
-na abertura opcional para apoiar a escolha de carregar o arquivo.
+usam o mesmo tamanho e formato, preenchidos em vermelho para cancelar/fechar e
+azul para baixar. O tamanho do arquivo aparece na abertura opcional para apoiar
+a escolha de carregar o arquivo.
+
+As abas do leitor usam um controle segmentado sobre fundo neutro. A seleção
+tem preenchimento azul e texto branco, sem combinar bordas vermelhas acima e
+abaixo do nome. Os estilos são locais ao leitor, separados de `.nav-tabs` do
+tema; cursor de mão, hover, foco visível e semântica acessível de NgbNav são
+preservados.
 
 Recriar o link oficial de download ao mudar de PDF: o componente DSpace 10.1
 define URL e autorização em `ngOnInit`. No cabeçalho, a troca de aba não destrói

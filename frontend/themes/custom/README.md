@@ -172,11 +172,15 @@ liberar espaço nas abas. Os nomes ocupam uma linha, com reticências no meio e
 final/extensão preservados. O helper `pdf-filename.ts`
 separa o texto sem modificar o nome do arquivo. O nome completo permanece no
 rótulo acessível, no título nativo da aba e no título acessível do iframe.
+A seleção usa abas segmentadas sobre uma faixa neutra, com a aba ativa em azul
+e texto branco, sem as bordas vermelhas superior e inferior. O cursor de mão
+indica que as abas são clicáveis; hover e foco de teclado têm estados próprios.
 A aba ativa identifica o PDF selecionado; não há uma faixa adicional com o nome.
 Cancelar/fechar visualização e “Baixar PDF” ficam junto à introdução “Leia o
-trabalho”, no cabeçalho, com botões de mesmo tamanho e estilo contornado e quebra
-de linha em telas pequenas. O link de download é recriado por arquivo para
-manter URL e autorização correspondentes à seleção.
+trabalho”, no cabeçalho, com botões de mesmo tamanho e formato: vermelho para
+cancelar/fechar e azul para baixar. Os controles quebram linha em telas pequenas.
+O link de download é recriado por arquivo para manter URL e autorização
+correspondentes à seleção.
 O tamanho do arquivo aparece na abertura opcional, antes de carregar o conteúdo.
 
 Os dois Dockerfiles instalam o PDF.js 6.4.299 em `src/assets/pdfjs`, com versão

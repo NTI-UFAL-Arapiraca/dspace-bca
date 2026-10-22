@@ -8,14 +8,15 @@
       @if (catalogState === 'ready' && selected) {
         <div class="pdf-preview__actions">
           @if (state === 'loading' || state === 'ready') {
-            <button type="button" class="btn btn-sm btn-outline-secondary mb-1" (click)="stopPreview()">
+            <button type="button" class="btn btn-sm btn-danger mb-1" (click)="stopPreview()">
               {{ (state === 'loading' ? 'repository.pdf.cancel' : 'repository.pdf.close') | translate }}
+              <i class="fas fa-times ms-1" aria-hidden="true"></i>
             </button>
           }
           <!-- The official link initializes its URL and permissions once per instance. -->
           @for (document of [selected]; track document.bitstream.id) {
             <ds-file-download-link [bitstream]="document.bitstream" [item]="item" [isBlank]="true"
-              [showAccessStatusBadge]="false" cssClasses="btn btn-sm btn-outline-secondary">
+              [showAccessStatusBadge]="false" cssClasses="btn btn-sm btn-primary">
               {{ 'repository.pdf.download' | translate }}
               <span class="visually-hidden"> — {{ names.getName(document.bitstream) }}</span>
               <i class="fas fa-download ms-1" aria-hidden="true"></i>
@@ -36,7 +37,7 @@
         </button>
       </div>
     } @else if (documents.length > 1) {
-      <ul ngbNav #nav="ngbNav" class="nav-tabs pdf-preview__tabs"
+      <ul ngbNav #nav="ngbNav" class="nav pdf-preview__tabs"
           [style.--pdf-tab-count]="documents.length > 3 ? documents.length : 3"
           [animation]="false"
           [activeId]="selected.bitstream.id" (activeIdChange)="selectDocument($event)"
