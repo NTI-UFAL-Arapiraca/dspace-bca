@@ -1,60 +1,74 @@
-# DSpace da Biblioteca
+# Repositório Institucional UFAL — Campus Arapiraca
 
-Este projeto mantém a implantação e as personalizações do **DSpace 10.1**:
-backend, PostgreSQL, Solr, interface Angular e proxy Nginx. A extração e a
-importação do legado pertencem ao projeto irmão `dspace-migration`.
+Este repositório reúne a implantação Docker e as personalizações do **DSpace 10.1** usado pela Biblioteca da UFAL — Campus Arapiraca. Mantém o backend, a interface Angular, o proxy e a documentação operacional.
 
-## Guias de execução
+A migração do acervo legado é feita no projeto irmão [`dspace-migration`](../dspace-migration). Este projeto prepara configurações e metadados acadêmicos, mas não extrai nem importa trabalhos.
 
-Os comandos de inicialização e operação estão em arquivos próprios:
+## Interface
 
-- [Inicializar o ambiente local](docs/guias/inicializacao-local.md).
-- [Inicializar ou atualizar a produção](docs/guias/inicializacao-producao.md).
-- [Preparar metadados e a coleção Pessoas](docs/guias/preparacao-academica.md).
-- [Operar e verificar a instalação](docs/guias/operacao.md).
-- [Executar a migração](../dspace-migration/docs/guias/migracao-producao.md).
+As capturas mostram a página inicial e a página de um trabalho. Os registros exibidos são fictícios e servem apenas para demonstração e testes locais.
 
-## Funcionamento
+![Página inicial do repositório](docs/imagens/home.jpg)
 
-Em produção, o proxy institucional termina TLS e encaminha HTTP para o
-`dspace-proxy`. Esse proxy atende `/dspace/` pela interface Angular e
-`/dspace-server/` pelo backend. Apenas ele publica a porta 80; PostgreSQL,
-Solr, interface e backend permanecem na rede interna Docker.
+*Página inicial.*
 
-A interface é compilada pelo GitHub Actions após o push e publicada no GHCR.
-As configurações de backend e de runtime são montadas a partir deste checkout.
-O ambiente local usa o projeto Compose `d10dev`, com volumes próprios, e
-expõe interface e API somente em loopback.
+![Página de informações do trabalho](docs/imagens/pagina-do-artigo.png)
 
-Os trabalhos recebem campos de curso e campus e referências a pessoas por
-UUID. `Person` representa o cadastro bibliográfico; `EPerson` representa a
-conta de acesso. Os perfis de pessoas mostram os trabalhos por papel.
+*Página de informações do trabalho, com metadados acadêmicos e leitura integrada do PDF.*
 
-## Referência
+## O repositório
 
-- [Arquitetura, URLs e configurações](docs/referencia/implantacao.md).
-- [Modelo acadêmico, pessoas e metadados](docs/referencia/modelo-academico.md).
-- [Levantamento e decisões sobre metadados](docs/referencia/relatorio-metadados-e-pessoas.md).
-- [Configuração do backend](backend/README.md) e [tema customizado](frontend/themes/custom/README.md).
-- [Decisões registradas nas RFCs](rfc/README.md).
-- [Índice da documentação](docs/README.md).
+O DSpace organiza os trabalhos como itens, agrupados em comunidades e coleções. Neste projeto, os registros também incluem curso, campus e vínculos com pessoas. `Person` é o cadastro bibliográfico usado em autoria, orientação, coorientação e banca; `EPerson` é uma conta de acesso. Os cadastros de autores e professores não criam contas de login.
 
-## Arquivos principais
+A interface apresenta os trabalhos, seus resumos e arquivos, permite a leitura de PDFs na página e relaciona os registros aos perfis bibliográficos das pessoas. A home reúne busca, comunidades e registros recentes. As páginas e os dados são servidos pela interface Angular e pela API REST do DSpace.
 
-| Arquivo ou pasta | Responsabilidade |
+## Executar localmente
+
+Na raiz do projeto, prepare o arquivo de ambiente e preencha a senha do banco, o caminho da base GeoLite2 e a pasta SAF:
+
+```bash
+cp .env.development.example .env.development
+```
+
+Inicie os serviços:
+
+```bash
+docker compose --env-file .env.development -p d10dev \
+  -f docker-compose-rest.yml -f docker-compose-dev.yml up -d --build
+```
+
+Abra `http://localhost:4000/`. A interface e a API usam portas locais em loopback; o ambiente `d10dev` tem banco, Solr e assetstore próprios. Para criar o administrador, registrar os metadados e encerrar os serviços, consulte o [guia de inicialização local](docs/guias/inicializacao-local.md).
+
+## Implantação
+
+Em produção, a implantação combina `docker-compose-dist.yml`, `docker-compose-rest.yml` e `docker-compose-prod.yml`. Apenas o proxy interno publica a porta 80; o proxy institucional termina TLS e encaminha a interface em `/dspace/` e a API em `/dspace-server/`.
+
+O workflow do GitHub Actions compila o tema e publica a imagem Angular no GHCR. Configurações de runtime e de backend são montadas separadamente. Consulte o [guia de produção](docs/guias/inicializacao-producao.md) e a [referência de implantação](docs/referencia/implantacao.md) antes de alterar URLs, rede, imagens ou proxy.
+
+## Estrutura do projeto
+
+| Caminho | Responsabilidade |
 | --- | --- |
-| `docker-compose-rest.yml` | Backend, PostgreSQL, Solr, rede e volumes. |
-| `docker-compose-dist.yml` | Interface Angular. |
-| `docker-compose-prod.yml` | Contrato de produção e proxy interno. |
-| `docker-compose-dev.yml` | Ambiente local com atualização automática do tema. |
-| `docker-compose-local.yml` | Publicação opcional de portas para uso local. |
-| `docker-compose-migration.yml` | SAF gravável durante a importação em produção. |
-| `proxy/nginx.conf` | Roteamento HTTP e cabeçalhos de proxy. |
-| `.env.production.example` e `.env.development.example` | Modelos de configuração sem credenciais reais. |
-| `Dockerfile.angular` e `.github/workflows/deploy.yml` | Compilação e publicação da interface no GHCR. |
-| `Dockerfile.angular.dev` e `frontend/dev/` | Servidor de desenvolvimento e sincronização do tema. |
-| `backend/config/` | Formulários, autoridades, registro de campos e Discovery. |
-| `frontend/themes/custom/` | Estilos, assets, traduções e componentes. |
-| `frontend/config/` | Configuração de runtime da interface. |
-| `scripts/prepare-academic.sh` | Preparação dos campos, tipos e coleção Person. |
-| `cli.yml` | Serviço administrativo conectado à rede e ao assetstore da instalação. |
+| `docker-compose-*.yml` | Serviços e overlays de produção, desenvolvimento, acesso local e migração. |
+| `proxy/nginx.conf` | Rotas HTTP para Angular e REST, com cabeçalhos de proxy. |
+| `backend/config/` | Metadados, formulários, autoridades, Discovery e propriedades REST. |
+| `frontend/config/` | Configuração Angular carregada em runtime. |
+| `frontend/themes/custom/` | Componentes, estilos, assets e traduções institucionais. |
+| `frontend/overrides/` e `frontend/patches/` | Extensões aplicadas ao Angular oficial durante o build. |
+| `Dockerfile.angular` e `.github/workflows/deploy.yml` | Build e publicação da imagem Angular. |
+| `scripts/` | Preparação idempotente dos metadados acadêmicos e da coleção Pessoas. |
+| `tests/` | Verificações da configuração acadêmica e dos scripts de preparação. |
+| `docs/` e `rfc/` | Guias, referências e decisões de arquitetura. |
+
+## Documentação
+
+- [Índice dos guias e referências](docs/README.md)
+- [Inicialização local](docs/guias/inicializacao-local.md)
+- [Inicialização e atualização em produção](docs/guias/inicializacao-producao.md)
+- [Operação e verificação](docs/guias/operacao.md)
+- [Preparação de metadados acadêmicos e da coleção Pessoas](docs/guias/preparacao-academica.md)
+- [Modelo acadêmico e autoridades de pessoas](docs/referencia/modelo-academico.md)
+- [Configuração do backend](backend/README.md)
+- [Personalização do tema Angular](frontend/themes/custom/README.md)
+- [Decisões registradas nas RFCs](rfc/README.md)
+- [Migração do acervo legado](../dspace-migration/docs/README.md)
