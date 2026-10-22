@@ -133,6 +133,14 @@ pelas duas páginas e carregado quando entra na tela. PDFs do bundle ORIGINAL
 usam o principal configurado ou a ordem existente, com abas para arquivos
 adicionais. A permissão de download é verificada antes de buscar o conteúdo;
 restrições e solicitações de cópia continuam com o link oficial do DSpace.
+As abas reservam três espaços e dividem a mesma linha igualmente entre todos
+os arquivos quando houver mais de três, inclusive em telas pequenas. Os títulos
+ficam centralizados. No celular, ícones e selo de principal ficam apenas na
+identificação do arquivo selecionado para liberar espaço nas abas. Os nomes
+ocupam uma linha,
+com reticências no meio e final/extensão preservados. O helper `pdf-filename.ts`
+separa o texto sem modificar o nome do arquivo. O nome completo permanece no
+rótulo acessível, no título nativo da aba e na identificação do arquivo selecionado.
 
 Os dois Dockerfiles instalam o PDF.js 6.4.299 em `src/assets/pdfjs`, com versão
 e hash verificados por `frontend/patches/install-pdf-viewer.mjs`. Worker, fontes
@@ -140,14 +148,16 @@ e traduções são locais. Scripts dos PDFs e edição ficam desativados. Nenhum
 serviço externo recebe o documento. `frontend/overrides/pdf-range-viewer.mjs`
 conecta o transporte oficial por intervalos ao HttpClient do Angular, mantendo
 autorização e tokens na página principal. Apenas os trechos necessários são
-pedidos, sem antecipar o arquivo restante. Busca textual, impressão ou download
+pedidos em blocos de 64 KiB, sem antecipar o arquivo restante. A estrutura interna
+do PDF também pode exigir muitos trechos, até o arquivo completo; não há garantia
+de um pedido por página. Busca textual, impressão ou download
 podem exigir o PDF inteiro. Fechar, trocar o arquivo ou sair cancela os pedidos.
 
 A partir de 20 MiB, ou quando o navegador sinaliza economia de dados/conexão
 lenta, o leitor aguarda “Carregar visualização”. O download oficial permanece
 visível. A política está em `pdf-preview-policy.ts`; a API de conexão é opcional,
 não identifica franquias e não está disponível em todos os navegadores.
-O caminho de assets inclui o sufixo `-range-1` para invalidar a integração anterior.
+O caminho de assets inclui o sufixo `-range-2` para invalidar a configuração anterior.
 
 Reconstrua a imagem de desenvolvimento para instalar o viewer inicialmente;
 os componentes e estilos seguintes continuam sincronizados pelo watcher.

@@ -38,7 +38,7 @@ test('uses a custom range transport without streaming, prefetch or content URLs'
   assert.equal(options.disableAutoFetch, true);
   assert.equal(options.disableStream, true);
   assert.equal(options.disableRange, false);
-  assert.equal(options.rangeChunkSize, 256 * 1024);
+  assert.equal(options.rangeChunkSize, 64 * 1024);
   assert.equal(options.range.length, 1024);
   assert.equal(options.range.initialData.byteLength, 0);
   assert.equal(options.range.progressiveDone, true);

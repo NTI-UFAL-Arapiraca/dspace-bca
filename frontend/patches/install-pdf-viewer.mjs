@@ -6,7 +6,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 export const version = '6.4.299';
-export const assetVersion = `${version}-range-1`;
+export const assetVersion = `${version}-range-2`;
 const sha256 = 'c894bce53b2f4c3e13141e088c89cc051a1f7118ba4a2c02ec058798ae1303d1';
 const sourceUrl = `https://github.com/mozilla/pdf.js/releases/download/v${version}/pdfjs-${version}-legacy-dist.zip`;
 

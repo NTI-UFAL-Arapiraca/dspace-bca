@@ -44,6 +44,7 @@ import {
   PDF_VIEWER_PATH,
   PdfDocument,
 } from './pdf-documents';
+import { splitPdfFilename } from './pdf-filename';
 import { PdfPreviewService } from './pdf-preview.service';
 import {
   getPdfPreviewGate,
@@ -83,6 +84,7 @@ export class PdfPreviewComponent implements OnChanges, OnDestroy {
   previewUrl: SafeResourceUrl;
   gate: PdfPreviewGate;
   loadedBytes = 0;
+  readonly filenameParts = splitPdfFilename;
 
   private catalogSubscription: Subscription;
   private previewSubscription: Subscription;

@@ -52,7 +52,8 @@ licença. A origem do iframe deriva do `baseURI`, incluindo `/dspace/` em
 produção; nenhum documento ou token vai para a Mozilla ou outro serviço.
 O caminho de assets inclui a versão para evitar misturar viewer e worker
 de releases diferentes no cache do navegador. A integração por intervalos usa
-o sufixo `-range-1`, também alterado quando mudar o contrato da ponte.
+o sufixo `-range-2`, também alterado quando mudar o contrato ou a configuração
+da ponte.
 A leitura usa o endpoint de conteúdo normal. No DSpace 10.1,
 `BitstreamRestController` registra o evento de acesso somente em requisições
 sem `Range`. Por isso a visualização parcial não gera um download nas
@@ -78,11 +79,19 @@ não fazer teste ativo de velocidade. A política é reavaliada a cada seleção
 Sem essa API, usar o tamanho do PDF. Sem tamanho válido, oferecer apenas o
 download, evitando iniciar um transporte parcial com comprimento desconhecido.
 
-O leitor usa intervalos de 256 KiB e desativa a antecipação de bytes e o streaming
+O leitor usa blocos de 64 KiB e desativa a antecipação de bytes e o streaming
 com as opções `disableAutoFetch: true` e `disableStream: true`, impedindo que
 o PDF.js antecipe especulativamente os trechos restantes. A leitura da própria
 estrutura do PDF ainda pode exigir todos os bytes. O tamanho efetivo dos
 pedidos depende dessa estrutura e das operações do leitor.
+O ajuste de 256 para 64 KiB evita transferir blocos grandes ao buscar pequenos
+objetos espalhados pelo PDF, ao custo de mais requisições. No PDF local de
+968.109 bytes e 41 páginas, a abertura passou de quatro pedidos cobrindo o
+arquivo inteiro para onze pedidos somando 705.965 bytes com a primeira página
+renderizada. O PDF não é linearizado e seus dicionários de página estão
+espalhados pelo arquivo; a validação inicial do PDF.js já precisa de vários deles.
+Blocos menores reduzem a leitura excedente, sem alterar o original nem remover
+as verificações do parser. Não se garante a mesma economia para outros PDFs.
 Busca textual, impressão e download podem exigir o documento completo.
 Mostrar bytes efetivamente transferidos, sem uma porcentagem que sugira que
 o arquivo inteiro precisa ser carregado. Cancelar/fechar desmonta o iframe

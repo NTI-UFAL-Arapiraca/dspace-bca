@@ -313,3 +313,63 @@ Ao concluir, os containers temporários de build, SSR, proxy e QA foram
 encerrados. O ambiente `d10dev` foi restaurado com a imagem de desenvolvimento
 reconstruída: compilação local aprovada, publicação e ponte do leitor em HTTP
 200, backend/banco/Solr preservados.
+
+## Abas de PDFs com nomes extensos
+
+Em 22/10/2026, reservar três espaços para arquivos e, acima dessa quantidade,
+dividir a mesma linha igualmente entre todas as abas, inclusive no mobile.
+Títulos pequenos ficam centralizados no espaço disponível. Cada nome fica em
+uma linha, com reticências no meio e o final do nome/extensão preservado,
+seguindo a referência do Finder. Abaixo de 768 px, ícone e selo de principal
+ficam apenas na identificação do arquivo selecionado, liberando espaço nas abas.
+
+`pdf-filename.ts` separa o nome em duas partes para apresentação, sem alterar
+o arquivo, extensão, metadados ou links. O rótulo acessível e o título nativo
+da aba mantêm o nome completo; o selo de principal integra o rótulo acessível
+quando presente. O nome completo também permanece na identificação do PDF
+selecionado, inclusive no mobile.
+
+Arquivos: componente do preview (TS, HTML e SCSS), helper `pdf-filename.ts`,
+`tests/frontend/pdf-filename.test.mjs`, README do tema e este relatório.
+Validação: 28 testes Node (incluindo três do helper), 19 testes Angular existentes,
+lint oficial e compilação local aprovados. Conferência visual com os quatro
+PDFs disponíveis no registro local, incluindo um nome extenso:
+1440 × 1000 (quatro espaços de 318 px) e 390 × 844 (quatro de aproximadamente
+84 px), além de 320 × 780 (quatro de 70 px). Sem overflow horizontal da página.
+Nome completo presente nos rótulos
+acessíveis e na identificação do PDF selecionado. Nenhum dado do acervo foi alterado.
+
+## Ajuste dos blocos após medir um PDF real
+
+O arquivo de 945,42 KiB (968.109 bytes, 41 páginas) apontado pelo usuário
+realmente era transferido inteiro na abertura: o parser solicitava os quatro
+blocos de 256 KiB para ler objetos espalhados pelo PDF. O backend respondia
+HTTP 206 corretamente; não era um fallback para HTTP 200 nem streaming.
+
+Reduzir o bloco para 64 KiB, mantendo `disableAutoFetch` e `disableStream`.
+Na medição isolada, a abertura do documento pediu 640.429 bytes e a preparação
+da primeira página elevou o total a 705.965 bytes. No viewer real, desktop e
+mobile renderizaram a primeira página com os mesmos 705.965 bytes (689,42 KiB),
+em onze pedidos: redução inicial de 262.144 bytes, aproximadamente 27,1%.
+O total permaneceu estável sem navegação. A estrutura ainda exige cerca de
+73% deste arquivo na abertura; economia maior dependeria de sua organização.
+Navegar para a página 20 pediu mais um bloco de 65.536 bytes, elevando a
+transferência a 771.501 bytes (753,42 KiB). A última página também foi renderizada.
+Blocos de 32 KiB também foram medidos isoladamente, mas 64 KiB mantém um
+compromisso entre leitura excedente e quantidade de pedidos HTTP.
+
+O sufixo de assets mudou para `-range-2` para evitar reaproveitar o script antigo
+em cache. A correção altera a ponte, o instalador, o caminho do viewer e o teste
+de contrato. Não altera o PDF original, autorização ou políticas de acesso.
+Otimização/linearização permanece fora do escopo porque requer uma derivada e
+um fluxo de processamento próprio. O tamanho do bloco não é limite do total
+transferido nem limite rígido de uma resposta: PDF.js pode reunir vários blocos.
+
+Arquivos deste ajuste, além dos arquivos de abas listados acima:
+`frontend/overrides/pdf-range-viewer.mjs`,
+`frontend/patches/install-pdf-viewer.mjs`, `pdf-preview/pdf-documents.ts`,
+`tests/frontend/pdf-range-viewer.test.mjs` e `rfc/0016-preview-integrado-de-pdfs.md`.
+O build da imagem de desenvolvimento executou o instalador com SHA-256
+verificado. Não foi repetido o build otimizado de produção/SSR para este ajuste:
+a lógica Angular foi compilada na suíte direcionada e no servidor local; a
+alteração da ponte usa a API e o transporte já validados anteriormente.

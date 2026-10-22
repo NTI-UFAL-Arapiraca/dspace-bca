@@ -27,19 +27,27 @@
 }
 
 .pdf-preview__tabs {
+  display: grid;
+  grid-template-columns: repeat(var(--pdf-tab-count, 3), minmax(0, 1fr));
   padding: .25rem .5rem 0;
   gap: .125rem;
 
-  li { max-width: 100%; }
+  li { min-width: 0; }
 
   .nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
     min-height: 2.5rem;
     padding: .375rem .75rem;
     font-size: .875rem;
-    text-align: start;
-    overflow-wrap: anywhere;
+    text-align: center;
     color: var(--bs-link-color);
   }
+
+  .nav-link > i,
+  .badge { flex-shrink: 0; }
 
   .nav-link.active {
     border-top: 3px solid #ed1c24;
@@ -47,6 +55,29 @@
     color: var(--ufal-ink);
     background: var(--ufal-surface);
   }
+}
+
+.pdf-preview__tab-name {
+  display: flex;
+  flex: 0 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.pdf-preview__tab-start {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pdf-preview__tab-end {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: flex-end;
+  max-width: 50%;
+  overflow: hidden;
+
+  > span { flex-shrink: 0; }
 }
 
 .badge {
@@ -120,6 +151,18 @@
 .pdf-preview__transfer {
   display: block;
   margin-bottom: .25rem;
+}
+
+@media (max-width: 767.98px) {
+  .pdf-preview__tabs {
+    padding-inline: .25rem;
+
+    .nav-link { padding-inline: .25rem; }
+
+    // The selected file's toolbar retains its icon and primary label.
+    .nav-link > i,
+    .badge { display: none; }
+  }
 }
 
 @media (max-width: 575.98px) {

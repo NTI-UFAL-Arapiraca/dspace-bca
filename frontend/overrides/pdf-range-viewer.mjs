@@ -28,7 +28,8 @@ export function installRepositoryPdfViewer(application, target = window) {
         await application.open({
           range: new RepositoryRangeTransport(source.length, new Uint8Array(0), true, source.filename),
           length: source.length,
-          rangeChunkSize: 256 * 1024,
+          // Larger chunks can cover a small PDF while parsing its scattered page tree.
+          rangeChunkSize: 64 * 1024,
           disableAutoFetch: true,
           disableStream: true,
           disableRange: false,

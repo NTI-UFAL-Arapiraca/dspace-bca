@@ -16,16 +16,23 @@
       </div>
     } @else if (documents.length > 1) {
       <ul ngbNav #nav="ngbNav" class="nav-tabs pdf-preview__tabs"
+          [style.--pdf-tab-count]="documents.length > 3 ? documents.length : 3"
           [animation]="false"
           [activeId]="selected.bitstream.id" (activeIdChange)="selectDocument($event)"
           [attr.aria-label]="'repository.pdf.files' | translate">
         @for (document of documents; track document.bitstream.id) {
+          @let filename = names.getName(document.bitstream);
+          @let parts = filenameParts(filename);
           <li [ngbNavItem]="document.bitstream.id">
-            <button ngbNavLink type="button">
+            <button ngbNavLink type="button" [title]="filename"
+              [attr.aria-label]="document.isPrimary ? filename + ' (' + ('item.page.bitstreams.primary' | translate) + ')' : filename">
               <i class="far fa-file-pdf me-2" aria-hidden="true"></i>
-              {{ names.getName(document.bitstream) }}
+              <span class="pdf-preview__tab-name" aria-hidden="true">
+                <span class="pdf-preview__tab-start">{{ parts.start }}</span>
+                <span class="pdf-preview__tab-end"><span>{{ parts.end }}</span></span>
+              </span>
               @if (document.isPrimary) {
-                <span class="badge ms-2">{{ 'item.page.bitstreams.primary' | translate }}</span>
+                <span class="badge ms-2" aria-hidden="true">{{ 'item.page.bitstreams.primary' | translate }}</span>
               }
             </button>
             <ng-template ngbNavContent>

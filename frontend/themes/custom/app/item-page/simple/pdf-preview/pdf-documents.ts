@@ -1,6 +1,6 @@
 import type { Bitstream } from '@dspace/core/shared/bitstream.model';
 
-export const PDF_VIEWER_PATH = 'assets/pdfjs/6.4.299-range-1/web/viewer.html';
+export const PDF_VIEWER_PATH = 'assets/pdfjs/6.4.299-range-2/web/viewer.html';
 
 export interface FormattedBitstream {
   bitstream: Bitstream;
