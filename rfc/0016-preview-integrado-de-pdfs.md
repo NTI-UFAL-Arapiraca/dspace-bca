@@ -28,6 +28,17 @@ Importar as diretivas standalone, como o DSpace 10.1; o módulo completo
 também exporta a diretiva base e duplica o host directive no Angular 20.
 Um único PDF não recebe uma barra de abas. Sem PDFs, a seção não aparece.
 
+Abaixo de 768 px, substituir a barra de abas por um `select` HTML nativo com
+rótulo associado. O navegador/sistema apresenta a lista de arquivos ao toque,
+com nomes limitados a 48 caracteres, reticências no meio e final/extensão
+preservados, além da indicação de principal nas opções. O nome completo permanece
+no rótulo acessível e no título nativo. O principal permanece
+primeiro e selecionado inicialmente; sem principal PDF, vale a ordem do bundle.
+A partir de 768 px, manter as abas. Ambos os controles usam a mesma seleção e
+o mesmo painel do leitor; alternar a largura não reinicia o PDF nem duplica o
+iframe. O controle oculto por CSS fica fora da navegação e da árvore acessível.
+Com apenas um PDF, não exibir controles de seleção.
+
 Antes de buscar o conteúdo, verificar `FeatureID.CanDownload`. O HttpClient
 preserva os interceptores de autenticação do DSpace em cada pedido parcial.
 O visualizador local usa `PDFDataRangeTransport`: pede intervalos ao componente,

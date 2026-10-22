@@ -339,6 +339,9 @@ reconstruída: compilação local aprovada, publicação e ponte do leitor em HT
 
 ## Abas de PDFs com nomes extensos
 
+A apresentação mobile descrita nesta seção foi substituída pelo seletor nativo
+registrado abaixo; a disposição das abas continua válida a partir de 768 px.
+
 Em 22/10/2026, reservar três espaços para arquivos e, acima dessa quantidade,
 dividir a mesma linha igualmente entre todas as abas, inclusive no mobile.
 Títulos pequenos ficam centralizados no espaço disponível. Cada nome fica em
@@ -361,6 +364,25 @@ PDFs disponíveis no registro local, incluindo um nome extenso:
 84 px), além de 320 × 780 (quatro de 70 px). Sem overflow horizontal da página.
 Nome completo presente nos rótulos
 acessíveis e na identificação do PDF selecionado. Nenhum dado do acervo foi alterado.
+
+### Seleção nativa de PDFs no celular
+
+Abaixo de 768 px, a seleção usa um `select` HTML, cujo toque abre a lista nativa
+do navegador/sistema. As opções limitam o nome a 48 caracteres, com reticências
+no meio e final/extensão preservados. O campo fechado usa os mesmos spans das
+abas para adaptar o truncamento à largura disponível. Nomes completos ficam
+nos rótulos acessíveis e títulos nativos. O principal continua primeiro e
+selecionado por padrão; sem principal PDF, mantém-se a ordem original.
+Um único PDF não recebe seletor. As abas a partir de 768 px e o controle mobile
+compartilham seleção, leitor e download oficial.
+
+Validação: 39 testes Node, 28 testes Angular do preview/serviço e lint oficial
+dos arquivos alterados aprovados. Compilação de desenvolvimento aprovada.
+Conferência no navegador com quatro PDFs, incluindo nome extenso, em 320 px,
+390 px e 768 px: seletor no celular e abas no iPad, sem overflow horizontal da
+página. A mudança de largura preservou a seleção. PDF real de 41 páginas
+renderizado pelo leitor integrado. A apresentação do menu em aparelhos físicos
+iOS/Android não foi testada.
 
 ## Ajuste dos blocos após medir um PDF real
 

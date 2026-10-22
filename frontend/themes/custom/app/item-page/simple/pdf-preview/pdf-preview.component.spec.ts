@@ -111,6 +111,43 @@ describe('PdfPreviewComponent', () => {
     expect(service.canPreview).not.toHaveBeenCalled();
   });
 
+  it('selects the primary PDF by default and switches the reader and download through the native picker', () => {
+    fixture.detectChanges();
+    connect();
+    const picker: HTMLSelectElement = fixture.nativeElement.querySelector('select');
+    expect(picker.value).toBe('main');
+    expect(Array.from(picker.options, (option) => option.value)).toEqual(['main', 'appendix']);
+    expect(picker.options[0].textContent).toContain('item.page.bitstreams.primary');
+    expect(fixture.nativeElement.querySelector(`label[for="${picker.id}"]`)).not.toBeNull();
+    const firstDownload = fixture.debugElement.query(By.css('header ds-file-download-link')).componentInstance;
+
+    picker.value = 'appendix';
+    picker.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.selected.bitstream).toBe(documents[1].bitstream);
+    expect(bridge.close).toHaveBeenCalled();
+    expect(fixture.nativeElement.querySelectorAll('iframe').length).toBe(1);
+    expect(picker.title).toBe('appendix.pdf');
+    const selectedDownload = fixture.debugElement.query(By.css('header ds-file-download-link')).componentInstance;
+    expect(selectedDownload.bitstream).toBe(documents[1].bitstream);
+    expect(selectedDownload).not.toBe(firstDownload);
+    expect(fixture.nativeElement.querySelectorAll('[role="tab"]')[1].getAttribute('aria-selected')).toBe('true');
+
+    fixture.nativeElement.querySelector('[role="tab"]').click();
+    fixture.detectChanges();
+    expect(picker.value).toBe('main');
+  });
+
+  it('shows one PDF without tabs or a native picker', () => {
+    service.findDocuments.and.returnValue(of([documents[0]]));
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('select')).toBeNull();
+    expect(fixture.nativeElement.querySelector('[role="tablist"]')).toBeNull();
+    expect(fixture.nativeElement.querySelectorAll('iframe').length).toBe(1);
+    expect(fixture.componentInstance.selected.bitstream).toBe(documents[0].bitstream);
+  });
+
   it('ignores an initial about:blank iframe load', () => {
     fixture.detectChanges();
     fixture.componentInstance.connectViewer({

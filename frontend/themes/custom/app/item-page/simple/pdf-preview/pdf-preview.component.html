@@ -37,6 +37,35 @@
         </button>
       </div>
     } @else if (documents.length > 1) {
+      <div class="pdf-preview__file-picker">
+        <label [for]="'pdf-file-' + item.id" class="form-label">
+          {{ 'repository.pdf.files' | translate }}
+        </label>
+        <div class="pdf-preview__select">
+          <select #filePicker class="form-select" [id]="'pdf-file-' + item.id"
+            [value]="selected.bitstream.id" [title]="names.getName(selected.bitstream)"
+            (change)="selectDocument(filePicker.value)">
+            @for (document of documents; track document.bitstream.id) {
+              @let filename = names.getName(document.bitstream);
+              <option [value]="document.bitstream.id" [title]="filename"
+                [attr.aria-label]="document.isPrimary ? filename + ' (' + ('item.page.bitstreams.primary' | translate) + ')' : filename">
+                {{ abbreviatedFilename(filename) }}{{ document.isPrimary ? ' (' + ('item.page.bitstreams.primary' | translate) + ')' : '' }}
+              </option>
+            }
+          </select>
+          <!-- The native select handles interaction; spans preserve the filename ending at any width. -->
+          <div class="form-select pdf-preview__selection" aria-hidden="true">
+            @let selectedParts = filenameParts(names.getName(selected.bitstream));
+            <span class="pdf-preview__tab-name">
+              <span class="pdf-preview__tab-start">{{ selectedParts.start }}</span>
+              <span class="pdf-preview__tab-end"><span>{{ selectedParts.end }}</span></span>
+            </span>
+            @if (selected.isPrimary) {
+              <span class="badge ms-2">{{ 'item.page.bitstreams.primary' | translate }}</span>
+            }
+          </div>
+        </div>
+      </div>
       <ul ngbNav #nav="ngbNav" class="nav pdf-preview__tabs"
           [style.--pdf-tab-count]="documents.length > 3 ? documents.length : 3"
           [animation]="false"

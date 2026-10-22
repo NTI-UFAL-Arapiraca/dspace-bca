@@ -190,17 +190,25 @@ pelas duas páginas e carregado quando entra na tela. PDFs do bundle ORIGINAL
 usam o principal configurado ou a ordem existente, com abas para arquivos
 adicionais. A permissão de download é verificada antes de buscar o conteúdo;
 restrições e solicitações de cópia continuam com o link oficial do DSpace.
-As abas reservam três espaços e dividem a mesma linha igualmente entre todos
-os arquivos quando houver mais de três, inclusive em telas pequenas. Os títulos
-ficam centralizados. No celular, ícones e selo de principal são ocultados para
-liberar espaço nas abas. Os nomes ocupam uma linha, com reticências no meio e
+Em telas a partir de 768 px, as abas reservam três espaços e dividem a mesma
+linha igualmente entre todos os arquivos quando houver mais de três. Os títulos
+ficam centralizados. Abaixo de 768 px, um seletor HTML nativo substitui as abas:
+o toque abre a lista do navegador/sistema com a indicação de principal. Os nomes
+têm no máximo 48 caracteres, com reticências no meio e o final/extensão
+preservados; nomes menores permanecem inteiros. O nome completo continua no
+rótulo acessível e no título nativo. O campo fechado adapta as reticências à
+largura disponível, preservando o final/extensão como nas abas. O primeiro PDF,
+principal quando configurado, continua selecionado por padrão. Os dois controles
+compartilham a seleção e um único leitor; mudar
+a largura da tela preserva o documento aberto. Com apenas um PDF, nenhum seletor
+é exibido. Nas abas, os nomes ocupam uma linha, com reticências no meio e
 final/extensão preservados. O helper `pdf-filename.ts`
 separa o texto sem modificar o nome do arquivo. O nome completo permanece no
 rótulo acessível, no título nativo da aba e no título acessível do iframe.
 A seleção usa abas segmentadas sobre uma faixa neutra, com a aba ativa em azul
 e texto branco, sem as bordas vermelhas superior e inferior. O cursor de mão
 indica que as abas são clicáveis; hover e foco de teclado têm estados próprios.
-A aba ativa identifica o PDF selecionado; não há uma faixa adicional com o nome.
+A aba ativa ou o seletor nativo identifica o PDF selecionado.
 Cancelar/fechar visualização e “Baixar PDF” ficam junto à introdução “Leia o
 trabalho”, no cabeçalho, com botões de mesmo tamanho e formato: vermelho para
 cancelar/fechar e azul para baixar. Os controles quebram linha em telas pequenas.

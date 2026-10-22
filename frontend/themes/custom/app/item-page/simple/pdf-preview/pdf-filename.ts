@@ -7,3 +7,12 @@ export function splitPdfFilename(name: string): { start: string; end: string } {
     end: characters.slice(splitAt).join(''),
   };
 }
+
+/** Native options cannot use the two spans that truncate tab names with CSS. */
+export function abbreviatePdfFilename(name: string): string {
+  const characters = Array.from(name);
+  if (characters.length <= 48) {
+    return name;
+  }
+  return characters.slice(0, 24).join('') + '…' + characters.slice(-23).join('');
+}
