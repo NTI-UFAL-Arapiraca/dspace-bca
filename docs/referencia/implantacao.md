@@ -146,8 +146,11 @@ administrativo solicita a projeção `allLanguages` para preservar traduções.
 A normalização legada afeta somente qualifiers de resumos.
 
 `DSPACE_NAME` define o nome público; seu padrão é
-`Repositório Institucional Campus Arapiraca`. O backend expõe `dspace.name`, usado
-pela interface também nos títulos das estatísticas.
+`Repositório Institucional da UFAL — Campus Arapiraca`. O backend expõe
+`dspace.name` à interface, inclusive nos títulos das estatísticas. Os títulos
+das páginas e abas do navegador usam `repository.title` e
+`repository.title.prefix` nos catálogos localizados do tema; alterá-los exige
+reconstruir a imagem Angular de produção.
 
 ## OAI, sitemaps e GeoIP
 

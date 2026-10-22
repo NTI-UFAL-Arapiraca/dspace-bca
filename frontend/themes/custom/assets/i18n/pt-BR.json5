@@ -65,6 +65,8 @@
   "person.profile.context.help": "Temas mais frequentes, cursos e campus dos trabalhos disponíveis no repositório. Selecione um valor para filtrar a produção relacionada.",
   "person.profile.affiliation": "Afiliação",
   "person.profile.about": "Sobre a pessoa",
+  "repository.title": "Repositório Institucional da UFAL — Campus Arapiraca",
+  "repository.title.prefix": "Repositório Institucional da UFAL — Campus Arapiraca :: ",
   "repository.brand": "Repositório Institucional",
   "repository.menu": "Menu",
   "repository.close": "Fechar",

@@ -32,6 +32,12 @@ aponta para a configuração `academic_works_search` em
 configuradas nesse arquivo e da reindexação Discovery;
 `item.showAuthorityRelations` está ativado no YAML.
 
+Os títulos de páginas e abas do navegador usam as traduções
+`repository.title` e `repository.title.prefix` em `assets/i18n/`. O nome público
+do backend (`DSPACE_NAME`) continua sendo a fonte para os títulos das
+estatísticas. Alterações nos catálogos do tema exigem uma nova imagem Angular
+em produção.
+
 O componente `app/home-page/home-news/` usa a extensão oficial para apresentar
 o acervo institucional, com título, descrição e links para pesquisa no acervo
 e comunidades. Busca, comunidades e adições recentes continuam herdadas da home

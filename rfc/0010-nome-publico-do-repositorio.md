@@ -1,7 +1,7 @@
 # RFC 0010 — Nome público do repositório
 
 - Status: aceita
-- Escopo: backend
+- Escopo: backend e identificação pública
 
 ## Contexto
 
@@ -12,21 +12,25 @@ placeholder técnico aos usuários.
 
 ## Decisão
 
-Configurar `dspace.name` como `Repositório Institucional Campus Arapiraca` por padrão e
-permitir sua substituição pela variável `DSPACE_NAME`. O nome permanece em uma
-única fonte no backend; o frontend apenas consome o valor publicado pela API.
+Configurar `dspace.name` como `Repositório Institucional da UFAL — Campus
+Arapiraca` por padrão e permitir sua substituição pela variável `DSPACE_NAME`.
+Esse nome permanece como a fonte do backend para informações institucionais e
+estatísticas. Os títulos das páginas e abas são definidos separadamente nos
+catálogos Angular pelas chaves `repository.title` e
+`repository.title.prefix`, com a identificação da UFAL nos dois idiomas ativos.
 
 ## Implementação
 
-- `dspace-docker/docker-compose-rest.yml`;
-- `.env.example`;
-- documentação operacional em `README.md` e `dspace-docker/README.md`.
+- `docker-compose-rest.yml` e os exemplos `.env.development.example` e
+  `.env.production.example`;
+- `frontend/themes/custom/assets/i18n/`;
+- `docs/referencia/implantacao.md` e `frontend/themes/custom/README.md`.
 
 ## Consequências e validação
 
-A alteração exige apenas recriar o container `dspace`; não requer rebuild do
+A alteração exige recriar o container `dspace`; não requer rebuild do
 frontend nem reindexação do Solr. A raiz da API REST deve retornar
-`"dspaceName": "Repositório Institucional Campus Arapiraca"`, e as páginas de
-estatísticas passam a usar esse nome. O teste
-`test_public_repository_name_is_institutional_and_configurable` impede o
-retorno do placeholder oficial.
+`"dspaceName": "Repositório Institucional da UFAL — Campus Arapiraca"`.
+Alterações aos títulos das páginas exigem recompilar a imagem Angular de
+produção; a página inicial passa a usar o nome institucional antes do título
+localizado da rota.

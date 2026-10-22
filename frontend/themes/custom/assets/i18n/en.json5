@@ -65,6 +65,8 @@
   "person.profile.context.help": "Most frequent topics, courses and campuses of works available in the repository. Select a value to filter the related works.",
   "person.profile.affiliation": "Affiliation",
   "person.profile.about": "About",
+  "repository.title": "UFAL Institutional Repository — Arapiraca Campus",
+  "repository.title.prefix": "UFAL Institutional Repository — Arapiraca Campus :: ",
   "repository.brand": "Institutional Repository",
   "repository.menu": "Menu",
   "repository.close": "Close",
