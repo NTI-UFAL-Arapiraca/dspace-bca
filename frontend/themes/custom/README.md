@@ -95,12 +95,15 @@ visual, preservando o texto completo no DOM e no título nativo da página atual
 A partir de 768 px, todos os níveis e links continuam visíveis. O componente
 herda o serviço e a visibilidade oficiais; produção exige nova imagem Angular.
 
-Nas comunidades, a partir de 768 px, apenas os filtros têm rolagem vertical
-independente, com a barra de rolagem oculta e sem rolagem horizontal. A altura
-máxima fica limitada à janela, com espaço de 2 rem. A lateral permanece visível
-durante a rolagem da página, que inclui os resultados. Em telas menores,
-permanece o painel de filtros móvel oficial. As regras ficam em
-`styles/_global-styles.scss`; produção exige uma nova imagem Angular.
+Nas buscas com filtros laterais — pesquisa global, comunidades, coleções e
+resultados nos perfis de pessoas, além da home quando exibe filtros Discovery —,
+a partir de 768 px, apenas os filtros têm rolagem vertical independente, com a
+barra de rolagem oculta e sem rolagem horizontal. A altura máxima fica limitada
+à janela, com espaço de 2 rem. A lateral permanece visível durante a rolagem da
+página, que inclui os resultados. Em telas menores, permanece o painel de
+filtros móvel oficial. A regra identifica o componente de faceta `ds-search-filter`
+no layout com lateral e fica em `styles/_global-styles.scss`; produção exige uma
+nova imagem Angular.
 
 As cores e medidas do Bootstrap são definidas no arquivo de variáveis Sass;
 as variáveis `--ds-*` integram os componentes do DSpace e as `--ufal-*`

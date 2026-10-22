@@ -341,10 +341,11 @@ ds-thumbnail .outer .thumbnail-placeholder {
   overflow-wrap: normal;
 }
 
-// Only community filters scroll independently; results follow the page.
+// Search filter sidebars scroll independently; results follow the page.
+// Match the filter component so the behavior is shared by every search context.
 // Preserve the upstream mobile off-canvas layout.
 @include media-breakpoint-up(md) {
-  .community-page ds-page-with-sidebar .row-with-sidebar > .sidebar-content {
+  ds-page-with-sidebar .row-with-sidebar > .sidebar-content:has(ds-search-filter) {
     position: sticky;
     top: 1rem;
     max-height: calc(100vh - 2rem);
