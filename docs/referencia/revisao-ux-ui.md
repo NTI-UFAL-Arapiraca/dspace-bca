@@ -396,3 +396,29 @@ O build da imagem de desenvolvimento executou o instalador com SHA-256
 verificado. Não foi repetido o build otimizado de produção/SSR para este ajuste:
 a lógica Angular foi compilada na suíte direcionada e no servidor local; a
 alteração da ponte usa a API e o transporte já validados anteriormente.
+
+## Fotografia discreta na página do trabalho
+
+A foto fornecida do corredor da biblioteca passa a compor o fundo do cartão
+de arquivos, junto à miniatura e aos links de acesso. Esse ponto associa o
+documento ao acervo físico sem ocupar a área de leitura ou aumentar a altura
+da página. UntypedItem e Publication compartilham o template e o SCSS existentes.
+
+O asset `biblioteca-corredor.webp` tem 1200 × 900 px e 152.420 bytes, sem
+metadados da câmera. A imagem é decorativa, com alternativa vazia,
+`aria-hidden`, carregamento adiado, recorte central e sem eventos de ponteiro.
+Saturação de 20%, contraste de 85% e opacidade de 16% são aplicados apenas à
+fotografia. Os links do cartão usam a cor de hover do tema, que oferece mais
+contraste nos dois modos. Considerando os extremos preto/branco da imagem
+antes dos filtros e da composição, o contraste calculado dos links fica
+acima de 5,9:1 nos temas claro e escuro.
+
+Validação: recompilação do tema no DSpace Angular 10.1 e lint oficial do
+template concluídos; `git diff --check` sem erros. Inspeção com o registro local
+de teste, miniatura real e quatro arquivos, em 1440 × 1000 e 390 × 844 nos dois
+modos de cor. Foto carregada com dimensões corretas e sem overflow horizontal.
+O lint mantém o aviso de configuração ESLint legada; o build local mantém o
+aviso preexistente de `RouterLink` não usado na página de privacidade.
+
+Não foi repetido o build otimizado de produção/SSR para essa alteração de
+apresentação. Publicar o fundo exige uma nova imagem Angular pelo workflow.

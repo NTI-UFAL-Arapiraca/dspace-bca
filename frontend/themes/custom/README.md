@@ -136,6 +136,16 @@ acessos diretos à rota recebem um aviso e um link para a página pública do it
 Isso controla a apresentação Angular: não altera as respostas da API REST nem
 substitui as regras `metadata.hide.*` do backend.
 
+O cartão de acesso ao documento usa a foto do corredor da biblioteca em
+`assets/images/biblioteca-corredor.webp` como fundo decorativo. A derivada tem
+1200 × 900 px, sem metadados da câmera, carregamento adiado e recorte central.
+Saturação de 20%, contraste de 85% e opacidade de 16% sobre o azul suave do
+tema mantêm a imagem discreta nos modos claro e escuro. O tratamento se aplica
+somente à foto; a miniatura real, os textos e os controles preservam sua
+nitidez. Os links do cartão usam a cor de maior contraste já definida pelo
+tema para hover. A foto tem alternativa vazia e fica fora da árvore acessível.
+Publication reutiliza o mesmo template e SCSS; publicar requer nova imagem Angular.
+
 Na área de informações, `app/item-page/simple/abstracts/` consulta o item com
 `projection=allLanguages` e usa somente os valores de `dc.description.abstract`.
 Assim, todos os resumos disponíveis aparecem sem trocar o idioma da página:

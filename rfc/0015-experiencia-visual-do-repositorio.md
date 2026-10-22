@@ -31,6 +31,12 @@ ordem arquivos, conteúdo, metadados, igual ao DOM. Publication continua usando
 o mesmo template e SCSS. O resumo permanece justificado conforme a RFC 0006.
 As condições e componentes de download, anexos, mídia e campos são preservados.
 
+O cartão de arquivos recebe uma fotografia decorativa do corredor da biblioteca,
+com baixa saturação e opacidade sobre a superfície azul do tema. A imagem fica
+restrita a esse cartão para dar contexto institucional à página sem competir
+com título, resumos e dados acadêmicos. Miniaturas e controles de acesso
+permanecem em primeiro plano; o fundo não representa a capa do trabalho.
+
 Usar sublinhados persistentes nos links de conteúdo e setas decorativas após
 os rótulos de navegação institucional, registro completo e atividade dos perfis.
 O link de registro completo deixa de declarar `role="button"`. Os títulos de

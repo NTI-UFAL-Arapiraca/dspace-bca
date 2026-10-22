@@ -21,6 +21,9 @@
 
 <div class="academic-item">
   <section class="academic-item__access" [attr.aria-label]="'repository.item.document' | translate">
+    <img class="academic-item__access-photo"
+      src="assets/custom/images/biblioteca-corredor.webp"
+      alt="" aria-hidden="true" width="1200" height="900" loading="lazy" decoding="async">
     @if (!(mediaViewer.image || mediaViewer.video)) {
       <ds-metadata-field-wrapper [hideIfNoTextContent]="false">
         <ds-thumbnail [thumbnail]="object?.thumbnail | async"

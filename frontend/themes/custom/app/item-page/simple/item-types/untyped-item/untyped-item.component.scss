@@ -35,7 +35,12 @@
 }
 
 .academic-item__access {
+  // Use the stronger theme link color to retain contrast over the photograph.
+  --bs-link-color: var(--bs-link-hover-color);
+  --bs-link-color-rgb: var(--bs-link-hover-color-rgb);
   grid-area: access;
+  position: relative;
+  isolation: isolate;
   background: var(--ufal-blue-soft);
   border-color: var(--ufal-blue-border);
 
@@ -44,6 +49,21 @@
     max-width: 8rem;
     margin-bottom: 1rem;
   }
+}
+
+.academic-item__access-photo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 55%;
+  border-radius: inherit;
+  pointer-events: none;
+  // Only the decorative layer is softened; document controls stay crisp.
+  filter: saturate(0.2) contrast(0.85);
+  opacity: 0.16;
 }
 
 .academic-item__metadata {
