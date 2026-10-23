@@ -2,6 +2,8 @@ name: Build and publish Angular image
 
 on:
   push:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:

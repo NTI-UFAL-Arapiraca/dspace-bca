@@ -132,7 +132,8 @@ principal. Um banco migrado pelo DSpace 11 não pode ser aberto pelo 10; dados
 existentes exigem restauração de backup compatível.
 
 O workflow `.github/workflows/deploy.yml` publica a interface em
-`ghcr.io/nti-ufal-arapiraca/dspace-bca-angular` a cada push. O
+`ghcr.io/nti-ufal-arapiraca/dspace-bca-angular` em pushes para `main` e também
+pode ser iniciado manualmente. O
 `Dockerfile.angular` aplica o tema e os patches ao fonte oficial e usa
 `dspace-10.1-dist` no runtime. O servidor executa `/app/dist/server/main.js`.
 

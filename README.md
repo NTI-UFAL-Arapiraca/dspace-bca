@@ -43,7 +43,7 @@ Abra `http://localhost:4000/`. A interface e a API usam portas locais em loopbac
 
 Em produção, a implantação combina `docker-compose-dist.yml`, `docker-compose-rest.yml` e `docker-compose-prod.yml`. Apenas o proxy interno publica a porta 80; o proxy institucional termina TLS e encaminha a interface em `/dspace/` e a API em `/dspace-server/`.
 
-O workflow do GitHub Actions compila o tema e publica a imagem Angular no GHCR. Configurações de runtime e de backend são montadas separadamente. Consulte o [guia de produção](docs/guias/inicializacao-producao.md) e a [referência de implantação](docs/referencia/implantacao.md) antes de alterar URLs, rede, imagens ou proxy.
+O workflow do GitHub Actions compila o tema e publica a imagem Angular no GHCR em pushes para `main`; também pode ser iniciado manualmente. Configurações de runtime e de backend são montadas separadamente. Consulte o [guia de produção](docs/guias/inicializacao-producao.md) e a [referência de implantação](docs/referencia/implantacao.md) antes de alterar URLs, rede, imagens ou proxy.
 
 ## Estrutura do projeto
 
