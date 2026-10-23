@@ -99,6 +99,12 @@ a:focus-visible, a.nav-link:focus-visible, button:focus-visible, [tabindex]:focu
   background-color: var(--ufal-surface) !important;
 }
 
+.institution-header__tools {
+  display: flex;
+  gap: calc(var(--bs-spacer) / 3);
+  align-items: center;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .institution-header__actions .theme-toggle,
   .institution-header__actions
@@ -602,9 +608,7 @@ ds-footer .bottom-footer :focus-visible {
     column-gap: 0.5rem;
     padding-block: 0;
 
-    [role="toolbar"] {
-      display: flex;
-      align-items: center;
+    .institution-header__tools {
       flex-wrap: wrap;
     }
 

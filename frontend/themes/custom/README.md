@@ -119,6 +119,10 @@ comunidades, listas, filtros e cartões dos perfis compartilham espaçamentos,
 bordas e raios. O cabeçalho se reorganiza em telas pequenas e os controles
 mantêm indicação de foco para uso por teclado.
 
+Os controles de usuário do cabeçalho usam um grupo nomeado, com navegação
+nativa por Tab e Shift+Tab. A classe `institution-header__tools` preserva o
+alinhamento e o espaçamento independentemente do papel acessível do grupo.
+
 No menu móvel, `#header-navbar-wrapper` fornece o bloco de referência para a
 navegação posicionada de forma absoluta. Isso evita que o Safari, inclusive no
 modo de design responsivo, calcule largura zero a partir do host inline do
@@ -203,10 +207,12 @@ deduzido de `dc.language.iso`.
 Cada texto tem uma prévia de até **10 linhas**, no desktop e no celular, e
 “Ver mais”/“Ver menos” independente quando há transbordamento real. A medição
 acompanha mudanças de largura. O conteúdo completo permanece no HTML, com
-Markdown sanitizado e atributo `lang`. Em falha de rede, o resumo já disponível
-permanece visível, acompanhado de aviso e botão para tentar novamente. Os
-demais campos e as buscas continuam usando a resposta localizada. Essa mudança
-requer nova imagem Angular em produção; o watcher local sincroniza o tema.
+Markdown sanitizado e atributo `lang`, e pode ser lido integralmente por
+tecnologias assistivas. Os botões alteram somente o recorte visual, sem anunciar
+um estado de conteúdo recolhido por `aria-expanded`. Em falha de rede, o resumo
+já disponível permanece visível, acompanhado de aviso e botão para tentar
+novamente. Os demais campos e as buscas continuam usando a resposta localizada.
+Essa mudança requer nova imagem Angular em produção; o watcher local sincroniza o tema.
 Consulte a [RFC 0018](../../../rfc/0018-resumos-publicos-em-todos-os-idiomas.md).
 
 A avaliação, as prioridades e a matriz de validação estão na
@@ -225,8 +231,10 @@ alterações exigem recompilar a imagem Angular de produção. O conteúdo da ro
 `info/privacy` substitui o modelo genérico do
 DSpace por um aviso em português do Brasil, específico para o repositório e
 complementar às políticas institucionais da UFAL. O override está em
-`frontend/overrides/` e é aplicado nos Dockerfiles de desenvolvimento e
-produção; alterações exigem reconstruir a imagem Angular correspondente.
+`frontend/overrides/` e declara `lang="pt-BR"` no artigo para preservar a
+pronúncia mesmo quando o idioma da interface for alterado. Ele é aplicado nos
+Dockerfiles de desenvolvimento e produção; alterações exigem reconstruir a
+imagem Angular correspondente.
 
 ## Leitura integrada de PDFs
 

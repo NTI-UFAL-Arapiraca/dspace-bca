@@ -536,3 +536,36 @@ Navegação adicional conferida: cartão de pessoa abre o perfil correto; “Ver
 registros” mantém `dc.date.accessioned` em ordem descendente na pesquisa;
 “Ver todas as comunidades” abre o catálogo. Tema claro e viewport padrão foram
 restaurados após os testes. O componente `home-news` não possui alterações no diff.
+
+## Correções de semântica para leitores de tela — 23/10/2026
+
+Os controles de usuário do cabeçalho passam de `role="toolbar"` para um grupo
+nomeado. A navegação continua nativa por Tab e Shift+Tab; o componente não
+implementa navegação entre controles por setas. O CSS oficial usava o papel
+`toolbar` como seletor de layout, por isso a classe `institution-header__tools`
+assume o alinhamento, o espaçamento e a quebra de linha no mobile.
+
+O artigo da política de privacidade declara `lang="pt-BR"`. A inspeção do
+`LocaleService` na imagem local DSpace 10.1 confirmou que a troca de idioma da
+interface altera `document.documentElement.lang`; o idioma próprio do artigo
+preserva a pronúncia do texto em português nessa situação. O override continua
+aplicado pelos dois Dockerfiles Angular.
+
+Os controles “Ver mais”/“Ver menos” dos resumos retiram `aria-expanded`.
+O recorte de dez linhas é exclusivamente visual e o texto integral permanece
+disponível na árvore acessível em ambos os estados. Os botões nativos mantêm
+seus nomes de ação e `aria-controls`, sem anunciar conteúdo recolhido ao leitor
+de tela. A decisão foi incorporada às RFCs 0015 e 0018 e ao README do tema.
+
+Validação em contêiner temporário da imagem local DSpace 10.1: lint oficial
+dos templates e spec alterados sem erros; quatro specs Angular do resumo
+aprovados no Chrome Headless; compilação de desenvolvimento do navegador
+concluída com código 0; `git diff --check` sem erros. Permanecem os avisos
+existentes de configuração ESLint legada, CommonJS, arquivos herdados não usados
+e `RouterLink` não usado no componente oficial da política de privacidade.
+
+Esta rodada não executou o site com backend, leitor de tela, build otimizado de
+produção ou SSR. Os testes de componente verificam o DOM e a apresentação,
+sem reproduzir os anúncios de NVDA ou VoiceOver. Publicar as correções exige
+nova imagem Angular; o override da política também exige reconstruir a imagem
+local, pois o watcher sincroniza somente o tema.

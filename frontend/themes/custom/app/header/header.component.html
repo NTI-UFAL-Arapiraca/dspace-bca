@@ -14,7 +14,7 @@
         } @else {
           <ds-search-navbar></ds-search-navbar>
         }
-        <div role="toolbar" [attr.aria-label]="'nav.user.description' | translate">
+        <div class="institution-header__tools" role="group" [attr.aria-label]="'nav.user.description' | translate">
           <button class="theme-toggle btn btn-link" type="button" data-test="theme-toggle"
             (click)="colorMode.toggle()" [attr.aria-pressed]="colorMode.isDark()"
             [attr.aria-label]="'theme.dark' | translate"

@@ -8,7 +8,6 @@
   </div>
   @if (hasOverflow) {
     <button type="button" class="btn btn-link repository-text-link p-0 mt-2"
-      [attr.aria-expanded]="expanded"
       [attr.aria-controls]="contentId"
       [attr.aria-label]="(expanded ? 'repository.item.abstract.less-label' : 'repository.item.abstract.more-label') | translate: { title: abstract.title }"
       (click)="toggle()">

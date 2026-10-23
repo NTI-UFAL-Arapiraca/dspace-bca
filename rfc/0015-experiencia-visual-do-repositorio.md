@@ -25,6 +25,10 @@ pelo NgbModal. O SCSS do formulário sobrescreve localmente o limite oficial de
 150 px do seletor para permitir uma linha completa no mobile. O cabeçalho
 reorganiza marca, menu e ferramentas abaixo de 768 px.
 
+Os controles de usuário formam um grupo nomeado com navegação nativa por Tab
+e Shift+Tab. Seu layout usa uma classe própria, sem depender de `role="toolbar"`,
+pois não há navegação entre esses controles por setas.
+
 Organizar a página simples em uma grade de arquivos, conteúdo e dados acadêmicos.
 No desktop, arquivos e metadados ficam na lateral; abaixo de 992 px, aparecem na
 ordem arquivos, conteúdo, metadados, igual ao DOM. Publication continua usando

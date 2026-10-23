@@ -33,6 +33,10 @@ deixar a área de leitura excessivamente pequena em relação à coluna acadêmi
   “Ver menos” individuais somente quando o conteúdo exceder a altura disponível.
   Conservar o texto integral no HTML e o alinhamento justificado da RFC 0006,
   renderizando com a diretiva Markdown sanitizada oficial e atributo `lang`.
+  O recorte é exclusivamente visual: o texto completo permanece na árvore
+  acessível. Os botões nativos mantêm os nomes de ação “Ver mais”/“Ver menos”
+  e a relação `aria-controls`, sem `aria-expanded`, que indicaria conteúdo
+  recolhido para a tecnologia assistiva.
 - Manter os resumos já disponíveis em caso de falha da consulta adicional e
   apresentar aviso com opção de tentar novamente.
 

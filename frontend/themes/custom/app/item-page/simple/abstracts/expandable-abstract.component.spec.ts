@@ -49,21 +49,26 @@ describe('ExpandableAbstractComponent', () => {
     fixture.detectChanges();
   }
 
-  it('expands and collapses only the overflowing abstract with an accessible control', () => {
+  it('changes the visual preview without hiding the full abstract from assistive technology', () => {
     measure(800, 288);
     const button: HTMLButtonElement = fixture.nativeElement.querySelector('button');
     const text: HTMLElement = fixture.nativeElement.querySelector('.abstract-text');
     expect(button.getAttribute('aria-controls')).toBe(text.id);
-    expect(button.getAttribute('aria-expanded')).toBe('false');
+    expect(button.hasAttribute('aria-expanded')).toBeFalse();
     expect(text.lang).toBe('en');
+    expect(text.textContent?.trim()).toBe('Complete summary text.');
+    expect(text.hidden).toBeFalse();
+    expect(text.hasAttribute('aria-hidden')).toBeFalse();
     button.click();
     fixture.detectChanges();
-    expect(button.getAttribute('aria-expanded')).toBe('true');
     expect(text.classList).toContain('is-expanded');
+    expect(text.textContent?.trim()).toBe('Complete summary text.');
     button.click();
     fixture.detectChanges();
-    expect(button.getAttribute('aria-expanded')).toBe('false');
     expect(text.classList).not.toContain('is-expanded');
+    expect(text.textContent?.trim()).toBe('Complete summary text.');
+    expect(text.hidden).toBeFalse();
+    expect(text.hasAttribute('aria-hidden')).toBeFalse();
   });
 
   it('does not show a control for short text and updates when the column width changes', () => {
