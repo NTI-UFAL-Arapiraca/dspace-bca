@@ -86,6 +86,7 @@ h1 {
     font-weight: 600;
     text-decoration: none;
     border-bottom: 1px solid var(--ufal-blue-border);
+    transition: color 220ms ease;
 
     span {
       text-decoration: underline;
