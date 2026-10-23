@@ -3,6 +3,33 @@
 Revisão de 19 de outubro de 2026, sobre o tema customizado do DSpace 10.1.
 A decisão de implementação está na [RFC 0015](../../rfc/0015-experiencia-visual-do-repositorio.md).
 
+## Textura de fundo
+
+Em 22/10/2026, o tema recebe um SVG repetível com contornos sutis de páginas
+abertas. Após a aprovação da aplicação inicial na home, o padrão passa a
+ocupar a área principal de todas as páginas, por meio de `#main-content` nos
+estilos globais. A máscara usa a cor dos links com 11% de opacidade, atrás das
+superfícies opacas. Abaixo de 768 px, usa uma composição própria de 480 × 1120 px
+com quatro posições, inclinações alternadas e pequenas variações de escala,
+mantendo o espaçamento vertical de 280 px. Isso evita a repetição da mesma
+coluna do módulo desktop de 720 × 560 px nos recortes estreitos. O fundo é
+decorativo, não captura cliques e é ocultado em cores forçadas. Cabeçalho,
+breadcrumb e rodapé mantêm seus fundos.
+
+Validação: SVG bem formado, recompilação de desenvolvimento DSpace 10.1
+concluída e `git diff --check` sem erros. Inspeção visual em modos claro e
+escuro, com larguras de 320, 390, 768 e 1440 px, sem overflow horizontal.
+A aplicação global também foi conferida na pesquisa, na lista de comunidades,
+em uma comunidade, no perfil Person e na página de um trabalho; os cartões de
+resumo e dados acadêmicos continuam opacos. O modo claro foi restaurado após a
+inspeção. Não foi repetido o build otimizado de produção/SSR nem emulado o modo
+de cores forçadas. Produção exige nova imagem Angular.
+
+A composição mobile foi conferida na rolagem da home em 390 px nos dois modos.
+SVG e recompilação local aprovados; verificação de layout em 320, 430, 767, 768
+e 1440 px sem overflow horizontal. A máscara específica entra abaixo de 768 px;
+a partir desse limite, o módulo desktop e sua escala permanecem iguais.
+
 ## Breadcrumb no mobile
 
 Em 22/10/2026, o tema passa a compactar o caminho de navegação abaixo de

@@ -97,3 +97,23 @@ Esta evolução substitui a afirmação anterior de que não há novos registros
 componentes. Não muda consultas REST, políticas, metadados persistidos ou
 implantação. Produção exige nova imagem Angular; o watcher aplica os arquivos
 em desenvolvimento. Validação e limites estão na revisão de UX/UI.
+
+### Textura decorativa das páginas
+
+O fundo das páginas recebe um padrão SVG repetível, com contornos abstratos de
+páginas abertas e bastante espaço vazio. A referência ao livro aparece nas
+curvas, com traço de 1 px e opacidade de 11%, sem acrescentar ícones aos blocos
+de conteúdo. Após a avaliação inicial na home, o mesmo padrão é compartilhado
+com as demais páginas, preservando a intensidade e a escala aprovadas.
+
+`page-contours.svg` é usado como máscara em um pseudoelemento de `#main-content`
+nos estilos globais. A cor acompanha os links nos dois modos do tema. Abaixo
+de 768 px, `page-contours-mobile.svg` substitui o módulo de 720 × 560 px por uma
+sequência de 480 × 1120 px, alternando quatro posições, inclinações e pequenas
+variações de escala. O espaçamento vertical e a opacidade são preservados;
+a versão desktop mantém a composição aprovada. Assim, o recorte estreito não
+repete sempre a mesma coluna do padrão. Cartões e abertura fotográfica continuam
+opacos; cabeçalho, breadcrumb e rodapé mantêm seus fundos. A camada decorativa
+não captura eventos nem acrescenta conteúdo acessível, e é ocultada em cores
+forçadas. Não há animação, JavaScript ou dependência adicional. O watcher
+sincroniza SVG e SCSS; produção exige nova imagem Angular.
