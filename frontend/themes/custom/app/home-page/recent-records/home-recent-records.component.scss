@@ -46,7 +46,12 @@
   overflow-wrap: anywhere;
 }
 .record-kind {
-  color: var(--bs-secondary-color);
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  color: var(--ufal-badge-color);
+  background: var(--ufal-blue-soft);
+  border-radius: var(--bs-border-radius-sm);
+  font-weight: 600;
   font-size: 0.75rem;
 }
 .record-detail {

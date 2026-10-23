@@ -126,3 +126,30 @@ opacos; cabeçalho, breadcrumb e rodapé mantêm seus fundos. A camada decorativ
 não captura eventos nem acrescenta conteúdo acessível, e é ocultada em cores
 forçadas. Não há animação, JavaScript ou dependência adicional. O watcher
 sincroniza SVG e SCSS; produção exige nova imagem Angular.
+
+## Evolução cromática — 23/10/2026
+
+A composição existente permanece: abertura fotográfica, busca, recentes e
+comunidades. A evolução usa o azul `#0994dc` presente no `brasao-ufal.svg`
+como filete decorativo no cabeçalho, abertura, comunidades e cartão de arquivos.
+O azul de ação `#006da5` e o vermelho `#ed1c24` são preservados. O asset contém
+também preto e branco, sem verde ou amarelo; não se introduzem novas famílias
+cromáticas nem se atribui a esta paleta o status de manual oficial da instituição.
+
+Os tokens `--ufal-blue-soft` e `--ufal-blue-border` passam a `#e4f1f8` e
+`#b9d6e8` no claro, `#203e54` e `#476c86` no escuro. São derivações de interface,
+compartilhadas com perfis, navegação e páginas de trabalhos. Os novos tokens
+`--ufal-brand-detail` e `--ufal-action-border` separam decoração e ação: o azul
+vivo não substitui texto, foco ou cores semânticas de alerta/erro/sucesso.
+
+A abertura troca o gradiente de superfície por azul suave uniforme; a fotografia
+usa saturação de 65%, contraste de 95%, opacidade de 19% e máscara progressiva
+para preservar a leitura à esquerda. Os caminhos de descoberta recebem uma
+superfície opaca. Títulos da home usam peso 600; busca recebe filete azul e sombra
+discreta; tipos de registros recebem etiquetas, sem mudar sua classificação.
+Comunidades ganham estados de superfície em hover e foco, além do foco global.
+A transição dos atalhos só ocorre sem preferência por movimento reduzido.
+
+Somente estilos e documentação mudam; componentes, consultas, organização,
+conteúdo institucional e texturas permanecem. Não há dependências, migrações ou
+alterações de implantação. Produção requer nova imagem Angular pelo fluxo existente.

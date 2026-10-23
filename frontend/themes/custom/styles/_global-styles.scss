@@ -30,7 +30,7 @@ a:focus-visible, a.nav-link:focus-visible, button:focus-visible, [tabindex]:focu
 }
 
 .institution-header {
-  border-top: 3px solid #{$primary};
+  border-top: 3px solid var(--ufal-brand-detail);
 }
 
 .institution-header__inner {
@@ -367,6 +367,7 @@ ds-recent-item-list {
 
 .badge-item-type, ds-type-badge .badge {
   color: var(--ufal-badge-color);
+  border: 1px solid var(--ufal-blue-border);
   // The upstream type badge also carries Bootstrap's bg-info utility.
   background-color: var(--ufal-blue-soft) !important;
   padding: 0.35em 0.65em;

@@ -16,9 +16,10 @@
   align-items: center;
   padding: clamp(1.5rem, 4vw, 3.25rem);
   color: var(--ufal-ink);
-  background: linear-gradient(120deg, var(--ufal-blue-soft), var(--ufal-surface));
+  background: var(--ufal-blue-soft);
   border: 1px solid var(--ufal-blue-border);
   border-radius: 1rem;
+  border-inline-start: 4px solid var(--ufal-brand-detail);
 }
 
 .repository-intro__photo {
@@ -32,13 +33,15 @@
   border-radius: inherit;
   pointer-events: none;
   // Keep the photograph secondary to the copy in both color modes.
-  filter: saturate(0.25) contrast(0.85);
-  opacity: 0.2;
+  filter: saturate(0.65) contrast(0.95);
+  opacity: 0.19;
+  // Reveal the library toward the right; keep the reading area nearly opaque.
+  mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.12), #000);
 }
 
 .repository-intro__eyebrow {
   margin-bottom: 1rem;
-  color: var(--bs-link-color);
+  color: var(--bs-link-hover-color);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -58,7 +61,7 @@ h1 {
   max-width: 22ch;
   margin-bottom: 1.25rem;
   font-size: clamp(1.75rem, 3vw, 2.5rem);
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.15;
   letter-spacing: -0.04em;
   text-wrap: balance;
@@ -73,8 +76,10 @@ h1 {
 }
 
 .repository-intro__paths {
-  padding-inline-start: 1.75rem;
-  border-inline-start: 1px solid var(--ufal-blue-border);
+  padding: 1.25rem;
+  background: var(--ufal-surface);
+  border: 1px solid var(--ufal-blue-border);
+  border-radius: var(--bs-border-radius-lg);
 
   a {
     display: flex;
@@ -82,19 +87,17 @@ h1 {
     justify-content: space-between;
     gap: 1rem;
     min-height: 48px;
-    padding-block: 0.75rem;
+    padding: 0.75rem;
+    border-radius: var(--bs-border-radius-sm);
     font-weight: 600;
     text-decoration: none;
     border-bottom: 1px solid var(--ufal-blue-border);
-    transition: color 220ms ease;
-
-    span {
-      text-decoration: underline;
-      text-decoration-thickness: 1px;
-      text-underline-offset: 0.25em;
+    @media (prefers-reduced-motion: no-preference) {
+      transition: color 180ms ease, background-color 180ms ease;
     }
 
-    &:hover {
+    &:hover, &:focus-visible {
+      background: var(--ufal-blue-soft);
       color: var(--bs-link-hover-color);
     }
   }
@@ -136,12 +139,11 @@ h1 {
   }
 
   .repository-intro__paths {
-    padding-inline-start: 0;
-    border-inline-start: 0;
+    padding: 1rem;
 
     a {
       font-size: 0.875rem;
-      padding-block: 0.5rem;
+      padding: 0.5rem 0.75rem;
     }
   }
 

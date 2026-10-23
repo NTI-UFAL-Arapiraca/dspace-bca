@@ -5,14 +5,16 @@
   margin-block: 1.5rem 2.75rem;
   padding: clamp(1.25rem, 3vw, 2rem);
   background: var(--ufal-surface);
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid var(--ufal-blue-border);
+  border-top: 4px solid var(--ufal-action-border);
+  box-shadow: var(--ufal-shadow);
   border-radius: 1rem;
 }
 .home-search__heading {
   h2 {
     margin: 0 0 0.5rem;
     font-size: 1.25rem;
-    font-weight: 500;
+    font-weight: 600;
   }
   p {
     margin: 0;

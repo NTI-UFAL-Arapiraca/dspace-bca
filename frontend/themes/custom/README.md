@@ -129,6 +129,12 @@ do brasão (`#ed1c24`) aparece como acento na aba selecionada; ações secundár
 usam cinza azulado para não competir com a navegação. Cores de sucesso, alerta e
 erro mantêm o significado definido pelo DSpace.
 
+O azul vivo `#0994dc`, extraído do SVG do brasão, aparece em filetes decorativos
+pelo token `--ufal-brand-detail`. `--ufal-action-border` mantém azul de ação no
+claro e azul legível no escuro. Superfícies suaves `#e4f1f8`/`#203e54` e bordas
+`#b9d6e8`/`#476c86` reforçam a separação de blocos nos dois modos. Essas derivações
+são escolhas de interface, não uma nova especificação oficial da marca.
+
 Fundos claros, superfícies brancas e títulos em azul profundo organizam a
 leitura. A tipografia usa fontes do sistema, sem downloads externos. Busca,
 comunidades, listas, filtros e cartões dos perfis compartilham espaçamentos,

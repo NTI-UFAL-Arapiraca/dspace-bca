@@ -6,12 +6,15 @@
   --ufal-ink: #{$dark};
   --ufal-surface: #fff;
   --ufal-surface-muted: #f0f4f8;
-  --ufal-blue-soft: #edf5fa;
-  --ufal-blue-border: #d3e4ef;
+  --ufal-blue-soft: #e4f1f8;
+  --ufal-blue-border: #b9d6e8;
+  // Coat-of-arms blue is decorative; text and controls keep the darker primary.
+  --ufal-brand-detail: #0994dc;
+  --ufal-action-border: #{$primary};
   --ufal-badge-color: #004c76;
   --ufal-focus: #{$primary};
   --ufal-footer-bg: #{$dark};
-  --ufal-shadow: 0 4px 20px rgba(22, 50, 79, 0.06);
+  --ufal-shadow: 0 6px 24px rgba(22, 50, 79, 0.09);
 
   --ds-header-logo-height: 64px;
   --ds-header-bg: var(--ufal-surface);

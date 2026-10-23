@@ -7,6 +7,7 @@ section {
   background: var(--ufal-blue-soft);
   border: 1px solid var(--ufal-blue-border);
   border-radius: 1rem;
+  border-top: 3px solid var(--ufal-brand-detail);
 }
 .community-links {
   margin: 0;
@@ -18,11 +19,16 @@ section {
   align-items: center;
   gap: 0.75rem;
   min-height: 56px;
-  padding-block: 1rem;
+  padding: 1rem 0.75rem;
   border-bottom: 1px solid var(--ufal-blue-border);
   font-size: 0.9375rem;
   line-height: 1.5;
   text-decoration: none;
+  border-radius: var(--bs-border-radius-sm);
+  &:hover, &:focus-visible {
+    background: var(--ufal-surface);
+    color: var(--bs-link-hover-color);
+  }
   span {
     flex: 1;
     min-width: 0;

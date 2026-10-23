@@ -43,6 +43,7 @@
   isolation: isolate;
   background: var(--ufal-blue-soft);
   border-color: var(--ufal-blue-border);
+  border-top: 3px solid var(--ufal-brand-detail);
 
   ds-thumbnail {
     display: block;

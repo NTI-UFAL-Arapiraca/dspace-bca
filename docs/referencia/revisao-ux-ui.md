@@ -569,3 +569,49 @@ produção ou SSR. Os testes de componente verificam o DOM e a apresentação,
 sem reproduzir os anúncios de NVDA ou VoiceOver. Publicar as correções exige
 nova imagem Angular; o override da política também exige reconstruir a imagem
 local, pois o watcher sincroniza somente o tema.
+
+## Presença cromática e hierarquia — 23/10/2026
+
+Diagnóstico: a home já tinha fotografia, abertura institucional, busca, recentes,
+comunidades e texturas. A baixa diferenciação entre superfícies e a distribuição
+uniforme da fotografia contribuíam para a aparência lavada. A evolução mantém a
+organização e dá papéis distintos à cor, conforme a RFC 0015.
+
+| Prioridade | Ajuste | Benefício esperado |
+| --- | --- | --- |
+| Alta | Busca com filete de ação, sombra discreta e título em peso 600 | Identificar rapidamente a tarefa principal. |
+| Alta | Abertura azul suave, título mais firme, foto com cor moderada e caminhos sobre superfície opaca | Reforçar identidade e separar leitura de navegação. |
+| Média | Etiquetas de tipo nos recentes e estados de superfície nas comunidades | Facilitar varredura e reconhecimento dos links. |
+| Média | Tokens compartilhados, filetes no cabeçalho e acesso ao documento | Dar continuidade às páginas internas sem colorir a área de leitura. |
+
+O SVG do brasão fornece `#0994dc`, `#ed1c24`, preto e branco. Mantém-se o azul
+mais escuro `#006da5` para ações e texto. Verde e amarelo não foram introduzidos,
+pois não aparecem nesse brasão. Os novos azuis suaves são derivações funcionais;
+a correspondência com um manual oficial ainda depende de confirmação institucional.
+A eficácia da hierarquia e a intensidade percebida da fotografia devem ser
+avaliadas com estudantes e equipe da biblioteca.
+
+Verificações desta rodada: recompilação de desenvolvimento DSpace 10.1 aprovada,
+cinco testes existentes de inicialização dos modos aprovados e revisão do diff
+com `git diff --check`. O build mantém o aviso preexistente de `RouterLink` não
+usado na política de privacidade. Foram inspecionadas a home clara e escura e as
+composições de 320, 390, 768 e 1440 px; o foco por Tab no botão da busca permaneceu
+visível. A pesquisa por “Biblioteca” retornou o trabalho fictício esperado. A página desse
+trabalho foi conferida em 1440 px no claro e 390 px no escuro, com o novo filete
+no cartão de arquivos e área de leitura opaca preservada.
+
+Após feedback visual, os links de “Caminhos para descobrir” e comunidades
+recebem 0,75 rem de respiro horizontal e cantos pelo token de raio pequeno.
+O fundo de hover/foco acompanha esse contorno, sem encostar o texto na borda.
+
+Cálculo de contraste dos pares de texto sobre a nova superfície suave:
+links claros 4,89:1, etiquetas claras 7,94:1, links escuros 6,14:1 e etiquetas
+escuras 7,33:1. Para a foto da abertura, a opacidade foi limitada a 19% e o
+rótulo usa a cor de hover, protegendo o contraste inclusive nos extremos de
+luminância da imagem; a máscara reduz ainda mais sua presença à esquerda.
+Os filetes vivos são decorativos, não indicadores exclusivos de estado.
+
+Limites: inspeção local com dados fictícios; sem testes com usuários, aparelhos
+físicos ou leitor de tela. Movimento reduzido foi preservado/revisado no SCSS,
+sem emulação nesta rodada. Não se repetiu build otimizado de produção/SSR nem
+uma auditoria completa WCAG. A publicação requer nova imagem Angular.
