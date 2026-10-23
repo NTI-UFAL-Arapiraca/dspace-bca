@@ -7,6 +7,7 @@ import { HomePageComponent } from './app/home-page/home-page.component';
 import { TopLevelCommunityListComponent } from './app/home-page/top-level-community-list/top-level-community-list.component';
 import { SearchPageComponent } from './app/search-page/search-page.component';
 import { SearchFormComponent } from './app/shared/search-form/search-form.component';
+import { StartsWithDateComponent } from './app/shared/starts-with/date/starts-with-date.component';
 import { CollectionStatisticsPageComponent } from './app/statistics-page/collection-statistics-page/collection-statistics-page.component';
 import { CommunityStatisticsPageComponent } from './app/statistics-page/community-statistics-page/community-statistics-page.component';
 import { ItemStatisticsPageComponent } from './app/statistics-page/item-statistics-page/item-statistics-page.component';
@@ -21,6 +22,7 @@ export const COMPONENTS = [
   TopLevelCommunityListComponent,
   SearchPageComponent,
   SearchFormComponent,
+  StartsWithDateComponent,
   CollectionStatisticsPageComponent,
   CommunityStatisticsPageComponent,
   ItemStatisticsPageComponent,

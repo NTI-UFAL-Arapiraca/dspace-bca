@@ -101,6 +101,13 @@ Os rótulos são mesclados nos catálogos pt-BR e en existentes. Como essa exten
 
 ## Identidade visual
 
+Na navegação por data, os seletores sem valor exibem “Ano” e “Mês” em telas
+abaixo de 576 px, usando o breakpoint XS do DSpace. Os nomes acessíveis completos
+e as opções selecionadas são preservados. A extensão em
+`app/shared/starts-with/date/` herda a lógica oficial de filtragem e registra-se
+no carregador de filtros por data pelo bundle eager. Produção exige nova imagem
+Angular.
+
 O azul institucional (`#006da5`) identifica links e ações principais. O vermelho
 do brasão (`#ed1c24`) aparece como acento na aba selecionada; ações secundárias
 usam cinza azulado para não competir com a navegação. Cores de sucesso, alerta e

@@ -1,4 +1,6 @@
 {
+  "browse.startsWith.choose_year.short": "Ano",
+  "browse.startsWith.months.none.short": "Mês",
   "repository.home.search.title": "O que você quer encontrar?",
   "repository.home.search.help": "Pesquise por título, autor ou assunto. Refine os resultados na próxima página.",
   "repository.home.search.placeholder": "Digite um título, autor ou assunto",
