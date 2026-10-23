@@ -33,8 +33,8 @@ aponta para a configuração `academic_works_search` em
 configuradas nesse arquivo e da reindexação Discovery;
 `item.showAuthorityRelations` está ativado no YAML.
 
-O `assets/site.webmanifest` fornece o nome, as cores e os ícones para instalação da interface como atalho no Android. A configuração de runtime declara o manifesto, mantém o `apple-touch-icon` para iOS/iPadOS e define a cor do navegador. Os ícones PNG de 192 e 512 px usam o logo da Biblioteca UFAL; o arquivo
-maskable tem fundo branco e margem segura para recortes de ícones Android. O
+O `assets/site.webmanifest` fornece o nome, as cores e os ícones para instalação da interface como atalho no Android. A configuração de runtime declara o manifesto, mantém o `apple-touch-icon` para iOS/iPadOS e define a cor do navegador. Os ícones PNG de 192 e 512 px usam `images/ufal_logo.png`; o arquivo maskable
+também deriva dessa imagem, com fundo branco e margem segura para recortes Android. O
 manifesto usa `/dspace/` como `start_url` e escopo, conforme o caminho público
 documentado.
 
