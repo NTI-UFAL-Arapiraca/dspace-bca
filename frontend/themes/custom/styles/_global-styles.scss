@@ -105,6 +105,17 @@ a:focus-visible, a.nav-link:focus-visible, button:focus-visible, [tabindex]:focu
   align-items: center;
 }
 
+ds-log-in button[type='submit'] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .institution-header__actions .theme-toggle,
   .institution-header__actions
