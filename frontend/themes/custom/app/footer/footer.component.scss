@@ -14,28 +14,16 @@
     margin-top: 0;
   }
 
-  .institutional-logos {
+  .institutional-logo {
     flex-shrink: 0;
-    gap: 0.75rem;
     margin-left: auto;
   }
 
-  .institutional-logo {
+  .gti-logo {
     display: block;
-    height: 3.25rem;
-    width: auto;
-    padding: 0.25rem 0.4rem;
-    background-color: #fff;
-    border-radius: 0.25rem;
+    width: 8.5rem;
+    height: auto;
     object-fit: contain;
-  }
-
-  .library-logo {
-    max-width: 12rem;
-  }
-
-  .nti-logo {
-    max-width: 4.75rem;
   }
 
   @media (max-width: 767.98px) {
@@ -44,12 +32,12 @@
       margin-right: 0;
     }
 
-    .institutional-logos {
+    .institutional-logo {
       margin-left: 0;
     }
 
-    .institutional-logo {
-      height: 2.75rem;
+    .gti-logo {
+      width: 7.5rem;
     }
   }
 }

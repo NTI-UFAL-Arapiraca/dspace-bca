@@ -177,14 +177,15 @@ composição está na [RFC 0015](../../../rfc/0015-experiencia-visual-do-reposit
 `app/footer/` personaliza o componente oficial do rodapé. A versão local mantém
 os links de acessibilidade, cookies, privacidade, acordo de usuário e COAR
 quando habilitados, remove o crédito/copyright de DSpace e LYRASIS e o link de
-envio de feedback. As logos da Biblioteca UFAL e do NTI ficam alinhadas à direita
-no desktop e centralizadas em telas pequenas. Elas são servidas dos assets do
-tema; alterações exigem recompilar a imagem Angular de produção. O conteúdo da
-rota `info/privacy` substitui o modelo genérico do DSpace por um aviso em
-português do Brasil, específico para o repositório e complementar às políticas
-institucionais da UFAL. O override está em `frontend/overrides/` e é aplicado nos
-Dockerfiles de desenvolvimento e produção; alterações exigem reconstruir a imagem
-Angular correspondente.
+envio de feedback. A logo da Gerência de Tecnologia da Informação da UFAL em
+Arapiraca fica alinhada à direita no desktop e centralizada em telas pequenas,
+diretamente sobre o fundo azul do rodapé. Ela é servida dos assets do tema;
+alterações exigem recompilar a imagem Angular de produção. O conteúdo da rota
+`info/privacy` substitui o modelo genérico do
+DSpace por um aviso em português do Brasil, específico para o repositório e
+complementar às políticas institucionais da UFAL. O override está em
+`frontend/overrides/` e é aplicado nos Dockerfiles de desenvolvimento e
+produção; alterações exigem reconstruir a imagem Angular correspondente.
 
 ## Leitura integrada de PDFs
 
