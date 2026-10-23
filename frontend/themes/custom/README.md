@@ -60,7 +60,7 @@ das duas imagens caiu de 468.012 para 227.200 bytes (51%). Alterar a foto
 ou o tratamento exige uma nova imagem Angular em produção.
 
 O fundo das páginas usa `assets/images/page-contours.svg`, um módulo repetível de
-720 × 560 px com curvas finas inspiradas nas folhas de um livro aberto. O SCSS
+720 × 1120 px com curvas finas inspiradas nas folhas de um livro aberto. O SCSS
 global aplica o SVG como máscara decorativa na área principal (`#main-content`),
 com 11% de opacidade e a cor dos links do tema, acompanhando os modos claro e
 escuro sem duplicar o arquivo. A textura aparece nos espaços entre os blocos;
@@ -70,7 +70,11 @@ acessível e é ocultada em cores forçadas. Abaixo de 768 px, a máscara usa
 `page-contours-mobile.svg`: um módulo de 480 × 1120 px com quatro posições,
 inclinações alternadas e pequenas variações de escala. A sequência mais longa
 evita repetir o mesmo livro em uma coluna estreita, mantendo o espaçamento
-vertical de 280 px e a mesma opacidade. A versão desktop permanece inalterada.
+vertical de 280 px e a mesma opacidade. Os dois módulos incluem uma lâmpada
+simplificada, com contorno fino, base curta e três raios de luz, menor que os
+livros e presente uma vez a cada quatro deles. No desktop, a altura
+do módulo foi duplicada para espaçar esse complemento, preservando as posições,
+o tamanho e o ritmo dos livros anteriores.
 Publicar essa alteração exige uma nova imagem Angular.
 
 ## Estatísticas

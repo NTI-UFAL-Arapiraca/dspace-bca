@@ -108,11 +108,16 @@ com as demais páginas, preservando a intensidade e a escala aprovadas.
 
 `page-contours.svg` é usado como máscara em um pseudoelemento de `#main-content`
 nos estilos globais. A cor acompanha os links nos dois modos do tema. Abaixo
-de 768 px, `page-contours-mobile.svg` substitui o módulo de 720 × 560 px por uma
+de 768 px, `page-contours-mobile.svg` substitui o módulo de 720 × 1120 px por uma
 sequência de 480 × 1120 px, alternando quatro posições, inclinações e pequenas
 variações de escala. O espaçamento vertical e a opacidade são preservados;
-a versão desktop mantém a composição aprovada. Assim, o recorte estreito não
-repete sempre a mesma coluna do padrão. Cartões e abertura fotográfica continuam
+a versão desktop mantém o ritmo dos livros aprovado. Assim, o recorte estreito
+não repete sempre a mesma coluna do padrão. Os dois módulos acrescentam uma
+lâmpada simplificada, menor e com o mesmo traço, como referência a ideias e luz.
+O desenho usa contorno, base curta e três raios, sem preenchimento.
+O complemento aparece uma vez a cada quatro livros; a altura do
+módulo desktop foi duplicada, repetindo as posições anteriores dos livros,
+para manter essa proporção. Cartões e abertura fotográfica continuam
 opacos; cabeçalho, breadcrumb e rodapé mantêm seus fundos. A camada decorativa
 não captura eventos nem acrescenta conteúdo acessível, e é ocultada em cores
 forçadas. Não há animação, JavaScript ou dependência adicional. O watcher

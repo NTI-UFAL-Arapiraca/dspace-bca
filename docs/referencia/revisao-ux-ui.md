@@ -12,7 +12,11 @@ estilos globais. A máscara usa a cor dos links com 11% de opacidade, atrás das
 superfícies opacas. Abaixo de 768 px, usa uma composição própria de 480 × 1120 px
 com quatro posições, inclinações alternadas e pequenas variações de escala,
 mantendo o espaçamento vertical de 280 px. Isso evita a repetição da mesma
-coluna do módulo desktop de 720 × 560 px nos recortes estreitos. O fundo é
+coluna do módulo desktop de 720 × 1120 px nos recortes estreitos. Os dois módulos
+incluem uma lâmpada simplificada com três raios de luz, menor e com o mesmo
+traço, uma vez a cada quatro livros. O módulo desktop repete duas vezes a
+composição anterior dos livros, preservando suas posições e escala para
+espaçar as lâmpadas. O fundo é
 decorativo, não captura cliques e é ocultado em cores forçadas. Cabeçalho,
 breadcrumb e rodapé mantêm seus fundos.
 
@@ -28,7 +32,13 @@ de cores forçadas. Produção exige nova imagem Angular.
 A composição mobile foi conferida na rolagem da home em 390 px nos dois modos.
 SVG e recompilação local aprovados; verificação de layout em 320, 430, 767, 768
 e 1440 px sem overflow horizontal. A máscara específica entra abaixo de 768 px;
-a partir desse limite, o módulo desktop e sua escala permanecem iguais.
+a partir desse limite, permanece o ritmo dos livros do desktop.
+
+O complemento de luz foi conferido na lista de comunidades em 1440 px e na
+home em 390 px, nos modos claro e escuro. Recompilação local e validação dos
+dois SVGs aprovadas; layout conferido em 320, 768 e 1440 px sem overflow
+horizontal. A opacidade continua em 11%, com uma lâmpada para cada quatro
+livros. O modo claro foi restaurado ao terminar.
 
 ## Breadcrumb no mobile
 

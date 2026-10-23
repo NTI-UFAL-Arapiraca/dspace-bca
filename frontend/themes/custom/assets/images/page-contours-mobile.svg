@@ -9,6 +9,11 @@
       <path d="M-144 24C-94 0-48 8 0 40C48 8 94 0 144 24"/>
       <path d="M-144 38C-94 14-48 22 0 54C48 22 94 14 144 38"/>
     </g>
+    <g id="light" fill="none" stroke="#000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M-12 20V14C-12 5-24 1-24-14a24 24 0 0 1 48 0c0 15-12 19-12 28v6"/>
+      <path d="M-12 20H12M-10 27H10M-6 34H6"/>
+      <path d="M0-51v-8M-39-38l-6-6M39-38l6-6"/>
+    </g>
   </defs>
   <use href="#pages" transform="translate(112 130) rotate(-18)"/>
   <use href="#pages" transform="translate(356 410) rotate(18)"/>
@@ -17,4 +22,5 @@
   <!-- Continue the two edge motifs across the left/right tile boundary. -->
   <use href="#pages" transform="translate(592 130) rotate(-18)"/>
   <use href="#pages" transform="translate(-124 410) rotate(18)"/>
+  <use href="#light" transform="translate(326 830) rotate(10) scale(.8)"/>
 </svg>
