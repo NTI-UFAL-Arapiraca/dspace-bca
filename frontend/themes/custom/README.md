@@ -77,6 +77,22 @@ do módulo foi duplicada para espaçar esse complemento, preservando as posiçõ
 o tamanho e o ritmo dos livros anteriores.
 Publicar essa alteração exige uma nova imagem Angular.
 
+## VLibras
+
+O tema carrega ativamente o VLibras Widget oficial, sem token, por
+`app/root/root.component.ts`, mantendo o template raiz do DSpace 10.1.
+`app/accessibility/vlibras.service.ts` executa após render somente no navegador,
+fora da zona Angular; `vlibras-widget.ts` conserva um único script/widget ao
+navegar entre rotas. A posição documentada `R` deixa o botão flutuante à direita,
+40 px acima da altura padrão, sem reservar coluna no celular nem mudar o
+prefixo `/dspace`.
+
+Produção exige nova imagem Angular. Consulte a
+[referência da integração](../../../docs/referencia/vlibras.md) e a
+[RFC 0022](../../../rfc/0022-vlibras-widget.md) para CSP, limites de idioma/PDF,
+disponibilidade do serviço e verificações. Os resumos estrangeiros continuam
+visíveis; a tradução documentada pelo VLibras é de português para Libras.
+
 ## Estatísticas
 
 `app/statistics-page/` substitui a apresentação das quatro páginas oficiais de

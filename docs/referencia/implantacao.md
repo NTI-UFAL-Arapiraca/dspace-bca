@@ -147,6 +147,15 @@ No desenvolvimento, `d10dev` tem banco, Solr e assetstore próprios. A rede é
 tema a cada dois segundos. O Node usa heap de até 4 GiB. O Compose precisa
 ser 2.24.4 ou posterior para aceitar `!override`.
 
+## VLibras e política de conteúdo
+
+O tema integra ativamente o VLibras oficial no navegador, sem token, mantendo
+SSR e `/dspace`. A integração está compilada na imagem Angular e exige nova
+publicação. O repositório não define CSP; caso o proxy institucional a imponha,
+suas permissões precisam contemplar scripts, iframe e fontes do serviço, sem
+bloquear o iframe local do PDF.js. A configuração externa e os limites de
+tradução estão na [referência VLibras](vlibras.md).
+
 ## Metadados, idioma e nome público
 
 O backend negocia os metadados públicos por `Accept-Language`. Na página simples

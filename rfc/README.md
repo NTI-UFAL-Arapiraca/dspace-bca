@@ -27,6 +27,7 @@ de contexto para reaplicar e revisar essas diferenças ao atualizar as imagens.
 | [0019](0019-cache-de-intervalos-dos-pdfs.md) | Reutilizar trechos já baixados dos PDFs ao alternar entre abas. |
 | [0020](0020-ano-de-publicacao-e-data-de-defesa.md) | Separar o ano de publicação da data de defesa nos metadados e na página do item. |
 | [0021](0021-desativar-cadastro-publico.md) | Bloquear o cadastro público de contas por senha e e-mail. |
+| [0022](0022-vlibras-widget.md) | Integrar o VLibras oficial no tema, somente no navegador e sem duplicação entre rotas. |
 
 Uma nova alteração por override deve incluir sua RFC neste índice no mesmo
 commit. Cada RFC deve identificar arquivos, consequência operacional e testes.

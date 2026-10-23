@@ -5,6 +5,7 @@ import { HeaderComponent } from './app/header/header.component';
 import { HomeNewsComponent } from './app/home-page/home-news/home-news.component';
 import { HomePageComponent } from './app/home-page/home-page.component';
 import { TopLevelCommunityListComponent } from './app/home-page/top-level-community-list/top-level-community-list.component';
+import { RootComponent } from './app/root/root.component';
 import { SearchPageComponent } from './app/search-page/search-page.component';
 import { SearchFormComponent } from './app/shared/search-form/search-form.component';
 import { StartsWithDateComponent } from './app/shared/starts-with/date/starts-with-date.component';
@@ -20,6 +21,7 @@ export const COMPONENTS = [
   HomeNewsComponent,
   HomePageComponent,
   TopLevelCommunityListComponent,
+  RootComponent,
   SearchPageComponent,
   SearchFormComponent,
   StartsWithDateComponent,

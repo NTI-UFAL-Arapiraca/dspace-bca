@@ -13,6 +13,7 @@
 ## Referência de funcionamento
 
 - [Implantação, URLs, proxy e configuração](referencia/implantacao.md).
+- [VLibras, inicialização, CSP e limites de tradução](referencia/vlibras.md).
 - [Modelo acadêmico e autoridades de pessoas](referencia/modelo-academico.md).
 - [Relatório de metadados e pessoas](referencia/relatorio-metadados-e-pessoas.md).
 - [Configuração do backend](../backend/README.md).
