@@ -119,6 +119,12 @@ comunidades, listas, filtros e cartões dos perfis compartilham espaçamentos,
 bordas e raios. O cabeçalho se reorganiza em telas pequenas e os controles
 mantêm indicação de foco para uso por teclado.
 
+No menu móvel, `#header-navbar-wrapper` fornece o bloco de referência para a
+navegação posicionada de forma absoluta. Isso evita que o Safari, inclusive no
+modo de design responsivo, calcule largura zero a partir do host inline do
+componente oficial. O estado e a animação do menu continuam sob responsabilidade
+do DSpace. Produção exige uma nova imagem Angular.
+
 O breadcrumb usa a extensão oficial em `app/breadcrumbs/`, registrada no bundle
 eager. Abaixo de 768 px, mantém início e página atual em uma única linha;
 quando há níveis intermediários, oculta seus links e indica a omissão com

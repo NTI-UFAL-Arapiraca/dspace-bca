@@ -569,6 +569,12 @@ ds-footer .bottom-footer :focus-visible {
 }
 
 @media (max-width: 767.98px) {
+  // Give the absolute mobile navbar a full-width containing block in Safari.
+  // The positioned inline themed host otherwise resolves its width to zero.
+  #header-navbar-wrapper {
+    position: relative;
+  }
+
   :root {
     --ds-header-logo-height: 52px;
   }
