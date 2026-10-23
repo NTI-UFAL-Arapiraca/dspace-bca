@@ -1,0 +1,32 @@
+{
+  "id": "/dspace/",
+  "name": "Repositório Institucional da UFAL — Campus Arapiraca",
+  "short_name": "RI UFAL Arapiraca",
+  "description": "Repositório Institucional da Universidade Federal de Alagoas — Campus Arapiraca.",
+  "lang": "pt-BR",
+  "start_url": "/dspace/",
+  "scope": "/dspace/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#006da5",
+  "icons": [
+    {
+      "src": "images/pwa-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/pwa-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/pwa-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

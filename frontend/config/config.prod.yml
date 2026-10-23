@@ -31,6 +31,14 @@ themes:
         attributes:
           rel: apple-touch-icon
           href: assets/custom/images/ufal_logo.png
+      - tagName: link
+        attributes:
+          rel: manifest
+          href: assets/custom/site.webmanifest
+      - tagName: meta
+        attributes:
+          name: theme-color
+          content: "#006da5"
   - name: dspace
 
 # People profiles query work roles through authority UUIDs.

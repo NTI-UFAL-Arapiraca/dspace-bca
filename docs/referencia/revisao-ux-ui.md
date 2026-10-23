@@ -426,9 +426,11 @@ de arquivos, junto à miniatura e aos links de acesso. Esse ponto associa o
 documento ao acervo físico sem ocupar a área de leitura ou aumentar a altura
 da página. UntypedItem e Publication compartilham o template e o SCSS existentes.
 
-O asset `biblioteca-corredor.webp` tem 1200 × 900 px e 152.420 bytes, sem
-metadados da câmera. A imagem é decorativa, com alternativa vazia,
-`aria-hidden`, carregamento adiado, recorte central e sem eventos de ponteiro.
+O asset `biblioteca-corredor.webp` tem 800 × 600 px e 61.216 bytes, sem
+metadados da câmera. A derivada anterior (1200 × 900 px, 152.420 bytes) foi
+reduzida após revisar o uso: a coluna desktop tem 19 rem, a imagem é decorativa,
+usa `cover` e carrega sob demanda, reduzindo o asset em 60%. A imagem tem
+alternativa vazia, `aria-hidden`, recorte central e sem eventos de ponteiro.
 Saturação de 20%, contraste de 85% e opacidade de 16% são aplicados apenas à
 fotografia. Os links do cartão usam a cor de hover do tema, que oferece mais
 contraste nos dois modos. Considerando os extremos preto/branco da imagem

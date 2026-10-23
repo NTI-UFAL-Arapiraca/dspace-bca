@@ -33,6 +33,11 @@ aponta para a configuração `academic_works_search` em
 configuradas nesse arquivo e da reindexação Discovery;
 `item.showAuthorityRelations` está ativado no YAML.
 
+O `assets/site.webmanifest` fornece o nome, as cores e os ícones para instalação da interface como atalho no Android. A configuração de runtime declara o manifesto, mantém o `apple-touch-icon` para iOS/iPadOS e define a cor do navegador. Os ícones PNG de 192 e 512 px usam o logo da Biblioteca UFAL; o arquivo
+maskable tem fundo branco e margem segura para recortes de ícones Android. O
+manifesto usa `/dspace/` como `start_url` e escopo, conforme o caminho público
+documentado.
+
 Os títulos de páginas e abas do navegador usam as traduções
 `repository.title` e `repository.title.prefix` em `assets/i18n/`. O nome público
 do backend (`DSPACE_NAME`) continua sendo a fonte para os títulos das
@@ -45,12 +50,14 @@ e comunidades. Busca, comunidades e adições recentes continuam herdadas da hom
 oficial; nenhum total ou conteúdo do acervo é inventado no tema.
 
 A abertura usa a foto da biblioteca em `assets/images/biblioteca-arapiraca.webp`
-como fundo decorativo de toda a superfície. A derivada WebP tem 1920 × 1440 px,
-sem metadados da câmera. O SCSS mantém 25% de saturação, contraste de 85% e
-opacidade de 20% sobre o gradiente do tema, preservando a leitura nos modos
-claro e escuro. `object-fit: cover` adapta o recorte à largura da tela; o texto
-e os links não recebem filtros. Alterar a foto ou o tratamento exige uma nova
-imagem Angular em produção.
+como fundo decorativo de toda a superfície. A derivada WebP atual tem
+1600 × 1200 px e 165.984 bytes, sem metadados da câmera. Ela é recortada com
+`cover`, recebe 25% de saturação, contraste de 85% e opacidade de 20% sobre o
+gradiente do tema. O texto e os links preservam sua nitidez nos modos claro e
+escuro. A foto foi reduzida de 1920 × 1440 px / 315.592 bytes para a resolução
+atual após avaliar a área de exibição; junto à foto do cartão de acesso, o peso
+das duas imagens caiu de 468.012 para 227.200 bytes (51%). Alterar a foto
+ou o tratamento exige uma nova imagem Angular em produção.
 
 ## Estatísticas
 
@@ -141,8 +148,11 @@ Isso controla a apresentação Angular: não altera as respostas da API REST nem
 substitui as regras `metadata.hide.*` do backend.
 
 O cartão de acesso ao documento usa a foto do corredor da biblioteca em
-`assets/images/biblioteca-corredor.webp` como fundo decorativo. A derivada tem
-1200 × 900 px, sem metadados da câmera, carregamento adiado e recorte central.
+`assets/images/biblioteca-corredor.webp` como fundo decorativo. A derivada WebP
+atual tem 800 × 600 px e 61.216 bytes, sem metadados da câmera, carregamento
+adiado e recorte central. A coluna mede 19 rem no desktop; em telas
+menores ela ocupa a largura disponível. Essa resolução fornece mais de 2×
+os pixels da coluna desktop e mantém a imagem leve nos layouts móveis.
 Saturação de 20%, contraste de 85% e opacidade de 16% sobre o azul suave do
 tema mantêm a imagem discreta nos modos claro e escuro. O tratamento se aplica
 somente à foto; a miniatura real, os textos e os controles preservam sua
