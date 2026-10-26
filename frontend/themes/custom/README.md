@@ -145,6 +145,9 @@ Links e botões não têm sublinhado permanente. Os links de texto usam uma linh
 que se expande no hover ou foco de teclado; a transição respeita a preferência
 por movimento reduzido. A regra global também remove os sublinhados dos
 componentes oficiais, mantendo os indicadores de foco e os estados de superfície.
+Nos nomes de pessoas da página do item, o fundo usa `box-decoration-break: slice`
+em um span inline: o sublinhado percorre a primeira linha antes de continuar na
+seguinte, mantendo uma única animação de 220 ms e o ícone fora do efeito.
 Atalhos com superfície própria, como “Caminhos para descobrir”, comunidades e
 cartões de novidades e atividade, usam o destaque de fundo/borda em hover e foco,
 sem acrescentar sublinhado. Links de texto, como “Ver mais registros” e

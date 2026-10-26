@@ -691,7 +691,10 @@ ds-footer .bottom-footer :focus-visible {
     background-image: none;
 
     > span[dsEntityIcon] {
-      display: inline-block;
+      display: inline;
+      // Slice one continuous background so the next line starts after this one.
+      -webkit-box-decoration-break: slice;
+      box-decoration-break: slice;
     }
   }
 }
