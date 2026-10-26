@@ -129,6 +129,11 @@
     <ds-academic-metadata-link [item]="object" field="local.campus.name" label="item.page.campus">
     </ds-academic-metadata-link>
     <ds-generic-item-page-field [item]="object"
+      [fields]="['local.cnpq.area']"
+      [separator]="', '"
+      [label]="'item.page.cnpq-area'">
+    </ds-generic-item-page-field>
+    <ds-generic-item-page-field [item]="object"
       [fields]="['journal.title']"
       [label]="'item.page.journal-title'">
     </ds-generic-item-page-field>

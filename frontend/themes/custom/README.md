@@ -32,6 +32,9 @@ aponta para a configuração `academic_works_search` em
 `backend/config/spring/api/academic-discovery.xml`. As abas dependem das buscas
 configuradas nesse arquivo e da reindexação Discovery;
 `item.showAuthorityRelations` está ativado no YAML.
+O detalhe de UntypedItem e Publication também mostra os valores de
+`local.cnpq.area` com o rótulo “Grande área CNPq”, preservando código e nome.
+O campo é descritivo e pode conter mais de uma categoria.
 
 O `assets/site.webmanifest` fornece o nome, as cores e os ícones para instalação da interface como atalho no Android. A configuração de runtime declara o manifesto, mantém o `apple-touch-icon` para iOS/iPadOS e define a cor do navegador. Os ícones PNG de 192 e 512 px usam `images/ufal_logo.png`; o arquivo maskable
 também deriva dessa imagem, com fundo branco e margem segura para recortes Android. O

@@ -18,7 +18,7 @@ As capturas mostram a página inicial e a página de um trabalho. Os registros e
 
 ## O repositório
 
-O DSpace organiza os trabalhos como itens, agrupados em comunidades e coleções. Neste projeto, os registros também incluem curso, campus e vínculos com pessoas. `Person` é o cadastro bibliográfico usado em autoria, orientação, coorientação e banca; `EPerson` é uma conta de acesso. Os cadastros de autores e professores não criam contas de login.
+O DSpace organiza os trabalhos como itens, agrupados em comunidades e coleções. Neste projeto, os registros também incluem curso, campus, grande área CNPq e vínculos com pessoas. `Person` é o cadastro bibliográfico usado em autoria, orientação, coorientação e banca; `EPerson` é uma conta de acesso. Os cadastros de autores e professores não criam contas de login.
 
 A interface apresenta os trabalhos, seus resumos e arquivos, permite a leitura de PDFs na página e relaciona os registros aos perfis bibliográficos das pessoas. A home reúne busca, comunidades e registros recentes. As páginas e os dados são servidos pela interface Angular e pela API REST do DSpace.
 

@@ -61,6 +61,7 @@ Os campos do acervo ficam assim:
 | --- | --- |
 | Curso | `local.course.name` |
 | Campus | `local.campus.name` |
+| Grande área CNPq | `local.cnpq.area` |
 | Ano de publicação | `dc.date.issued` |
 | Data de defesa | `local.date.defense` |
 | Autor | `dc.contributor.author` |
@@ -70,10 +71,13 @@ Os campos do acervo ficam assim:
 
 Curso e campus são campos de texto editáveis nesta entrega. Na página do
 trabalho, seus valores são links para a busca pública de trabalhos filtrada
-pelo valor selecionado. Os quatro campos de pessoas usam seleção de cadastro
-existente. Se a pessoa ainda não existir, a biblioteca a cadastra na coleção
-Pessoas e depois a seleciona no trabalho. Programa de pós-graduação e grau
-acadêmico não são deduzidos do nome do curso.
+pelo valor selecionado. `local.cnpq.area` guarda a classificação legada como
+código e nome, por exemplo `1.00.00.00-3 Ciências exatas e da terra`, com um
+valor por categoria vinculada. O campo é editável e aparece na página do
+trabalho; não substitui as palavras-chave de `dc.subject`. Os quatro campos
+de pessoas usam seleção de cadastro existente. Se a pessoa ainda não existir,
+a biblioteca a cadastra na coleção Pessoas e depois a seleciona no trabalho.
+Programa de pós-graduação e grau acadêmico não são deduzidos do nome do curso.
 
 O item distingue `dc.date.issued`, apresentado como ano de publicação, de
 `local.date.defense`, apresentado como data de defesa. A data de defesa não é

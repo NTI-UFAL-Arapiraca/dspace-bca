@@ -28,6 +28,7 @@ de contexto para reaplicar e revisar essas diferenças ao atualizar as imagens.
 | [0020](0020-ano-de-publicacao-e-data-de-defesa.md) | Separar o ano de publicação da data de defesa nos metadados e na página do item. |
 | [0021](0021-desativar-cadastro-publico.md) | Bloquear o cadastro público de contas por senha e e-mail. |
 | [0022](0022-vlibras-widget.md) | Integrar o VLibras oficial no tema, somente no navegador e sem duplicação entre rotas. |
+| [0023](0023-grande-area-cnpq.md) | Preservar e exibir a grande área CNPq do legado em campo próprio. |
 
 Uma nova alteração por override deve incluir sua RFC neste índice no mesmo
 commit. Cada RFC deve identificar arquivos, consequência operacional e testes.

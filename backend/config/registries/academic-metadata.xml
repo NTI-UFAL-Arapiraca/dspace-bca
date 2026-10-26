@@ -17,6 +17,12 @@
   </dc-type>
   <dc-type>
     <schema>local</schema>
+    <element>cnpq</element>
+    <qualifier>area</qualifier>
+    <scope_note>Grande área CNPq associada à publicação no legado, preservando código e nome; um valor por categoria vinculada.</scope_note>
+  </dc-type>
+  <dc-type>
+    <schema>local</schema>
     <element>date</element>
     <qualifier>defense</qualifier>
     <scope_note>Data da defesa do trabalho acadêmico, separada do ano de publicação em dc.date.issued.</scope_note>

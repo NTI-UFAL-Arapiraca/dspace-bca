@@ -11,8 +11,9 @@ Overrides mantidos pelo projeto:
   `common_iso_languages`;
 - `pt` e `en` são oferecidos para corresponder aos qualifiers dos abstracts;
 - `dc.language.iso` permanece independente e recebe `pt_BR` na migração.
-- a seção `academicDetails` adiciona curso, campus, orientação, coorientação,
-  banca, data de defesa, número de páginas e observações de acervo;
+- a seção `academicDetails` adiciona curso, campus, grande área CNPq,
+  orientação, coorientação, banca, data de defesa, número de páginas e
+  observações de acervo; a área CNPq aceita um valor por categoria vinculada;
 - `dc.date.issued` é rotulado como ano de publicação; a data de defesa usa
   `local.date.defense`;
 - os formulários tradicional e Publication usam seleção fechada de pessoas;
@@ -40,6 +41,8 @@ administrador é criado pela CLI.
 Os mounts são iguais em REST e CLI. O registro dos campos e a criação da
 coleção são feitos por `scripts/prepare-academic.sh`, conforme o
 [guia de operação](../docs/guias/preparacao-academica.md).
+`local.cnpq.area` é registrado por esse mesmo XML antes da importação SAF;
+o valor reúne código e nome da grande área CNPq legada.
 
 A validação dos overrides e os comandos de atualização ficam no
 [guia de operação](../docs/guias/operacao.md). Mudanças de versão exigem

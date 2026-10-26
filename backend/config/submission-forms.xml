@@ -489,6 +489,18 @@
             </row>
             <row>
                 <field>
+                    <dc-schema>local</dc-schema>
+                    <dc-element>cnpq</dc-element>
+                    <dc-qualifier>area</dc-qualifier>
+                    <repeatable>true</repeatable>
+                    <label>Grande área CNPq</label>
+                    <input-type>onebox</input-type>
+                    <hint>Informe o código e o nome da grande área CNPq, por exemplo 1.00.00.00-3 Ciências exatas e da terra. Adicione um valor por categoria vinculada.</hint>
+                    <required></required>
+                </field>
+            </row>
+            <row>
+                <field>
                     <dc-schema>dc</dc-schema>
                     <dc-element>contributor</dc-element>
                     <dc-qualifier>advisor</dc-qualifier>
