@@ -1,6 +1,5 @@
-# Apply after the three production files only while importing SAF packages.
-# ItemImport writes mapfile.txt beside each collection's packages. Restore the
-# regular production composition after the migration to make this bind read-only.
+# Apply after the three production files while importing SAF packages.
+# ItemImport writes mapfile.txt beside each collection's packages.
 services:
   dspace:
     volumes:

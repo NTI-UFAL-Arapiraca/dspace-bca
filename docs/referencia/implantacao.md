@@ -13,6 +13,9 @@ os arquivos XML e HTML gerados.
 A produção combina `docker-compose-dist.yml`, `docker-compose-rest.yml` e
 `docker-compose-prod.yml`. Somente `dspace-proxy` publica a porta 80. O proxy
 institucional termina TLS e preserva `Host` e `X-Forwarded-*` até o backend.
+Na rota REST, o proxy interno também envia `X-Forwarded-Prefix: /dspace-server`
+para informar o prefixo público removido antes de encaminhar ao contexto
+interno `/server/`.
 Certificados e porta 443 pertencem ao proxy institucional.
 
 | Caminho público | Destino interno |
@@ -198,8 +201,8 @@ No ambiente local, o diagnóstico SEO do backend não alcança a interface por
 `SEO_HEALTH_ENABLED=false` desativa apenas esse diagnóstico. Em produção,
 o diagnóstico depende de a URL pública ser acessível pelo backend.
 
-`GEOLITE2_CITY_DB_PATH` fornece o GeoLite2 City `.mmdb`, montado como somente
-leitura. A propriedade efetiva é `usage-statistics.dbfile`. O formato antigo
+`GEOLITE2_CITY_DB_PATH` fornece o GeoLite2 City `.mmdb`, montado no backend.
+A propriedade efetiva é `usage-statistics.dbfile`. O formato antigo
 `GeoLiteCity.dat` não se aplica. IPs privados e loopback não têm localização
 geográfica. A base e suas credenciais não pertencem ao Git.
 
@@ -208,8 +211,9 @@ geográfica. A base e suas credenciais não pertencem ao Git.
 `DSPACE_SAF_HOST_DIR` identifica a pasta do host montada em
 `/dspace/saf_bundle`. Sem essa variável, a configuração base usa
 `SAF_BUNDLE_DIR` e depois `../saf_bundle`. A produção exige o caminho
-explícito e o monta como somente leitura. O overlay de migração permite
-que o importador grave os mapfiles e não publica portas extras.
+explícito. O mount permite escrita para que o importador grave os mapfiles;
+use o overlay de migração durante a importação. O Compose de produção não
+publica portas extras.
 
 `cli.yml` utiliza a rede e o assetstore do projeto indicado por `-p`.
 Os overrides acadêmicos são montados tanto na CLI quanto no backend REST.

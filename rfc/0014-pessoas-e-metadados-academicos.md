@@ -31,8 +31,8 @@ Configurações existentes com relações virtuais exigem plano de conversão.
 - `backend/config/spring/api/academic-discovery.xml`, acrescentando entradas
   ao mapa oficial por inicialização Spring, sem substituir as demais buscas;
 - mounts em `docker-compose-rest.yml` e `cli.yml`;
-- `docker-compose-migration.yml`, permitindo gravar mapfiles durante a
-  importação sem alterar a montagem somente leitura da produção normal;
+- `docker-compose-migration.yml`, overlay usado durante a importação para
+  permitir a gravação dos mapfiles no SAF;
 - tema de trabalhos/Publication e Person, traduções e YAML do frontend;
 - `scripts/prepare-academic.sh` e `prepare_people_collection.py`;
 - `docs/guias/preparacao-academica.md`.

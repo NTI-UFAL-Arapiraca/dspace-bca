@@ -90,6 +90,11 @@ rotas. Um `config --quiet` válido não verifica DNS, TLS, SMTP ou permissões
 nos volumes. Consulte a [referência](../referencia/implantacao.md) para as
 responsabilidades de cada componente.
 
+O backend monta a pasta SAF de produção com escrita habilitada para que a
+importação persista os mapfiles ao lado dos pacotes. A base GeoLite2 também é
+montada no backend sem a opção de somente leitura. Preserve as permissões e
+faça backup dos arquivos do SAF antes de executar uma nova importação.
+
 ## Diagnosticar campos e vínculos
 
 | Situação | Onde conferir |

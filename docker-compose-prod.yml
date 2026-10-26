@@ -15,7 +15,6 @@ services:
       - type: bind
         source: ${DSPACE_SAF_HOST_DIR:?Defina DSPACE_SAF_HOST_DIR para o diretorio SAF existente}
         target: /dspace/saf_bundle
-        read_only: true
         bind:
           create_host_path: false
   dspace-angular:

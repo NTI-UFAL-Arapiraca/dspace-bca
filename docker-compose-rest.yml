@@ -94,7 +94,6 @@ services:
     - type: bind
       source: ${GEOLITE2_CITY_DB_PATH:?Defina GEOLITE2_CITY_DB_PATH no .env}
       target: /dspace/config/GeoLite2-City.mmdb
-      read_only: true
       bind:
         create_host_path: false
     # Ensure that the database is ready BEFORE starting tomcat
