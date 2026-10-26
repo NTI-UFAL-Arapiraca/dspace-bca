@@ -101,6 +101,8 @@ faça backup dos arquivos do SAF antes de executar uma nova importação.
 | --- | --- |
 | A propriedade do modelo não foi encontrada | Backend recriado com os mounts e o novo `rest.cfg`; arquivos legíveis no host. |
 | Falha de login na preparação | URL da API, e-mail e senha do administrador no `.env` da migração. |
+| Erro de metadado `dc.contributor.coadvisor` ao criar conta | Atualize/recrie o backend e rode `registry-loader -m /dspace/config/registries/academic-metadata.xml` antes de criar a conta. |
+| Projeto de migração não encontrado | Confirme o caminho do `.env`; informe `--migration-dir` ou defina `DSPACE_MIGRATION_DIR` para a raiz que contém `pyproject.toml`. |
 | A coleção Pessoas existe sem tipo | Administração da coleção; selecione `Person` quando adequado e confira seu conteúdo. |
 | Publicações sem handle | Correspondência entre `people.json`, mapfiles e o lote importado. |
 | Pessoa não aparece no seletor | Registro Person arquivado, permissões e atualização do índice Discovery. |

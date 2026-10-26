@@ -79,7 +79,23 @@ curl --fail -H 'Host: repo.interno.example.org' \
 Substitua o domínio ilustrativo. Confira também as URLs públicas da interface
 e da API. Somente o proxy deve publicar a porta 80.
 
-## 6. Criar o administrador, se necessário
+## 6. Registrar metadados antes de criar o administrador
+
+O DSpace exige que os metadados usados nos formulários de usuário estejam no
+registro antes de salvar a conta. Isso inclui `dc.contributor.coadvisor`,
+adicionado pela configuração acadêmica deste projeto. Carregue o registro no
+banco depois de atualizar/recriar o backend e antes de criar o administrador:
+
+```bash
+docker compose --env-file .env -p d10 \
+  -f docker-compose-dist.yml -f docker-compose-rest.yml -f docker-compose-prod.yml \
+  exec dspace /dspace/bin/dspace registry-loader \
+  -m /dspace/config/registries/academic-metadata.xml
+```
+
+O comando pode ser repetido; os campos que já existem são reutilizados.
+
+## 7. Criar o administrador, se necessário
 
 O cadastro público de contas está desativado. Crie a conta administrativa
 diretamente no backend com o comando abaixo; contas existentes continuam
@@ -94,7 +110,7 @@ docker compose --env-file .env -p d10 \
 Teste login, upload e envio de e-mail. Guarde as credenciais administrativas
 no `.env` da migração quando for executar a importação.
 
-## 7. Continuar conforme a tarefa
+## 8. Continuar conforme a tarefa
 
 - [Preparar campos e pessoas](preparacao-academica.md).
 - [Executar a migração](../../../dspace-migration/docs/guias/migracao-producao.md).

@@ -5,8 +5,11 @@ set -euo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd -- "$SCRIPT_DIR/.." && pwd)"
 MIGRATION_DIR="${DSPACE_MIGRATION_DIR:-$PROJECT_DIR/../dspace-migration}"
+MIGRATION_DIR_EXPLICIT=false
+if [[ -n "${DSPACE_MIGRATION_DIR:-}" ]]; then MIGRATION_DIR_EXPLICIT=true; fi
 ENV_FILE="$PROJECT_DIR/.env"
 MIGRATION_ENV="$MIGRATION_DIR/.env"
+MIGRATION_ENV_EXPLICIT=false
 PROJECT_NAME=d10
 DEVELOPMENT=false
 
@@ -15,6 +18,7 @@ usage() {
 Uso: bash scripts/prepare-academic.sh [opções]
   --env-file CAMINHO            .env da implantação (padrão: .env deste projeto)
   --migration-env-file CAMINHO  .env da migração (padrão: ../dspace-migration/.env)
+  --migration-dir CAMINHO       diretório do projeto de migração
   --project-name NOME          projeto Compose (padrão: d10)
   --development               usa rest + dev; requer projeto diferente de d10
   --help                      mostra esta ajuda
@@ -27,11 +31,12 @@ EOF
 
 while (( $# )); do
     case "$1" in
-        --env-file|--migration-env-file|--project-name)
+        --env-file|--migration-env-file|--migration-dir|--project-name)
             if (( $# < 2 )); then usage >&2; exit 2; fi
             case "$1" in
                 --env-file) ENV_FILE="$2" ;;
-                --migration-env-file) MIGRATION_ENV="$2" ;;
+                --migration-env-file) MIGRATION_ENV="$2"; MIGRATION_ENV_EXPLICIT=true ;;
+                --migration-dir) MIGRATION_DIR="$2"; MIGRATION_DIR_EXPLICIT=true ;;
                 --project-name) PROJECT_NAME="$2" ;;
             esac
             shift 2 ;;
@@ -41,11 +46,20 @@ while (( $# )); do
     esac
 done
 
+# When the migration project is not a sibling, infer its root from an explicit
+# .env path if that directory contains the project's pyproject.toml.
+if [[ "$MIGRATION_DIR_EXPLICIT" != true && "$MIGRATION_ENV_EXPLICIT" == true ]]; then
+    migration_env_dir="$(dirname -- "$MIGRATION_ENV")"
+    if [[ -f "$migration_env_dir/pyproject.toml" ]]; then
+        MIGRATION_DIR="$migration_env_dir"
+    fi
+fi
+
 [[ -r "$ENV_FILE" && -r "$MIGRATION_ENV" ]] || {
     echo "Informe arquivos .env legíveis para implantação e migração." >&2; exit 1;
 }
 [[ -f "$MIGRATION_DIR/pyproject.toml" ]] || {
-    echo "Projeto de migração não encontrado; configure DSPACE_MIGRATION_DIR." >&2; exit 1;
+    echo "Projeto de migração não encontrado em '$MIGRATION_DIR'; informe --migration-dir ou DSPACE_MIGRATION_DIR." >&2; exit 1;
 }
 command -v docker >/dev/null
 command -v uv >/dev/null

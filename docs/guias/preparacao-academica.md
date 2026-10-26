@@ -1,8 +1,18 @@
 # Preparar metadados e a coleção Pessoas
 
-Execute depois de inicializar o DSpace e criar o administrador. Requer os
-projetos `dspace-bca` e `dspace-migration` lado a lado e `uv` instalado.
-Esta preparação não importa trabalhos.
+Execute depois de inicializar o DSpace e criar o administrador. Requer `uv` e
+o projeto `dspace-migration` disponível. Por padrão, o script espera os dois
+projetos lado a lado. Se estiverem em diretórios diferentes, informe
+`DSPACE_MIGRATION_DIR` ou `--migration-dir`; um `--migration-env-file` dentro
+da raiz da migração também permite ao script localizar o projeto. Esta
+preparação não importa trabalhos.
+
+Em produção, carregue `academic-metadata.xml` antes de criar o administrador,
+pois os formulários de conta podem incluir campos acadêmicos como
+`dc.contributor.coadvisor`. O procedimento está no guia de
+[inicialização da produção](inicializacao-producao.md#6-registrar-metadados-antes-de-criar-o-administrador).
+Se o administrador já existe e um campo não estiver registrado, execute o
+mesmo `registry-loader` antes de continuar.
 
 ## 1. Preparar a migração
 
@@ -29,6 +39,14 @@ bash scripts/prepare-academic.sh --development --project-name d10dev \
 ```bash
 bash scripts/prepare-academic.sh --project-name d10 \
   --env-file .env --migration-env-file ../dspace-migration/.env
+```
+
+Quando a migração estiver em outro caminho, use, por exemplo:
+
+```bash
+bash scripts/prepare-academic.sh --project-name d10 \
+  --env-file .env --migration-dir /srv/dspace-migration \
+  --migration-env-file /srv/dspace-migration/.env
 ```
 
 Aguarde o término sem erros. Confira o preenchimento de
