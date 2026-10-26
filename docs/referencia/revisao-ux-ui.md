@@ -615,3 +615,30 @@ Limites: inspeção local com dados fictícios; sem testes com usuários, aparel
 físicos ou leitor de tela. Movimento reduzido foi preservado/revisado no SCSS,
 sem emulação nesta rodada. Não se repetiu build otimizado de produção/SSR nem
 uma auditoria completa WCAG. A publicação requer nova imagem Angular.
+
+## Links e cartões de novidades — 26/10/2026
+
+A indicação de tipo em “Novidades no acervo” passa a texto secundário simples,
+sem fundo azul ou formato de etiqueta. O título perde o sublinhado permanente;
+hover e foco realçam a superfície e a borda do cartão inteiro, com deslocamento
+da seta. O destino e a área clicável continuam sendo o único link do cartão.
+
+Links e botões deixam de ter sublinhado permanente, inclusive nos componentes
+oficiais. Links de texto, como “Ver mais registros” e “Ver todas as comunidades”,
+mostram uma linha animada em hover/foco. Atalhos com superfície própria, como
+“Caminhos para descobrir” e “Explore por comunidade”, usam somente o destaque
+do fundo. Essa separação substitui o tratamento de sublinhados registrado nas
+rodadas anteriores, conforme a evolução da RFC 0015.
+
+Validação: recompilação de desenvolvimento DSpace Angular 10.1 concluída;
+verificações no Chrome local confirmaram a tag neutra, a mudança de fundo sem
+linha nos atalhos, a linha e o contorno de foco em “Ver mais registros”, e a
+navegação ao perfil ao clicar no espaço interno do cartão, fora do título.
+Home sem sublinhados permanentes ou rolagem horizontal em 320, 390, 768 e
+1440 px, nos modos claro e escuro; perfil aberto também sem sublinhados
+permanentes. A emulação de movimento reduzido confirmou transições de duração
+zero na linha e na seta. `git diff --check` sem erros.
+
+Limites: validação local, sem build otimizado de produção/SSR, aparelho físico
+ou leitor de tela. Permanece o aviso preexistente de `RouterLink` não usado no
+template da política de privacidade. Produção exige nova imagem Angular.

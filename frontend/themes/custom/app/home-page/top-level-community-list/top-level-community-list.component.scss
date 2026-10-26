@@ -39,24 +39,3 @@ section {
     font-size: 0.875rem;
   }
 }
-.community-links a span,
-.section-link span {
-  background-image: linear-gradient(currentColor, currentColor);
-  background-repeat: no-repeat;
-  background-position: left bottom;
-  background-size: 0 1px;
-  text-decoration: none;
-
-  @media (prefers-reduced-motion: no-preference) {
-    transition: background-size 220ms ease-in-out;
-  }
-}
-.community-links a:hover span,
-.community-links a:focus-visible span,
-.section-link:hover span,
-.section-link:focus-visible span {
-  background-size: 100% 1px;
-}
-.section-link {
-  text-decoration: none;
-}

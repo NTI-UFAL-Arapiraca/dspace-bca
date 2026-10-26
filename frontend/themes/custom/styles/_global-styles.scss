@@ -5,6 +5,11 @@ body {
   text-underline-offset: 0.18em;
 }
 
+// Upstream components also declare underlines in their encapsulated styles.
+a, .btn-link, .btn-link-inline {
+  text-decoration: none !important;
+}
+
 h1, h2, h3, h4, h5, h6 {
   overflow-wrap: break-word;
   font-weight: 500;
@@ -314,8 +319,6 @@ ds-top-level-community-list {
       color: var(--bs-link-color);
       font-size: 1.0625rem;
       font-weight: 600;
-      text-decoration: underline;
-      text-underline-offset: 0.2em;
     }
 
     &:focus-within {
@@ -642,36 +645,53 @@ ds-footer .bottom-footer :focus-visible {
   }
 }
 
-// Reading links stay recognisable without depending on colour or hover.
-#main-content {
+// Text links reveal their underline on interaction; cards keep surface feedback.
+#main-content, ds-footer {
   .repository-text-link,
   .item-list-title a,
   a.item-list-title,
   a.lead,
+  a.link-contrast,
   ds-metadata-representation-list a,
   ds-academic-metadata-link a,
   ds-generic-item-page-field a,
   ds-item-page-uri-field a,
+  ds-file-download-link a,
   .academic-item__access a,
   .profile-links a,
-  .context-values a {
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.2em;
+  .context-values a,
+  .statistics-bars__line a,
+  .section-link > span,
+  .academic-item__metadata ds-metadata-link-view a > span[dsEntityIcon],
+  .footer-info :is(a, button),
+  .coar-notify-support-route {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    background-size: 0 1px;
 
-    &:hover {
-      text-decoration-thickness: 2px;
+    @media (prefers-reduced-motion: no-preference) {
+      transition: background-size 220ms ease-in-out;
     }
+
+    &:hover, &:focus-visible {
+      background-size: 100% 1px;
+    }
+  }
+
+  .section-link:hover > span,
+  .section-link:focus-visible > span,
+  .academic-item__metadata ds-metadata-link-view a:hover > span[dsEntityIcon],
+  .academic-item__metadata ds-metadata-link-view a:focus-visible > span[dsEntityIcon] {
+    background-size: 100% 1px;
   }
 
   // The authority icon and its nonbreaking separator sit outside the name span.
   .academic-item__metadata ds-metadata-link-view a {
-    text-decoration-line: none;
+    background-image: none;
 
     > span[dsEntityIcon] {
       display: inline-block;
-      text-decoration-line: underline;
-      text-decoration-thickness: inherit;
     }
   }
 }

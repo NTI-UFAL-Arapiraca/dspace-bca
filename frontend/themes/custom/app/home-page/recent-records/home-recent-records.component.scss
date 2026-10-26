@@ -26,6 +26,10 @@
   &:hover, &:focus-visible {
     border-color: var(--bs-link-color);
     background: var(--ufal-blue-soft);
+
+    > i {
+      transform: translateX(0.25rem);
+    }
   }
   h3 {
     margin: 0.375rem 0 0;
@@ -33,12 +37,13 @@
     font-size: 1.0625rem;
     font-weight: 500;
     line-height: 1.5;
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
   }
   > i {
     flex-shrink: 0;
     font-size: 0.875rem;
+    @media (prefers-reduced-motion: no-preference) {
+      transition: transform 180ms ease-in-out;
+    }
   }
 }
 .record-copy {
@@ -47,11 +52,7 @@
 }
 .record-kind {
   display: inline-block;
-  padding: 0.15rem 0.5rem;
-  color: var(--ufal-badge-color);
-  background: var(--ufal-blue-soft);
-  border-radius: var(--bs-border-radius-sm);
-  font-weight: 600;
+  color: var(--bs-secondary-color);
   font-size: 0.75rem;
 }
 .record-detail {
@@ -63,15 +64,5 @@
 @media (max-width: 575.98px) {
   .record-link {
     padding: 1rem;
-  }
-}
-.section-link > i {
-  text-decoration: none;
-}
-.section-link {
-  text-decoration: none;
-  .section-link-label {
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
   }
 }

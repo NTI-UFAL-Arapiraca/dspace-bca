@@ -41,7 +41,8 @@ restrita a esse cartão para dar contexto institucional à página sem competir
 com título, resumos e dados acadêmicos. Miniaturas e controles de acesso
 permanecem em primeiro plano; o fundo não representa a capa do trabalho.
 
-Usar sublinhados persistentes nos links de conteúdo e setas decorativas após
+Usar sublinhados persistentes nos links de conteúdo (substituídos pela evolução
+de interação de 26/10/2026 abaixo) e setas decorativas após
 os rótulos de navegação institucional, registro completo e atividade dos perfis.
 O link de registro completo deixa de declarar `role="button"`. Os títulos de
 curso e campus passam de h5 para h2, coerentes com os demais campos.
@@ -153,3 +154,20 @@ A transição dos atalhos só ocorre sem preferência por movimento reduzido.
 Somente estilos e documentação mudam; componentes, consultas, organização,
 conteúdo institucional e texturas permanecem. Não há dependências, migrações ou
 alterações de implantação. Produção requer nova imagem Angular pelo fluxo existente.
+
+## Interação dos links — 26/10/2026
+
+Após revisão visual, links e botões deixam de ter sublinhados permanentes,
+incluindo os estilos encapsulados dos componentes oficiais. Links de texto
+revelam uma linha com expansão no hover e no foco de teclado.
+Atalhos com superfície própria, incluindo “Caminhos para descobrir” e as
+comunidades, usam somente o realce de fundo/borda, sem sublinhado adicional.
+A transição só ocorre sem preferência por movimento
+reduzido; o contorno de foco continua independente da animação.
+
+Em “Novidades no acervo”, o tipo do registro passa a texto secundário simples,
+sem fundo azul. O título perde o sublinhado; o cartão continua sendo um único
+link e recebe destaque de superfície e borda, acompanhado pelo deslocamento
+da seta em hover e foco. O atalho para mais registros compartilha o tratamento
+dos demais links de texto. Consultas, classificação dos registros e destinos
+de navegação são preservados. Produção exige uma nova imagem Angular.

@@ -141,6 +141,15 @@ comunidades, listas, filtros e cartões dos perfis compartilham espaçamentos,
 bordas e raios. O cabeçalho se reorganiza em telas pequenas e os controles
 mantêm indicação de foco para uso por teclado.
 
+Links e botões não têm sublinhado permanente. Os links de texto usam uma linha
+que se expande no hover ou foco de teclado; a transição respeita a preferência
+por movimento reduzido. A regra global também remove os sublinhados dos
+componentes oficiais, mantendo os indicadores de foco e os estados de superfície.
+Atalhos com superfície própria, como “Caminhos para descobrir”, comunidades e
+cartões de novidades e atividade, usam o destaque de fundo/borda em hover e foco,
+sem acrescentar sublinhado. Links de texto, como “Ver mais registros” e
+“Ver todas as comunidades”, mantêm a linha animada.
+
 Os controles de usuário do cabeçalho usam um grupo nomeado, com navegação
 nativa por Tab e Shift+Tab. A classe `institution-header__tools` preserva o
 alinhamento e o espaçamento independentemente do papel acessível do grupo.
@@ -198,7 +207,7 @@ local: arquivos e metadados na lateral, conteúdo na área de leitura. Abaixo de
 Os componentes oficiais continuam responsáveis por autorização, download,
 mídia, licenças e exibição condicional de campos. O resumo permanece justificado
 conforme a RFC 0006. Links de registro completo usam semântica de navegação;
-cartões de atividade dos perfis exibem rótulos sublinhados e setas decorativas.
+cartões de atividade dos perfis exibem rótulos e setas decorativas.
 Os links e a rota de metadados completos exigem o privilégio de administrador;
 acessos diretos à rota recebem um aviso e um link para a página pública do item.
 Isso controla a apresentação Angular: não altera as respostas da API REST nem
@@ -390,6 +399,11 @@ navegação para mais registros. Os cartões exibem título, tipo de apresentaç
 mostra a página retornada pelo serviço como uma prévia com acesso ao catálogo
 completo. Ambas mantêm carregamento, erro e vazio; não há nova consulta ou filtro.
 CMS, COAR, sugestões e a opção de filtros Discovery continuam na composição.
+
+O tipo do registro é um texto secundário, sem fundo ou cor de destaque.
+O cartão inteiro é um link: hover e foco realçam sua superfície e borda e
+deslocam a seta, sem sublinhar apenas o título. O atalho para mais registros
+segue a animação dos demais links de texto.
 
 Home e comunidades entram no registro eager; recentes é importado diretamente.
 Os estilos compartilhados ficam em `_home-sections.scss`; o formulário recebe
