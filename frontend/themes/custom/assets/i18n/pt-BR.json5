@@ -1,4 +1,16 @@
 {
+  "admin.access-control.epeople.form.initial-password.too-short": "Use pelo menos 8 caracteres. Esta senha não foi enviada.",
+  "admin.access-control.epeople.form.initial-password.rejected": "A conta foi criada, mas o servidor rejeitou a operação de senha (HTTP 422). Confira a política de senha: use pelo menos 8 caracteres. Informe e confirme uma senha válida para tentar novamente nesta mesma conta.",
+
+  "admin.access-control.epeople.form.initial-password.enable": "Definir senha inicial agora",
+  "admin.access-control.epeople.form.initial-password.password": "Senha",
+  "admin.access-control.epeople.form.initial-password.confirm": "Confirmar senha",
+  "admin.access-control.epeople.form.initial-password.invalid": "Preencha os dois campos com senhas iguais e habilite o login da conta.",
+  "admin.access-control.epeople.form.initial-password.policy": "Use pelo menos 8 caracteres. O servidor valida a política de senha configurada no DSpace. A conta precisa permitir login.",
+  "admin.access-control.epeople.form.initial-password.partial": "A conta foi criada, mas não foi possível confirmar a definição da senha. Não crie outra conta. Se o servidor recusou a política de senha, informe uma senha válida e tente novamente aqui. Se a resposta se perdeu, verifique primeiro o login com segurança na conta pretendida. Uma nova tentativa não substitui uma senha existente: isso exige a senha atual ou recuperação por e-mail. Você pode voltar à lista sem tentar novamente.",
+  "admin.access-control.epeople.form.initial-password.retry": "Tentar definir a senha inicial desta conta novamente",
+  "admin.access-control.epeople.form.initial-password.success": "Conta criada e senha inicial definida.",
+
   "browse.startsWith.choose_year.short": "Ano",
   "browse.startsWith.months.none.short": "Mês",
   "repository.home.search.title": "O que você quer encontrar?",

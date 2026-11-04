@@ -1,4 +1,16 @@
 {
+  "admin.access-control.epeople.form.initial-password.too-short": "Use at least 8 characters. This password has not been sent.",
+  "admin.access-control.epeople.form.initial-password.rejected": "The account was created, but the server rejected the password operation (HTTP 422). Check the password policy: use at least 8 characters. Enter and confirm a compliant password to try again for this same account.",
+
+  "admin.access-control.epeople.form.initial-password.enable": "Set initial password now",
+  "admin.access-control.epeople.form.initial-password.password": "Password",
+  "admin.access-control.epeople.form.initial-password.confirm": "Confirm password",
+  "admin.access-control.epeople.form.initial-password.invalid": "Both fields are required and must match. Enable login for this account.",
+  "admin.access-control.epeople.form.initial-password.policy": "Use at least 8 characters. The server validates the configured DSpace password policy. The account must allow login.",
+  "admin.access-control.epeople.form.initial-password.partial": "The account was created, but the password could not be confirmed. Do not create another account. If the server rejected the password policy, enter a compliant password and try again here. If the response was lost, verify login securely with the intended account first. A retry cannot replace an existing password; that requires the current password or email recovery. You can return to the account list without retrying.",
+  "admin.access-control.epeople.form.initial-password.retry": "Try initial password for this account again",
+  "admin.access-control.epeople.form.initial-password.success": "Account created and initial password set.",
+
   "browse.startsWith.choose_year.short": "Year",
   "browse.startsWith.months.none.short": "Month",
   "repository.home.search.title": "What are you looking for?",

@@ -124,3 +124,41 @@ A resposta deve conter `Access-Control-Allow-Origin: http://localhost:4000`.
 Não misture a interface local com as URLs de produção. No diagnóstico SEO,
 mantenha `SEO_HEALTH_ENABLED=false` em desenvolvimento; na produção, use
 `true` depois de verificar o acesso do backend ao domínio público.
+
+## Criar uma conta com senha inicial sem SMTP
+
+Em Administração → Controle de acesso → EPeople → Criar, marque **Definir
+senha inicial agora**, preencha **Senha** e **Confirmar senha** e mantenha o
+login habilitado. A senha deve ter pelo menos oito caracteres; o formulário
+valida esse mínimo antes da criação. O servidor pode exigir regras adicionais.
+Sem marcar a opção, o fluxo original é preservado. A opção
+não aparece na edição e não redefine senhas existentes.
+
+A interface cria a EPerson e depois envia um PATCH para o link REST da conta
+(`/api/eperson/epersons/{uuid}`), com a operação
+`add /password` e o objeto `value` contendo `new_password`. O backend aplica
+sua política de senha configurada, exige permissão WRITE e autenticação pelo
+método password, além de permitir a definição de senha para a conta. Não há
+alteração de política ou configuração de SMTP. Senhas ficam apenas nos campos
+e na requisição HTTP, fora do cache de requisições NgRx.
+
+Se a conta for criada e o PATCH falhar, a tela informa o resultado parcial,
+mostra e-mail/UUID e permite informar novamente uma senha para **a mesma conta**.
+Não crie uma segunda conta. Uma resposta perdida pode esconder um PATCH já
+concluído: verifique o login com segurança antes de tentar novamente. A API
+recusa a tentativa sem senha atual se a conta já tiver senha; nesse caso use
+a senha atual ou a recuperação normal por e-mail. Voltar à lista encerra a
+tentativa e limpa os campos; não há recuperação persistente dessa senha.
+
+Contrato conferido nos fontes oficiais DSpace 10.1:
+[EPersonRestRepository](https://github.com/DSpace/DSpace/blob/dspace-10.1/dspace-server-webapp/src/main/java/org/dspace/app/rest/repository/EPersonRestRepository.java),
+[EPersonPasswordAddOperation](https://github.com/DSpace/DSpace/blob/dspace-10.1/dspace-server-webapp/src/main/java/org/dspace/app/rest/repository/patch/operation/EPersonPasswordAddOperation.java) e
+[EPersonRestPermissionEvaluatorPlugin](https://github.com/DSpace/DSpace/blob/dspace-10.1/dspace-server-webapp/src/main/java/org/dspace/app/rest/security/EPersonRestPermissionEvaluatorPlugin.java).
+O formulário oficial está em
+[eperson-form](https://github.com/DSpace/dspace-angular/tree/dspace-10.1/src/app/access-control/epeople-registry/eperson-form).
+A extensão é aplicada por patch isolado nos dois Dockerfiles; exige reconstruir
+a imagem Angular.
+
+A resposta HTTP 422 recebe aviso específico de rejeição, separado da mensagem
+de resultado incerto por falha de rede. A resposta bruta não é exibida nem
+registrada pelo componente.

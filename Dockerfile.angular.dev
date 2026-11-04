@@ -26,6 +26,11 @@ RUN node /tmp/apply-item-all-languages.mjs \
     /app/src/app/core/data/item-data.service.ts \
     /app/src/app/item-page/edit-item-page/edit-item-page-routes.ts
 
+# Administrative initial passwords use the standard REST PATCH without caching secrets.
+COPY frontend/patches/apply-eperson-initial-password.mjs /tmp/apply-eperson-initial-password.mjs
+RUN node /tmp/apply-eperson-initial-password.mjs \
+    /app/src/app/access-control/epeople-registry/eperson-form
+
 # Keep Person search navigation local to its results, including smooth scrolling.
 COPY frontend/overrides/person-search-navigation*.ts /app/src/app/
 COPY frontend/patches/apply-person-search-navigation.mjs /tmp/apply-person-search-navigation.mjs
