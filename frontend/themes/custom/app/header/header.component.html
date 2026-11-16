@@ -18,9 +18,9 @@
           <ds-lang-switch></ds-lang-switch>
           <button class="theme-toggle btn btn-link" type="button" data-test="theme-toggle"
             (click)="colorMode.toggle()" [attr.aria-pressed]="colorMode.isDark()"
-            [title]="(colorMode.isDark() ? 'theme.enable-light' : 'theme.enable-dark') | translate">
+            [title]="(colorMode.isDark() ? 'theme.enable-light' : 'theme.enable-dark') | translate"
+            [attr.aria-label]="(colorMode.isDark() ? 'theme.enable-light' : 'theme.enable-dark') | translate">
             <i class="fas fa-fw" [class.fa-sun]="colorMode.isDark()" [class.fa-moon]="!colorMode.isDark()" aria-hidden="true"></i>
-            <span class="theme-toggle__label">{{ 'theme.dark.short' | translate }}</span>
           </button>
           <ds-context-help-toggle></ds-context-help-toggle>
           <ds-auth-nav-menu></ds-auth-nav-menu>

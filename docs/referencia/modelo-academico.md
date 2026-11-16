@@ -1,7 +1,10 @@
 # Modelo acadêmico e pessoas
 
 Configuração do DSpace **10.1**, baseada no **Authority Framework**.
-Para executar a preparação, use o [roteiro próprio](../guias/preparacao-academica.md).
+Para executar a preparação, use a [instalação](../guias/instalacao.md#coleção-pessoas).
+Este documento descreve o destino (configuração, formulários e perfis); a
+extração, a importação e o enriquecimento do acervo legado são do projeto
+[`dspace-migration`](../../../dspace-migration/docs/README.md).
 
 No DSpace, um trabalho é um **item**: seus arquivos, título, resumo e outros
 metadados ficam juntos. Uma coleção agrupa itens; uma comunidade agrupa
@@ -24,17 +27,8 @@ Uma pessoa pode ser autora de um trabalho e orientadora de outro. Guardamos
 o cadastro uma vez e registramos seu papel em cada trabalho. Os autores e
 professores migrados não recebem contas de acesso: a biblioteca administra
 os cadastros. O administrador usa sua própria conta para preparar e revisar
-a migração.
-
-```mermaid
-flowchart LR
-    L[Banco legado] --> E[Extração: trabalhos e pessoas com IDs]
-    E --> S[Pacotes SAF e manifesto de pessoas]
-    S --> I[Importação dos trabalhos]
-    I --> P[Criação e reutilização de Person]
-    P --> V[Vínculos de autoria, orientação e banca]
-    V --> B[Busca e páginas públicas]
-```
+a migração. O fluxo de extração, importação e vínculos está descrito na
+[migração](../../../dspace-migration/docs/guias/migracao.md).
 
 Os seguintes arquivos já estão integrados à implantação. Não é necessário
 copiar o exemplo `people-authority.cfg.example` manualmente para o container.
@@ -73,8 +67,9 @@ Curso e campus são campos de texto editáveis nesta entrega. Na página do
 trabalho, seus valores são links para a busca pública de trabalhos filtrada
 pelo valor selecionado. `local.cnpq.area` guarda a classificação legada como
 código e nome, por exemplo `1.00.00.00-3 Ciências exatas e da terra`, com um
-valor por categoria vinculada. O campo é editável e aparece na página do
-trabalho; não substitui as palavras-chave de `dc.subject`. Os quatro campos
+valor por categoria vinculada. O campo é editável e, na página do trabalho,
+cada valor é um link para a busca de trabalhos filtrada pela faceta `cnpq`;
+não substitui as palavras-chave de `dc.subject`. Os quatro campos
 de pessoas usam seleção de cadastro existente. Se a pessoa ainda não existir,
 a biblioteca a cadastra na coleção Pessoas e depois a seleciona no trabalho.
 Programa de pós-graduação e grau acadêmico não são deduzidos do nome do curso.
@@ -107,10 +102,9 @@ conciliação está descrito na [referência de pessoas da migração](../../../
 
 ## Conteúdo dos perfis
 
-A extração preserva e-mail, URL Lattes e titulação em `people.json`. O
-`apply-people` cria os campos nas novas Person e enriquece cadastros existentes
-sem substituir valores divergentes de curadoria. A preparação registra
-`person.identifier.lattes` e `local.person.degree`; e-mail usa `person.email`.
+A preparação registra `person.identifier.lattes` e `local.person.degree`;
+e-mail usa `person.email`. Como a migração preenche esses campos nas Person
+está em [pessoas e vínculos](../../../dspace-migration/docs/referencia/pessoas-e-vinculos.md#conteúdo-dos-perfis-e-atualização-de-lotes).
 A titulação mantém o rótulo da origem (Dr., Dr.ª, Me., Ma., Esp.) e a interface
 mostra a descrição por extenso. Cargo e afiliação continuam separados.
 
@@ -123,22 +117,16 @@ filtro selecionado; as listas mantêm paginação e filtros por assunto, curso,
 campus e data. A ausência de resultado não é usada para inferir afiliação,
 especialidade pessoal ou situação profissional atual.
 
-Em lotes existentes, registre os campos e use no projeto de migração:
-`uv run apply-people --refresh-profiles --dry-run`, depois
-`uv run apply-people --refresh-profiles`. Isso consulta a origem em leitura,
-confere identidades e participações e atualiza somente o manifesto de pessoas,
-sem regenerar pacotes SAF, mapfiles, arquivos ou políticas.
+Para atualizar perfis de lotes já importados, registre os campos aqui e siga
+a [atualização de perfis na migração](../../../dspace-migration/docs/referencia/pessoas-e-vinculos.md#conteúdo-dos-perfis-e-atualização-de-lotes).
 
-`person.email` é um metadado de `Person`; a migração não cria contas `EPerson`.
+`person.email` é um metadado de `Person`; nenhuma conta `EPerson` é criada.
 O `dspace.cfg` padrão do DSpace 10.1 oculta esse campo da API e da interface
 para usuários não administradores ([configuração oficial](https://github.com/DSpace/DSpace/blob/dspace-10.1/dspace/config/dspace.cfg#L1199-L1215)).
 O perfil não aplica uma ocultação apenas visual: só mostra o campo quando a
-API o disponibiliza. Além disso,
-`apply-people` grava os e-mails migrados com `securityLevel: 2` (regra por
-valor para administradores e proprietário) e aplica essa regra aos e-mails de
-origem já presentes em Person reutilizadas. A regra global `metadata.hide` tem
-precedência sobre a visibilidade por valor; consulte a [configuração oficial
-de segurança de metadados](https://wiki.lyrasis.org/spaces/DSDOC10x/pages/438698074/Metadata%2Bsecurity%2Bconfiguration).
+API o disponibiliza. A regra global `metadata.hide` tem precedência sobre a
+visibilidade por valor (`securityLevel`, aplicado pela migração); consulte a
+[configuração oficial de segurança de metadados](https://wiki.lyrasis.org/spaces/DSDOC10x/pages/438698074/Metadata%2Bsecurity%2Bconfiguration).
 
 Tornar `person.email` público exige uma decisão explícita: desativar a
 ocultação da API e alterar os níveis dos valores afeta todas as Person com

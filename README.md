@@ -37,13 +37,13 @@ docker compose --env-file .env.development -p d10dev \
   -f docker-compose-rest.yml -f docker-compose-dev.yml up -d --build
 ```
 
-Abra `http://localhost:4000/`. A interface e a API usam portas locais em loopback; o ambiente `d10dev` tem banco, Solr e assetstore próprios. Para criar o administrador, registrar os metadados e encerrar os serviços, consulte o [guia de inicialização local](docs/guias/inicializacao-local.md).
+Abra `http://localhost:4000/`. A interface e a API usam portas locais em loopback; o ambiente `d10dev` tem banco, Solr e assetstore próprios. Para criar o administrador, registrar os metadados e encerrar os serviços, consulte a [instalação local](docs/guias/instalacao.md#local).
 
 ## Implantação
 
 Em produção, a implantação combina `docker-compose-dist.yml`, `docker-compose-rest.yml` e `docker-compose-prod.yml`. Apenas o proxy interno publica a porta 80; o proxy institucional termina TLS e encaminha a interface em `/dspace/` e a API em `/dspace-server/`.
 
-O workflow do GitHub Actions compila o tema e publica a imagem Angular no GHCR em pushes para `main`; também pode ser iniciado manualmente. Configurações de runtime e de backend são montadas separadamente. Consulte o [guia de produção](docs/guias/inicializacao-producao.md) e a [referência de implantação](docs/referencia/implantacao.md) antes de alterar URLs, rede, imagens ou proxy.
+O workflow do GitHub Actions compila o tema e publica a imagem Angular no GHCR em pushes para `main`; também pode ser iniciado manualmente. Configurações de runtime e de backend são montadas separadamente. Consulte a [instalação em produção](docs/guias/instalacao.md#produção) e a [referência de implantação](docs/referencia/implantacao.md) antes de alterar URLs, rede, imagens ou proxy.
 
 ## Estrutura do projeto
 
@@ -63,10 +63,8 @@ O workflow do GitHub Actions compila o tema e publica a imagem Angular no GHCR e
 ## Documentação
 
 - [Índice dos guias e referências](docs/README.md)
-- [Inicialização local](docs/guias/inicializacao-local.md)
-- [Inicialização e atualização em produção](docs/guias/inicializacao-producao.md)
-- [Operação e verificação](docs/guias/operacao.md)
-- [Preparação de metadados acadêmicos e da coleção Pessoas](docs/guias/preparacao-academica.md)
+- [Instalação](docs/guias/instalacao.md): local, produção, metadados, administrador e coleção Pessoas.
+- [Operação](docs/guias/operacao.md): atualizar, reindexar, verificar, backup, validação e diagnóstico.
 - [Modelo acadêmico e autoridades de pessoas](docs/referencia/modelo-academico.md)
 - [Configuração do backend](backend/README.md)
 - [Personalização do tema Angular](frontend/themes/custom/README.md)

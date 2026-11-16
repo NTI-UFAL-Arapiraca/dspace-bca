@@ -126,6 +126,33 @@ administrador. O primeiro administrador continua sendo criado pela CLI. A
 opção é aplicada tanto na produção quanto no ambiente local porque ambos usam
 `docker-compose-rest.yml`; após atualizar o checkout, recrie o serviço `dspace`.
 
+### Senha inicial definida pelo administrador
+
+Um patch isolado (aplicado nos dois Dockerfiles Angular) acrescenta ao
+formulário de criação de EPerson a opção **Definir senha inicial agora**, para
+criar contas sem SMTP. O procedimento está na
+[operação](../guias/operacao.md#conta-com-senha-inicial-sem-smtp).
+
+A interface cria a EPerson e depois envia um PATCH ao link REST da conta
+(`/api/eperson/epersons/{uuid}`) com a operação `add /password` e `value`
+contendo `new_password`. O backend aplica a política de senha configurada,
+exige permissão WRITE e autenticação pelo método password. Não há mudança de
+política nem de SMTP. A senha fica só nos campos e na requisição HTTP, fora do
+cache NgRx; a resposta bruta não é exibida nem registrada.
+
+Se o PATCH falhar, a tela informa o resultado parcial e permite repetir a
+senha para a mesma conta. HTTP 422 recebe aviso de rejeição, separado do
+aviso de resultado incerto por falha de rede. Se a conta já tiver senha, a API
+recusa a tentativa sem a senha atual; use-a ou a recuperação por e-mail.
+Voltar à lista encerra a tentativa e limpa os campos.
+
+Contrato conferido nos fontes oficiais DSpace 10.1:
+[EPersonRestRepository](https://github.com/DSpace/DSpace/blob/dspace-10.1/dspace-server-webapp/src/main/java/org/dspace/app/rest/repository/EPersonRestRepository.java),
+[EPersonPasswordAddOperation](https://github.com/DSpace/DSpace/blob/dspace-10.1/dspace-server-webapp/src/main/java/org/dspace/app/rest/repository/patch/operation/EPersonPasswordAddOperation.java),
+[EPersonRestPermissionEvaluatorPlugin](https://github.com/DSpace/DSpace/blob/dspace-10.1/dspace-server-webapp/src/main/java/org/dspace/app/rest/security/EPersonRestPermissionEvaluatorPlugin.java)
+e o formulário
+[eperson-form](https://github.com/DSpace/dspace-angular/tree/dspace-10.1/src/app/access-control/epeople-registry/eperson-form).
+
 ## Versões, publicação e runtime
 
 Backend, Solr, CLI e Angular usam `dspace-10.1`. `DSPACE_VER` e
@@ -204,7 +231,9 @@ o diagnóstico depende de a URL pública ser acessível pelo backend.
 `GEOLITE2_CITY_DB_PATH` fornece o GeoLite2 City `.mmdb`, montado no backend.
 A propriedade efetiva é `usage-statistics.dbfile`. O formato antigo
 `GeoLiteCity.dat` não se aplica. IPs privados e loopback não têm localização
-geográfica. A base e suas credenciais não pertencem ao Git.
+geográfica. A base e suas credenciais não pertencem ao Git. O bind não usa
+a opção de somente leitura e não cria o arquivo no host; ao trocá-lo, recrie
+`dspace`.
 
 ## SAF e administração
 

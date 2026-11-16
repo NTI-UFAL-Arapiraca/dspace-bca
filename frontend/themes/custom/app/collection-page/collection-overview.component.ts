@@ -9,7 +9,6 @@ import {
   input,
 } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import {
   combineLatest,
@@ -21,10 +20,8 @@ import {
   AGGREGATES_CONFIGURATION,
   HomeOverviewService,
 } from '../home-page/overview/home-overview.service';
-import {
-  yearSearchParams,
-  yearSeries,
-} from '../home-page/overview/year-series';
+import { YearBarsComponent } from '../home-page/overview/year-bars.component';
+import { yearSeries } from '../home-page/overview/year-series';
 
 /** Works in a collection: total, years covered and works per year. */
 @Component({
@@ -34,8 +31,8 @@ import {
   imports: [
     AsyncPipe,
     DecimalPipe,
-    RouterLink,
     TranslateModule,
+    YearBarsComponent,
   ],
 })
 export class CollectionOverviewComponent {
@@ -48,8 +45,4 @@ export class CollectionOverviewComponent {
       years: this.overview.facet('publicationYear', 100, scope).pipe(map((values) => yearSeries(values))),
     })),
   );
-
-  yearParams(year: number): Record<string, string> {
-    return { ...yearSearchParams(year), scope: this.scope() };
-  }
 }

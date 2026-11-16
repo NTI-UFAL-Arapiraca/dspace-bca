@@ -9,16 +9,7 @@
         }
       </dl>
       @if (data.years.length > 1) {
-        <ol class="home-years__bars collection-overview__bars">
-          @for (bar of data.years; track bar.year) {
-            <li>
-              <a [routerLink]="['/search']" [queryParams]="yearParams(bar.year)"
-                [style.--bar]="bar.percent + '%'" [class.is-empty]="!bar.count"
-                [attr.aria-label]="'repository.home.explore.year-label' | translate: { year: bar.year, count: bar.count }">
-              </a>
-            </li>
-          }
-        </ol>
+        <ds-year-bars class="collection-overview__bars" [bars]="data.years" [scope]="scope()"></ds-year-bars>
       }
     </div>
   }

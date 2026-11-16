@@ -1,14 +1,14 @@
-# Operação do DSpace
+# Operação
 
-Os comandos de produção partem da raiz de `dspace-bca`, com serviços já
-iniciados. Use as URLs reais nos testes.
+Tarefas recorrentes depois da [instalação](instalacao.md). Exemplos de
+produção (projeto `d10`, raiz de `dspace-bca`, serviços iniciados); no
+desenvolvimento use `.env.development`, `-p d10dev` e
+`docker-compose-rest.yml` + `docker-compose-dev.yml`.
 
-## Atualizar a interface ou as configurações
+## Atualizar
 
-1. Faça push e aguarde o workflow quando houver mudanças no tema, componentes,
-   patches ou `frontend/overrides/robots.txt.ejs`.
-2. Atualize o checkout do servidor.
-3. Baixe a imagem publicada e recrie os serviços afetados:
+Mudanças no tema, componentes, patches ou `frontend/overrides/robots.txt.ejs`
+exigem nova imagem: faça push e aguarde o workflow. Depois, no servidor:
 
 ```bash
 git pull --ff-only
@@ -21,13 +21,13 @@ docker compose --env-file .env -p d10 \
   up -d --no-build --force-recreate dspace dspace-angular
 ```
 
-Para mudanças apenas no YAML da interface, basta recriar `dspace-angular`.
-Para configurações do backend ou troca do arquivo GeoLite2, recrie `dspace`.
-No desenvolvimento, use `.env.development`, `-p d10dev` e os arquivos
-`docker-compose-rest.yml` + `docker-compose-dev.yml`; alterações nos patches
-ou em `frontend/overrides/` precisam de `up -d --build`.
+| Mudança | Recriar |
+| --- | --- |
+| Só o YAML da interface | `dspace-angular` |
+| Configuração do backend ou arquivo GeoLite2 | `dspace` |
+| Patches ou `frontend/overrides/` (local) | `up -d --build` |
 
-## Reconstruir índices e arquivos públicos
+## Reindexar
 
 Depois de alterações em lote, restauração ou mudança de URLs públicas:
 
@@ -45,8 +45,10 @@ docker compose --env-file .env -p d10 \
   exec -T dspace /dspace/bin/dspace generate-sitemaps
 ```
 
-Para atualizar OAI sem limpar o índice, omita `-c`. Antes de normalizar
-resumos legados, faça backup e revise o SQL. Somente quando aplicável:
+Para atualizar o OAI sem limpar o índice, omita `-c`.
+
+Normalizar idiomas de resumos legados, só quando aplicável, com backup e o SQL
+revisado; depois, reindexe o Discovery:
 
 ```bash
 docker compose --env-file .env -p d10 \
@@ -55,9 +57,37 @@ docker compose --env-file .env -p d10 \
   < backend/sql/normalize_abstract_languages.sql
 ```
 
-Depois, reconstrua Discovery com o comando acima.
+## Importar um lote (escrita no SAF)
 
-## Verificar a instalação
+O `dspace-migration` importa dentro do container `dspace`, que normalmente
+monta o SAF somente leitura. Para uma importação, recrie o backend com o
+overlay de migração; ao terminar, volte ao Compose normal. Os comandos de
+importação em si ficam no
+[roteiro de migração](../../../dspace-migration/docs/guias/migracao.md#produção).
+
+```bash
+# antes: valide e habilite a escrita no SAF
+docker compose --env-file .env -p d10 \
+  -f docker-compose-dist.yml -f docker-compose-rest.yml -f docker-compose-prod.yml \
+  -f docker-compose-migration.yml config --quiet
+
+docker compose --env-file .env -p d10 \
+  -f docker-compose-dist.yml -f docker-compose-rest.yml -f docker-compose-prod.yml \
+  -f docker-compose-migration.yml up -d --no-build --force-recreate dspace
+
+# depois: restaure a montagem somente leitura
+docker compose --env-file .env -p d10 \
+  -f docker-compose-dist.yml -f docker-compose-rest.yml -f docker-compose-prod.yml \
+  up -d --no-build --force-recreate dspace
+```
+
+Aguarde a API e confirme que a pasta do lote aparece em `/dspace/saf_bundle`
+no container `dspace`. `DSPACE_SAF_HOST_DIR` precisa apontar para a pasta do
+lote e ser gravável pelo DSpace, para os mapfiles.
+
+## Verificação
+
+Troque o domínio ilustrativo pelo real:
 
 ```bash
 curl --fail https://repo.interno.example.org/dspace/robots.txt
@@ -66,14 +96,33 @@ curl --fail https://repo.interno.example.org/dspace/sitemap_index.html
 curl --fail 'https://repo.interno.example.org/dspace-server/oai/request?verb=Identify'
 ```
 
-- Confira uma página real de item: título e metadados devem estar no HTML SSR.
-- Verifique busca, idioma dos resumos, login, upload e e-mail.
-- Teste um PDF público e outro embargado com acesso anônimo.
-- Confira GeoIP em `/dspace/health` e os logs dos serviços.
-- Preserve banco e assetstore como um conjunto consistente nos backups.
-- Não execute `docker compose down -v` em produção; essa opção remove volumes.
+- [ ] Título e metadados no HTML de uma página de item (SSR).
+- [ ] Busca, idioma dos resumos, login, upload e e-mail.
+- [ ] PDF público acessível e PDF embargado protegido, com acesso anônimo.
+- [ ] GeoIP em `/dspace/health` e logs dos serviços sem erros.
 
-## Validar mudanças na configuração
+**Local (CORS e SEO).** Abra a interface por `http://localhost:4000`, sem
+misturar URLs de produção, e confira:
+
+```bash
+curl --fail -D - -o /dev/null \
+  -H 'Origin: http://localhost:4000' http://localhost:8080/server/api
+```
+
+A resposta deve conter `Access-Control-Allow-Origin: http://localhost:4000`.
+Mantenha `SEO_HEALTH_ENABLED=false` no desenvolvimento; na produção, `true`
+depois de confirmar que o backend alcança o domínio público.
+
+## Backup
+
+Banco e assetstore como conjunto consistente, mais `solr_data`, `sitemaps` e
+a pasta SAF com seus mapfiles. Os artefatos de cada lote (manifestos,
+relatórios) são tratados na
+[operação da migração](../../../dspace-migration/docs/guias/operacao.md#backup).
+Nunca rode
+`docker compose down -v` em produção: apaga volumes.
+
+## Validar mudanças
 
 ```bash
 docker compose --env-file .env.production.example -p d10 \
@@ -84,81 +133,34 @@ docker build -t dspace-bca-backend:academic-check -f tests/backend/Dockerfile .
 git diff --check
 ```
 
-A validação do Compose deve confirmar que somente o proxy publica a porta 80.
-Mudanças no Nginx exigem também `nginx -t` na imagem fixada e testes das duas
-rotas. Um `config --quiet` válido não verifica DNS, TLS, SMTP ou permissões
-nos volumes. Consulte a [referência](../referencia/implantacao.md) para as
-responsabilidades de cada componente.
+Confira que somente o proxy publica a porta 80. Mudanças no Nginx exigem
+`nginx -t` na imagem fixada e testes de `/dspace/` e `/dspace-server/`.
+`config --quiet` não verifica DNS, TLS, SMTP nem permissões nos volumes.
+Responsabilidades de cada componente na
+[referência de implantação](../referencia/implantacao.md).
 
-O backend monta a pasta SAF de produção com escrita habilitada para que a
-importação persista os mapfiles ao lado dos pacotes. A base GeoLite2 também é
-montada no backend sem a opção de somente leitura. Preserve as permissões e
-faça backup dos arquivos do SAF antes de executar uma nova importação.
+## Conta com senha inicial sem SMTP
 
-## Diagnosticar campos e vínculos
+Em Administração → Controle de acesso → EPeople → Criar, marque **Definir
+senha inicial agora**, preencha **Senha** e **Confirmar senha** (mínimo de
+oito caracteres; o servidor pode exigir mais) e mantenha o login habilitado.
+A opção não aparece na edição e não redefine senhas existentes.
+
+Se a conta for criada e a senha falhar, a tela mostra e-mail/UUID e permite
+tentar de novo para **a mesma conta**; não crie outra. Uma resposta perdida
+pode esconder uma senha já gravada: teste o login antes de repetir. Contrato e
+limites na [referência de implantação](../referencia/implantacao.md#contas-e-autenticação).
+
+## Diagnóstico
 
 | Situação | Onde conferir |
 | --- | --- |
-| A propriedade do modelo não foi encontrada | Backend recriado com os mounts e o novo `rest.cfg`; arquivos legíveis no host. |
+| Propriedade do modelo não encontrada | Backend recriado com os mounts e o novo `rest.cfg`; arquivos legíveis no host. |
 | Falha de login na preparação | URL da API, e-mail e senha do administrador no `.env` da migração. |
-| Erro de metadado `dc.contributor.coadvisor` ao criar conta | Atualize/recrie o backend e rode `registry-loader -m /dspace/config/registries/academic-metadata.xml` antes de criar a conta. |
-| Projeto de migração não encontrado | Confirme o caminho do `.env`; informe `--migration-dir` ou defina `DSPACE_MIGRATION_DIR` para a raiz que contém `pyproject.toml`. |
-| A coleção Pessoas existe sem tipo | Administração da coleção; selecione `Person` quando adequado e confira seu conteúdo. |
-| Publicações sem handle | Correspondência entre `people.json`, mapfiles e o lote importado. |
-| Pessoa não aparece no seletor | Registro Person arquivado, permissões e atualização do índice Discovery. |
+| Falha em `apply-people`, mapfiles ou handles de um lote | [Retomada da migração](../../../dspace-migration/docs/guias/migracao.md#retomar). |
+| Erro de `dc.contributor.coadvisor` ao criar conta | Recrie o backend e rode o `registry-loader` da [instalação](instalacao.md#metadados-e-administrador) antes de criar a conta. |
+| Projeto de migração não encontrado | Caminho do `.env`; `--migration-dir` ou `DSPACE_MIGRATION_DIR` apontando para a raiz com `pyproject.toml`. |
+| Coleção Pessoas sem tipo | Administração da coleção; selecione `Person` quando adequado e confira o conteúdo. |
+| Pessoa não aparece no seletor | Registro Person arquivado, permissões e índice Discovery atualizado. |
 | Perfil não mostra orientações | Autoridades aplicadas, reindexação e imagem Angular recompilada. |
-| Os campos não aparecem em Editar | Backend reiniciado e processo de edição usado pela coleção; o projeto configura os processos tradicional e Publication. |
-
-## Conferir CORS e o diagnóstico SEO local
-
-No ambiente local, abra a interface por `http://localhost:4000` e mantenha
-as URLs e a origem permitida locais. Depois de corrigir o ambiente, recrie
-os serviços usando o Compose de desenvolvimento. Confira:
-
-```bash
-curl --fail -D - -o /dev/null \
-  -H 'Origin: http://localhost:4000' http://localhost:8080/server/api
-```
-
-A resposta deve conter `Access-Control-Allow-Origin: http://localhost:4000`.
-Não misture a interface local com as URLs de produção. No diagnóstico SEO,
-mantenha `SEO_HEALTH_ENABLED=false` em desenvolvimento; na produção, use
-`true` depois de verificar o acesso do backend ao domínio público.
-
-## Criar uma conta com senha inicial sem SMTP
-
-Em Administração → Controle de acesso → EPeople → Criar, marque **Definir
-senha inicial agora**, preencha **Senha** e **Confirmar senha** e mantenha o
-login habilitado. A senha deve ter pelo menos oito caracteres; o formulário
-valida esse mínimo antes da criação. O servidor pode exigir regras adicionais.
-Sem marcar a opção, o fluxo original é preservado. A opção
-não aparece na edição e não redefine senhas existentes.
-
-A interface cria a EPerson e depois envia um PATCH para o link REST da conta
-(`/api/eperson/epersons/{uuid}`), com a operação
-`add /password` e o objeto `value` contendo `new_password`. O backend aplica
-sua política de senha configurada, exige permissão WRITE e autenticação pelo
-método password, além de permitir a definição de senha para a conta. Não há
-alteração de política ou configuração de SMTP. Senhas ficam apenas nos campos
-e na requisição HTTP, fora do cache de requisições NgRx.
-
-Se a conta for criada e o PATCH falhar, a tela informa o resultado parcial,
-mostra e-mail/UUID e permite informar novamente uma senha para **a mesma conta**.
-Não crie uma segunda conta. Uma resposta perdida pode esconder um PATCH já
-concluído: verifique o login com segurança antes de tentar novamente. A API
-recusa a tentativa sem senha atual se a conta já tiver senha; nesse caso use
-a senha atual ou a recuperação normal por e-mail. Voltar à lista encerra a
-tentativa e limpa os campos; não há recuperação persistente dessa senha.
-
-Contrato conferido nos fontes oficiais DSpace 10.1:
-[EPersonRestRepository](https://github.com/DSpace/DSpace/blob/dspace-10.1/dspace-server-webapp/src/main/java/org/dspace/app/rest/repository/EPersonRestRepository.java),
-[EPersonPasswordAddOperation](https://github.com/DSpace/DSpace/blob/dspace-10.1/dspace-server-webapp/src/main/java/org/dspace/app/rest/repository/patch/operation/EPersonPasswordAddOperation.java) e
-[EPersonRestPermissionEvaluatorPlugin](https://github.com/DSpace/DSpace/blob/dspace-10.1/dspace-server-webapp/src/main/java/org/dspace/app/rest/security/EPersonRestPermissionEvaluatorPlugin.java).
-O formulário oficial está em
-[eperson-form](https://github.com/DSpace/dspace-angular/tree/dspace-10.1/src/app/access-control/epeople-registry/eperson-form).
-A extensão é aplicada por patch isolado nos dois Dockerfiles; exige reconstruir
-a imagem Angular.
-
-A resposta HTTP 422 recebe aviso específico de rejeição, separado da mensagem
-de resultado incerto por falha de rede. A resposta bruta não é exibida nem
-registrada pelo componente.
+| Campos não aparecem em Editar | Backend reiniciado e processo de edição da coleção (o projeto configura o tradicional e o Publication). |

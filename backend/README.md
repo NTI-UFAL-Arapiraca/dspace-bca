@@ -44,7 +44,7 @@ administrador é criado pela CLI.
 
 Os mounts são iguais em REST e CLI. O registro dos campos e a criação da
 coleção são feitos por `scripts/prepare-academic.sh`, conforme o
-[guia de operação](../docs/guias/preparacao-academica.md).
+[guia de instalação](../docs/guias/instalacao.md#coleção-pessoas).
 `local.cnpq.area` é registrado por esse mesmo XML antes da importação SAF;
 o valor reúne código e nome da grande área CNPq legada.
 

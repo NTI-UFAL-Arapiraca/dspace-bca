@@ -10,10 +10,8 @@ import { map } from 'rxjs';
 
 import { workFilterParams } from '../../item-page/simple/work/work-context';
 import { HomeOverviewService } from './home-overview.service';
-import {
-  yearSearchParams,
-  yearSeries,
-} from './year-series';
+import { YearBarsComponent } from './year-bars.component';
+import { yearSeries } from './year-series';
 
 /**
  * Ways into the collection for visitors without a query: by course, by type
@@ -27,6 +25,7 @@ import {
     AsyncPipe,
     RouterLink,
     TranslateModule,
+    YearBarsComponent,
   ],
 })
 export class HomeExploreComponent {
@@ -35,8 +34,6 @@ export class HomeExploreComponent {
   readonly courses$ = this.overview.facet('course', 8);
   readonly types$ = this.overview.facet('itemtype', 6);
   readonly years$ = this.overview.facet('publicationYear', 100).pipe(map((values) => yearSeries(values)));
-
-  readonly yearParams = yearSearchParams;
 
   courseParams(value: string): Record<string, string> {
     return workFilterParams('course', value);

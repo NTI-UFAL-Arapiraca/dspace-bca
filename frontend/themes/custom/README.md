@@ -53,9 +53,11 @@ ação principal e os números do acervo (`overview/home-stats.component.ts`).
 Os números vêm da busca e das facetas da configuração `academic_works_aggregates`
 (RFC 0025); nada é inventado no tema e falhas resultam em blocos ocultos.
 
-Desde a RFC 0026 não há fotografia de fundo nem textura decorativa nas páginas:
-o conteúdo fica sobre o fundo `--ufal-paper`. Publicar alterações do tema exige
-uma nova imagem Angular.
+Desde a RFC 0026 não há fotografias decorativas. A textura de páginas abertas
+(`assets/images/page-contours*.svg`, sem as lâmpadas da RFC 0015) aparece só na
+abertura da home, como máscara em `.repository-intro`; as demais páginas ficam
+sobre o fundo `--ufal-paper`. Publicar alterações do tema exige uma nova imagem
+Angular.
 
 ## VLibras
 
@@ -346,7 +348,7 @@ em `src/themes/custom` da versão `dspace-10.1`. Por exemplo, um cabeçalho pode
 ser sobrescrito em `app/header/`. O caminho e as importações devem acompanhar a
 mesma versão definida por `DSPACE_ANGULAR_TAG`.
 
-O fluxo de desenvolvimento está no [guia de inicialização local](../../../docs/guias/inicializacao-local.md).
+O fluxo de desenvolvimento está no [instalação local](../../../docs/guias/instalacao.md#local).
 A publicação da imagem pelo GitHub/GHCR e a recriação dos containers ficam no
 [guia de operação](../../../docs/guias/operacao.md). O YAML de runtime é
 montado separadamente da imagem compilada.

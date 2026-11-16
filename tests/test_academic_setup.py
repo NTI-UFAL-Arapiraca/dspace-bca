@@ -75,10 +75,23 @@ class AcademicSetupTests(unittest.TestCase):
             self.assertIn(f"DSPACE_PERSON_COLLECTION_UUID={COLLECTION}", text)
             self.assertEqual(0o600, path.stat().st_mode & 0o777)
 
-    def test_bootstrap_uses_same_registry_as_migration(self):
-        registered = ET.parse(ROOT / "backend/config/registries/academic-metadata.xml").getroot()
-        migrated = ET.parse(ROOT.parent / "dspace-migration/config/registries/migration-metadata.xml").getroot()
-        self.assertEqual(ET.tostring(migrated), ET.tostring(registered))
+    def test_registry_defines_academic_fields_without_changing_schemas(self):
+        root = ET.parse(ROOT / "backend/config/registries/academic-metadata.xml").getroot()
+        self.assertEqual("dspace-dc-types", root.tag)
+        self.assertIsNone(root.find("dc-schema"))
+        fields = [
+            ".".join(field.findtext(part) for part in ("schema", "element", "qualifier"))
+            for field in root.findall("dc-type")
+        ]
+        self.assertEqual(len(fields), len(set(fields)))
+        self.assertEqual({
+            "local.course.name", "local.campus.name", "local.date.defense",
+            "local.cnpq.area", "local.identifier.legacy", "local.person.degree",
+            "dc.contributor.coadvisor", "dc.contributor.referee",
+            "dc.description.note", "person.identifier.lattes",
+        }, set(fields))
+        for field in root.findall("dc-type"):
+            self.assertTrue(field.findtext("scope_note", "").strip())
 
     def test_both_edit_processes_use_academic_fields_and_closed_people_selectors(self):
         process_root = ET.parse(ROOT / "backend/config/item-submission.xml").getroot()

@@ -33,7 +33,12 @@
     }
   }
 
+  // Labels: the official ds-metadata-field-wrapper sets a 1.25rem header in
+  // encapsulated styles (two attribute selectors plus the class), so every
+  // label rule here goes through .simple-view-element to take precedence.
+
   // Authorship reads as the byline of a title page: label, then the names.
+  // Labels use the same quiet style as the work data below.
   .work-byline {
     display: grid;
     gap: 0.625rem;
@@ -47,13 +52,12 @@
       margin: 0;
     }
 
-    .simple-view-element-header {
+    .simple-view-element .simple-view-element-header {
       margin: 0;
       color: var(--ufal-muted);
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
+      font-size: 0.875rem;
+      font-weight: 500;
+      line-height: 1.5;
     }
 
     .simple-view-element-body {
@@ -113,10 +117,10 @@
       border-top: 1px solid var(--ufal-line);
     }
 
-    :is(.simple-view-element-header, .item-page-label) {
+    .simple-view-element :is(.simple-view-element-header, .item-page-label) {
       margin: 0;
       color: var(--ufal-muted);
-      font-size: 0.84375rem;
+      font-size: 0.875rem;
       font-weight: 500;
       line-height: 1.5;
     }
@@ -139,7 +143,7 @@
   .document-abstract {
     display: block;
 
-    .simple-view-element-header, h2 {
+    .simple-view-element .simple-view-element-header, h2 {
       font-family: var(--ufal-serif);
       font-size: clamp(1.375rem, 1vw + 1rem, 1.6875rem);
       font-weight: 600;
@@ -276,7 +280,7 @@
     margin: 0;
   }
 
-  .simple-view-element-header {
+  .simple-view-element .simple-view-element-header {
     margin: 0 0 0.25rem;
     color: var(--ufal-muted);
     font-size: 0.78125rem;
@@ -308,6 +312,31 @@
     min-height: 40px;
     color: var(--bs-body-color);
     font-weight: 500;
+
+    // A mouse click must not leave the button looking pressed or selected.
+    &:focus:not(:focus-visible), &:active {
+      border-color: transparent;
+      box-shadow: none;
+    }
+
+    &:hover {
+      color: var(--bs-link-hover-color);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition: color 180ms ease-in-out;
+    }
+  }
+
+  // Copy feedback: check mark and green text while the link is on the clipboard.
+  .work-access__copy {
+    &.is-copied, &.is-copied:hover {
+      color: var(--ufal-ok);
+    }
+
+    &.is-failed, &.is-failed:hover {
+      color: var(--ufal-danger);
+    }
   }
 }
 
@@ -373,7 +402,7 @@
   font-size: 0.875rem;
   font-weight: 500;
 
-  &:hover {
+  &:hover, &:focus-visible {
     color: var(--bs-link-hover-color);
     border-color: var(--bs-link-color);
   }

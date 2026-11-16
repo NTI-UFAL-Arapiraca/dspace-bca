@@ -38,9 +38,21 @@
     <ng-content></ng-content>
   </div>
 
+  @let copy = copyState();
   <div class="work-access__actions">
-    <button type="button" class="btn btn-link btn-sm" (click)="copyLink()">
-      <i class="fas fa-link me-1" aria-hidden="true"></i>{{ 'repository.item.access.copy-link' | translate }}
+    <button type="button" class="btn btn-link btn-sm work-access__copy" (click)="copyLink()"
+      [class.is-copied]="copy === 'copied'" [class.is-failed]="copy === 'failed'">
+      @switch (copy) {
+        @case ('copied') {
+          <i class="fas fa-check me-1" aria-hidden="true"></i>{{ 'repository.item.access.copied-short' | translate }}
+        }
+        @case ('failed') {
+          <i class="fas fa-exclamation-triangle me-1" aria-hidden="true"></i>{{ 'repository.item.access.copy-failed-short' | translate }}
+        }
+        @default {
+          <i class="fas fa-link me-1" aria-hidden="true"></i>{{ 'repository.item.access.copy-link' | translate }}
+        }
+      }
     </button>
     @if (canShare()) {
       <button type="button" class="btn btn-link btn-sm" (click)="share()">
@@ -48,7 +60,13 @@
       </button>
     }
   </div>
-  <p class="visually-hidden" aria-live="polite">{{ copied() ? ('repository.item.access.copied' | translate) : '' }}</p>
+  <p class="visually-hidden" aria-live="polite">
+    @if (copy === 'copied') {
+      {{ 'repository.item.access.copied' | translate }}
+    } @else if (copy === 'failed') {
+      {{ 'repository.item.access.copy-failed' | translate }}
+    }
+  </p>
 </section>
 
 @if (floatingVisible() && state?.file && state?.canDownload) {

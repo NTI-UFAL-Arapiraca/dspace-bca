@@ -43,20 +43,11 @@
 
   @let years = years$ | async;
   @if (years?.length) {
-    <section class="home-explore__block" aria-labelledby="home-years-title">
+    <section class="home-explore__block home-explore__years" aria-labelledby="home-years-title">
       <p class="ufal-label">{{ 'repository.home.explore.eyebrow' | translate }}</p>
       <h2 id="home-years-title">{{ 'repository.home.explore.years' | translate }}</h2>
       <div class="home-years">
-        <ol class="home-years__bars">
-          @for (bar of years; track bar.year) {
-            <li>
-              <a [routerLink]="['/search']" [queryParams]="yearParams(bar.year)"
-                [style.--bar]="bar.percent + '%'" [class.is-empty]="!bar.count"
-                [attr.aria-label]="'repository.home.explore.year-label' | translate: { year: bar.year, count: bar.count }">
-              </a>
-            </li>
-          }
-        </ol>
+        <ds-year-bars [bars]="years"></ds-year-bars>
         <div class="home-years__axis" aria-hidden="true">
           <span>{{ years[0].year }}</span><span>{{ years[years.length - 1].year }}</span>
         </div>

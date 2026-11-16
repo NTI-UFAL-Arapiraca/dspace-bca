@@ -28,8 +28,10 @@ solicitação de cópia explícita (D5) ficam fora desta RFC.
   estados (aberto, embargo, restrito), com valores próprios no modo escuro.
   O azul do brasão e o vermelho ficam restritos a detalhes decorativos; o
   filete vermelho do eyebrow é o único ornamento.
-- A textura de páginas abertas e as fotos do corredor e da abertura são
-  removidas (revisão da RFC 0015). O foco passa a 3 px com afastamento de 2 px.
+- As fotos do corredor e da abertura são removidas (revisão da RFC 0015). A
+  textura de páginas abertas, sem as lâmpadas, fica restrita à abertura da
+  home; as demais páginas usam o fundo liso. O foco passa a 3 px com
+  afastamento de 2 px.
 
 ### Moldura
 

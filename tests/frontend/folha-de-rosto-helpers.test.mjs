@@ -4,6 +4,7 @@ import { test } from 'node:test';
 import { personInitials } from '../../frontend/themes/custom/app/entity-groups/research-entities/item-pages/person/person-profile.helpers.ts';
 import { isSearchShortcut } from '../../frontend/themes/custom/app/header/search-shortcut.ts';
 import { yearSearchParams, yearSeries } from '../../frontend/themes/custom/app/home-page/overview/year-series.ts';
+import { copyText } from '../../frontend/themes/custom/app/item-page/simple/work/copy-text.ts';
 import { documentLanguageName } from '../../frontend/themes/custom/app/item-page/simple/work/document-language.ts';
 import { isPdfName, permanentLink } from '../../frontend/themes/custom/app/item-page/simple/work/work-access-state.ts';
 import { workContext, workFilterParams } from '../../frontend/themes/custom/app/item-page/simple/work/work-context.ts';
@@ -44,6 +45,10 @@ test('filters link to the public works search with an exact value', () => {
   assert.deepEqual(workFilterParams('course', 'Letras'), {
     configuration: 'academic_works_search',
     'f.course': 'Letras,equals',
+  });
+  assert.deepEqual(workFilterParams('cnpq', '1.00.00.00-3 Ciências exatas e da terra'), {
+    configuration: 'academic_works_search',
+    'f.cnpq': '1.00.00.00-3 Ciências exatas e da terra,equals',
   });
 });
 
@@ -87,4 +92,36 @@ test('initials skip particles and use first and last names', () => {
   assert.equal(personInitials('Marina Aurora de Lima'), 'ML');
   assert.equal(personInitials('Ana'), 'A');
   assert.equal(personInitials(''), '');
+});
+
+function fakeDocument({ secure, writeText, execCommand }) {
+  const appended = [];
+  const button = { focused: 0, focus() { this.focused++; } };
+  const doc = {
+    activeElement: button,
+    defaultView: { isSecureContext: secure, navigator: { clipboard: writeText ? { writeText } : undefined } },
+    body: { appendChild: (node) => appended.push(node) },
+    createElement: () => ({
+      style: {}, removed: false,
+      setAttribute() {}, select() {}, remove() { this.removed = true; },
+    }),
+    execCommand,
+  };
+  return { doc, appended, button };
+}
+
+test('copy uses the Clipboard API in secure contexts and a textarea otherwise', async () => {
+  const written = [];
+  const secure = fakeDocument({ secure: true, writeText: async (text) => written.push(text), execCommand: () => assert.fail() });
+  assert.equal(await copyText('https://hdl.example/1', secure.doc), true);
+  assert.deepEqual(written, ['https://hdl.example/1']);
+
+  const insecure = fakeDocument({ secure: false, writeText: async () => assert.fail(), execCommand: (cmd) => cmd === 'copy' });
+  assert.equal(await copyText('https://hdl.example/2', insecure.doc), true);
+  assert.equal(insecure.appended[0].value, 'https://hdl.example/2');
+  assert.equal(insecure.appended[0].removed, true);
+  assert.equal(insecure.button.focused, 1);
+
+  const refused = fakeDocument({ secure: true, writeText: async () => { throw new Error('denied'); }, execCommand: () => false });
+  assert.equal(await copyText('x', refused.doc), false);
 });

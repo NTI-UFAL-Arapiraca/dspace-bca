@@ -4,10 +4,8 @@
 
 | Tarefa | Guia |
 | --- | --- |
-| Iniciar o DSpace local | [Inicialização local](guias/inicializacao-local.md) |
-| Publicar e iniciar o servidor | [Inicialização de produção](guias/inicializacao-producao.md) |
-| Registrar campos e preparar pessoas | [Preparação acadêmica](guias/preparacao-academica.md) |
-| Atualizar serviços e reconstruir índices | [Operação](guias/operacao.md) |
+| Instalar local ou em produção, registrar metadados, criar o administrador e preparar a coleção Pessoas | [Instalação](guias/instalacao.md) |
+| Atualizar, reindexar, verificar, fazer backup, validar e diagnosticar | [Operação](guias/operacao.md) |
 | Extrair e importar o legado | [Guias da migração](../../dspace-migration/docs/README.md) |
 
 ## Referência de funcionamento
@@ -15,9 +13,7 @@
 - [Implantação, URLs, proxy e configuração](referencia/implantacao.md).
 - [VLibras, inicialização, CSP e limites de tradução](referencia/vlibras.md).
 - [Modelo acadêmico e autoridades de pessoas](referencia/modelo-academico.md).
-- [Relatório de metadados e pessoas](referencia/relatorio-metadados-e-pessoas.md).
 - [Configuração do backend](../backend/README.md).
 - [Personalização do tema](../frontend/themes/custom/README.md).
 - [Revisão de UX/UI e validação responsiva](referencia/revisao-ux-ui.md).
-- [Revisão técnica do repositório — 22/10/2026](referencia/revisao-tecnica-2026-10-22.md).
 - [RFCs](../rfc/README.md).

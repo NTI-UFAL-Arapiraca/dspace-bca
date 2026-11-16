@@ -36,11 +36,18 @@ import {
 import { ThemedFileDownloadLinkComponent } from '../../../../../../app/shared/file-download-link/themed-file-download-link.component';
 import { ThemedAccessStatusBadgeComponent } from '../../../../../../app/shared/object-collection/shared/badges/access-status-badge/themed-access-status-badge.component';
 import { FileSizePipe } from '../../../../../../app/shared/utils/file-size-pipe';
+import { copyText } from './copy-text';
 import {
   isPdfName,
   permanentLink,
   WorkAccessState,
 } from './work-access-state';
+
+/** Result of the last "copy permanent link", shown on the button for a while. */
+export type CopyState = 'idle' | 'copied' | 'failed';
+
+/** How long the button keeps the copied or failed state. */
+const COPY_FEEDBACK_MS = 3000;
 
 /**
  * Access card of a work: one primary action (download), the access state in
@@ -65,7 +72,7 @@ export class WorkAccessComponent implements OnInit, AfterViewInit {
   readonly readerId = input<string>();
 
   readonly floatingVisible = signal(false);
-  readonly copied = signal(false);
+  readonly copyState = signal<CopyState>('idle');
   readonly canShare = signal(false);
   state$: Observable<WorkAccessState>;
 
@@ -75,6 +82,11 @@ export class WorkAccessComponent implements OnInit, AfterViewInit {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   readonly names = inject(DSONameService);
   private readonly card = viewChild<ElementRef<HTMLElement>>('card');
+  private copyTimer: ReturnType<typeof setTimeout> | undefined;
+
+  constructor() {
+    this.destroyRef.onDestroy(() => clearTimeout(this.copyTimer));
+  }
 
   ngOnInit(): void {
     const item = this.item();
@@ -115,12 +127,13 @@ export class WorkAccessComponent implements OnInit, AfterViewInit {
   }
 
   copyLink(): void {
-    if (!this.isBrowser || !navigator.clipboard) {
+    if (!this.isBrowser) {
       return;
     }
-    void navigator.clipboard.writeText(this.link).then(() => {
-      this.copied.set(true);
-      setTimeout(() => this.copied.set(false), 4000);
+    void copyText(this.link, document).then((copied) => {
+      clearTimeout(this.copyTimer);
+      this.copyState.set(copied ? 'copied' : 'failed');
+      this.copyTimer = setTimeout(() => this.copyState.set('idle'), COPY_FEEDBACK_MS);
     });
   }
 

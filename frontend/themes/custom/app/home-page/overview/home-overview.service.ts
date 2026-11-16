@@ -47,8 +47,11 @@ export class HomeOverviewService {
     );
   }
 
-  /** Values of one facet of the aggregates configuration, up to `size`. */
-  facet(name: string, size: number, scope?: string): Observable<FacetValue[]> {
+  /**
+   * Values of one facet, up to `size`. Defaults to the aggregates
+   * configuration; the facet must be a sidebar facet of `configuration`.
+   */
+  facet(name: string, size: number, scope?: string, configuration = AGGREGATES_CONFIGURATION): Observable<FacetValue[]> {
     return this.halService.getEndpoint('discover').pipe(
       take(1),
       switchMap((discover) => {
@@ -58,9 +61,9 @@ export class HomeOverviewService {
           _links: { self: { href: `${discover}/facets/${name}` } },
         });
         const options = new PaginatedSearchOptions({
-          configuration: AGGREGATES_CONFIGURATION,
+          configuration,
           scope,
-          pagination: Object.assign(new PaginationComponentOptions(), { id: `home-facet-${name}-${scope ?? 'all'}`, currentPage: 1, pageSize: size }),
+          pagination: Object.assign(new PaginationComponentOptions(), { id: `home-facet-${configuration}-${name}-${scope ?? 'all'}`, currentPage: 1, pageSize: size }),
         });
         return this.searchService.getFacetValuesFor(config, 1, options);
       }),

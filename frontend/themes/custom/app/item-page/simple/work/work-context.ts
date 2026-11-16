@@ -3,7 +3,7 @@ import type { MetadataMap } from '@dspace/core/shared/metadata.models';
 /** Public search used by the links of course, campus and keywords. */
 export const WORKS_SEARCH_CONFIGURATION = 'academic_works_search';
 
-export type WorkFilter = 'course' | 'campus' | 'subject';
+export type WorkFilter = 'course' | 'campus' | 'cnpq' | 'subject';
 
 /** Query parameters of the public works search filtered by one exact value. */
 export function workFilterParams(filter: WorkFilter, value: string): Record<string, string> {

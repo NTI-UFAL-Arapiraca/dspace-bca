@@ -172,26 +172,26 @@ ds-log-in button[type='submit'] {
   }
 }
 
+// Header controls are buttons: they answer with a soft surface, never with
+// a text underline.
+.institution-header__actions .theme-toggle,
+.institution-header__actions
+  :is(ds-mobile-search, ds-lang-switch, ds-context-help-toggle, ds-auth-nav-menu, ds-impersonate-navbar)
+  :is(a:not(.dropdown-item), button) {
+  border-radius: 0.375rem;
+
+  &:hover, &:focus-visible {
+    background-color: var(--ufal-blue-soft);
+    text-decoration: none;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .institution-header__actions .theme-toggle,
   .institution-header__actions
-    :is(ds-search-navbar, ds-mobile-search, ds-lang-switch, ds-context-help-toggle, ds-auth-nav-menu, ds-impersonate-navbar)
+    :is(ds-mobile-search, ds-lang-switch, ds-context-help-toggle, ds-auth-nav-menu, ds-impersonate-navbar)
     :is(a:not(.dropdown-item), button) {
-    background-image: linear-gradient(currentColor, currentColor);
-    background-repeat: no-repeat;
-    background-position: left bottom;
-    background-size: 0 2px;
-    transition: background-size 220ms ease-in-out;
-
-    &:hover,
-    &:focus-visible {
-      background-size: 100% 2px;
-      text-decoration: none;
-    }
-  }
-
-  .institution-header__actions .theme-toggle {
-    transition: color 180ms ease-in-out, background-size 220ms ease-in-out;
+    transition: color 180ms ease-in-out, background-color 180ms ease-in-out;
   }
 }
 
@@ -242,6 +242,13 @@ ds-log-in button[type='submit'] {
   font-weight: 500;
 }
 
+// The home hero starts right below the menu; the generic navbar rule would
+// leave a grey line between the two surfaces.
+:root:has(ds-home-page) {
+  --ds-header-navbar-border-bottom-color: transparent;
+  --ds-header-navbar-border-bottom-height: 0;
+}
+
 // RFC 0026 removes the decorative page texture: content sits on a plain paper
 // background so long reading and zoom are not disturbed.
 #main-content {
@@ -250,6 +257,13 @@ ds-log-in button[type='submit'] {
 
 #main-content:has(ds-untyped-item),
 #main-content:has(ds-publication) {
+  padding-top: 0;
+}
+
+// The home hero sits flush under the menu; any top spacing would expose the
+// grey body background as a stray band between the two surfaces.
+#main-content:has(ds-home-page) {
+  margin-top: 0;
   padding-top: 0;
 }
 
@@ -563,12 +577,6 @@ ds-lang-switch #language-menu-list {
   box-shadow: none;
 }
 
-.theme-toggle__label {
-  margin-inline-start: 0.25rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
 .institution-brand__title {
   font-family: var(--ufal-serif);
 }
@@ -698,57 +706,36 @@ ds-lang-switch #language-menu-list {
   }
 }
 
-// Text links reveal their underline on interaction; cards keep surface feedback.
+// Text links show a plain underline on interaction, as in the result titles
+// and the footer. Buttons, chips and cards keep their own surface feedback.
 #main-content, ds-footer {
-  .repository-text-link,
-  .item-list-title a,
-  a.item-list-title,
-  a.lead,
-  a.link-contrast,
-  ds-metadata-representation-list a,
-  ds-academic-metadata-link a,
-  ds-generic-item-page-field a,
-  ds-item-page-uri-field a,
-  ds-file-download-link a,
-  .work-access__files a,
-  .profile-links a,
-  .context-values a,
-  .statistics-bars__line a,
-  .section-link > span,
-  :is(.work-byline, .work-data) ds-metadata-link-view a > span[dsEntityIcon],
-  .footer-info :is(a, button),
-  .coar-notify-support-route {
-    background-image: linear-gradient(currentColor, currentColor);
-    background-repeat: no-repeat;
-    background-position: left bottom;
-    background-size: 0 1px;
-
-    @media (prefers-reduced-motion: no-preference) {
-      transition: background-size 220ms ease-in-out;
-    }
-
-    &:hover, &:focus-visible {
-      background-size: 100% 1px;
-    }
+  :is(
+    .repository-text-link,
+    .item-list-title a,
+    a.item-list-title,
+    a.lead,
+    a.link-contrast,
+    ds-metadata-representation-list a,
+    ds-academic-metadata-link a,
+    ds-generic-item-page-field a,
+    ds-item-page-uri-field a,
+    ds-file-download-link a,
+    .work-access__files a,
+    .profile-links a,
+    .statistics-bars__line a,
+    .coar-notify-support-route
+  ):not(.btn, .ufal-chip):is(:hover, :focus-visible),
+  .section-link:is(:hover, :focus-visible) > span,
+  :is(.work-byline, .work-data) ds-metadata-link-view a:is(:hover, :focus-visible) > span[dsEntityIcon] {
+    text-decoration: underline !important;
+    text-decoration-thickness: 1px !important;
   }
 
-  .section-link:hover > span,
-  .section-link:focus-visible > span,
-  :is(.work-byline, .work-data) ds-metadata-link-view a:hover > span[dsEntityIcon],
-  :is(.work-byline, .work-data) ds-metadata-link-view a:focus-visible > span[dsEntityIcon] {
-    background-size: 100% 1px;
-  }
-
-  // The authority icon and its nonbreaking separator sit outside the name span.
-  :is(.work-byline, .work-data) ds-metadata-link-view a {
-    background-image: none;
-
-    > span[dsEntityIcon] {
-      display: inline;
-      // Slice one continuous background so the next line starts after this one.
-      -webkit-box-decoration-break: slice;
-      box-decoration-break: slice;
-    }
+  // People links underline only the name, not the authority icon beside it.
+  // The :not() matches the specificity of the rule above, which also reaches
+  // these anchors through ds-metadata-representation-list.
+  :is(.work-byline, .work-data) ds-metadata-link-view a:not(.btn, .ufal-chip):is(:hover, :focus-visible) {
+    text-decoration: none !important;
   }
 }
 

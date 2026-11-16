@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="560" viewBox="0 0 720 560">
+  <defs>
+    <g id="pages" fill="none" stroke="#000" stroke-width="1" stroke-linecap="round">
+      <path d="M-144-46C-94-70-48-62 0-30C48-62 94-70 144-46"/>
+      <path d="M-144-32C-94-56-48-48 0-16C48-48 94-56 144-32"/>
+      <path d="M-144-18C-94-42-48-34 0-2C48-34 94-42 144-18"/>
+      <path d="M-144-4C-94-28-48-20 0 12C48-20 94-28 144-4"/>
+      <path d="M-144 10C-94-14-48-6 0 26C48-6 94-14 144 10"/>
+      <path d="M-144 24C-94 0-48 8 0 40C48 8 94 0 144 24"/>
+      <path d="M-144 38C-94 14-48 22 0 54C48 22 94 14 144 38"/>
+    </g>
+  </defs>
+  <use href="#pages" transform="translate(90 130) rotate(-18)"/>
+  <!-- Continue the motif across the left/right tile boundary. -->
+  <use href="#pages" transform="translate(810 130) rotate(-18)"/>
+  <use href="#pages" transform="translate(450 410) rotate(18)"/>
+</svg>

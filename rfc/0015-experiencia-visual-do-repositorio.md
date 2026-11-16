@@ -1,6 +1,6 @@
 # RFC 0015 — Experiência visual do repositório
 
-- Status: aceita; textura, fotografias e animação de sublinhado revistas pela [RFC 0026](0026-sistema-visual-folha-de-rosto.md)
+- Status: aceita; textura (restrita à abertura da home, sem lâmpadas), fotografias e animação de sublinhado revistas pela [RFC 0026](0026-sistema-visual-folha-de-rosto.md)
 - Escopo: frontend, apresentação e acessibilidade
 
 ## Contexto

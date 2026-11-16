@@ -6,6 +6,20 @@ import { RouterLink } from '@angular/router';
 import { Item } from '@dspace/core/shared/item.model';
 import { TranslateModule } from '@ngx-translate/core';
 
+import {
+  WorkFilter,
+  workFilterParams,
+} from '../../work/work-context';
+
+/** Work fields shown as links to the works search filtered by their value. */
+const FIELD_FILTERS = {
+  'local.course.name': 'course',
+  'local.campus.name': 'campus',
+  'local.cnpq.area': 'cnpq',
+} as const satisfies Record<string, WorkFilter>;
+
+export type AcademicLinkField = keyof typeof FIELD_FILTERS;
+
 @Component({
   selector: 'ds-academic-metadata-link',
   template: `
@@ -32,7 +46,7 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class AcademicMetadataLinkComponent {
   @Input() item: Item;
-  @Input() field: 'local.course.name' | 'local.campus.name';
+  @Input() field: AcademicLinkField;
   @Input() label: string;
 
   get values() {
@@ -40,10 +54,6 @@ export class AcademicMetadataLinkComponent {
   }
 
   filterParams(value: string): Record<string, string> {
-    const facet = this.field === 'local.course.name' ? 'course' : 'campus';
-    return {
-      configuration: 'academic_works_search',
-      [`f.${facet}`]: `${value},equals`,
-    };
+    return workFilterParams(FIELD_FILTERS[this.field], value);
   }
 }
