@@ -21,4 +21,8 @@ import { FooterComponent as BaseComponent } from '../../../../app/footer/footer.
   ],
 })
 export class FooterComponent extends BaseComponent {
+  /** OAI-PMH endpoint of the backend (RFC 0011), shown for harvesters. */
+  get oaiUrl(): string {
+    return `${this.appConfig.rest.baseUrl}/oai/request`;
+  }
 }

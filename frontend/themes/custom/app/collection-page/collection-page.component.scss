@@ -1,0 +1,26 @@
+.collection-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 3.5rem;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding: 1rem 0 2rem;
+  border-bottom: 1px solid var(--ufal-line);
+}
+
+.collection-header__copy {
+  flex: 999 1 32rem;
+  min-width: 0;
+}
+
+.collection-header__aside {
+  display: grid;
+  flex: 1 1 18rem;
+  gap: 1rem;
+  justify-items: end;
+  max-width: 24rem;
+
+  ds-collection-overview {
+    width: 100%;
+  }
+}

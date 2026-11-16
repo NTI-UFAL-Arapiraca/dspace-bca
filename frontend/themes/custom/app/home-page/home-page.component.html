@@ -16,18 +16,26 @@
 <ds-suggestions-popup></ds-suggestions-popup>
 
 <ng-template #homeContent>
-  <section class="home-search" aria-labelledby="home-search-title">
-    <div class="home-search__heading">
-      <h2 id="home-search-title">{{ 'repository.home.search.title' | translate }}</h2>
-      <p>{{ 'repository.home.search.help' | translate }}</p>
-    </div>
-    <ds-search-form [inPlaceSearch]="false" [showScopeSelector]="false"
-      [searchPlaceholder]="'repository.home.search.placeholder' | translate"></ds-search-form>
-  </section>
-  <div class="home-discovery" [class.home-discovery--communities-only]="recentSubmissionspageSize <= 0">
+  <ds-home-explore class="home-explore"></ds-home-explore>
+  <div class="home-latest">
     @if (recentSubmissionspageSize > 0) {
-      <ds-home-recent-records></ds-home-recent-records>
+      <ds-home-recent-records class="home-latest__list"></ds-home-recent-records>
     }
-    <ds-top-level-community-list></ds-top-level-community-list>
+    <aside class="home-latest__aside">
+      <div class="home-card">
+        <h2 class="home-card__title">{{ 'repository.home.people.title' | translate }}</h2>
+        <p>{{ 'repository.home.people.text' | translate }}</p>
+        <a class="repository-text-link" routerLink="/search" [queryParams]="{configuration: 'person'}">
+          {{ 'repository.home.people.link' | translate }} <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
+        </a>
+      </div>
+      <div class="home-card">
+        <h2 class="home-card__title">{{ 'repository.home.collections.title' | translate }}</h2>
+        <p>{{ 'repository.home.collections.text' | translate }}</p>
+        <a class="repository-text-link" routerLink="/community-list">
+          {{ 'repository.home.communities.all' | translate }} <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
+        </a>
+      </div>
+    </aside>
   </div>
 </ng-template>

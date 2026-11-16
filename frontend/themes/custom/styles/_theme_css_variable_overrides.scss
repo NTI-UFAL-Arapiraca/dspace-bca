@@ -2,19 +2,36 @@
 // after the Sass variables in _theme_sass_variable_overrides.scss.
 
 :root {
+  // Folha de Rosto tokens (RFC 0026). Decorative colors never carry text.
+  --ufal-serif: #{$font-family-serif};
+  --ufal-sans: #{$font-family-sans-serif};
+  --ufal-paper: #{$body-bg};
+  --ufal-muted: #{$body-secondary-color};
+  --ufal-line: #{$border-color};
+  --ufal-field: #8696a7;
+  --ufal-ok: #1d6b45;
+  --ufal-ok-soft: #e3f2e9;
+  --ufal-warn: #7a4f00;
+  --ufal-warn-soft: #fbf0d9;
+  --ufal-danger: #b42318;
+  --ufal-danger-soft: #fdecea;
+  --ufal-mark: #fff0b3;
+  --ufal-shadow-sm: 0 1px 2px rgba(15, 34, 54, 0.06);
+  --ufal-reading-measure: 68ch;
+
   --ufal-accent: #{$ufal-red};
   --ufal-ink: #{$dark};
   --ufal-surface: #fff;
-  --ufal-surface-muted: #f0f4f8;
-  --ufal-blue-soft: #e4f1f8;
-  --ufal-blue-border: #b9d6e8;
+  --ufal-surface-muted: #eef2f6;
+  --ufal-blue-soft: #e8f2f8;
+  --ufal-blue-border: #cfe4f1;
   // Coat-of-arms blue is decorative; text and controls keep the darker primary.
   --ufal-brand-detail: #0994dc;
   --ufal-action-border: #{$primary};
   --ufal-badge-color: #004c76;
   --ufal-focus: #{$primary};
   --ufal-footer-bg: #{$dark};
-  --ufal-shadow: 0 6px 24px rgba(22, 50, 79, 0.09);
+  --ufal-shadow: 0 10px 30px rgba(15, 34, 54, 0.14);
 
   --ds-header-logo-height: 64px;
   --ds-header-bg: var(--ufal-surface);

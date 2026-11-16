@@ -1,87 +1,62 @@
-<footer>
+<footer class="repository-footer">
   @if (showTopFooter) {
-    <div class="top-footer">
-      @if (footerMetadataValue$ | async; as footerMetadataValue) {
+    @if (footerMetadataValue$ | async; as footerMetadataValue) {
+      <div class="top-footer">
         <ds-markdown-viewer [value]="footerMetadataValue"></ds-markdown-viewer>
-      }
-      @else {
-        <div class="container p-4">
-          <div class="row">
-            <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
-              <h5 class="text-uppercase">Footer Content</h5>
-              <ul class="list-unstyled mb-0">
-                <li><a routerLink="./">Lorem ipsum</a></li>
-                <li><a routerLink="./">Ut facilisis</a></li>
-                <li><a routerLink="./">Aenean sit</a></li>
-              </ul>
-            </div>
-            <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
-              <h5 class="text-uppercase">Footer Content</h5>
-              <ul class="list-unstyled mb-0">
-                <li><a routerLink="./" role="link" tabindex="0">Suspendisse potenti</a></li>
-              </ul>
-            </div>
-            <div class="col-lg-4 col-md-12 mb-4 mb-md-0">
-              <h5 class="text-uppercase">Footer Content</h5>
-              <p>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste atque ea quis
-                molestias. Fugiat pariatur maxime quis culpa corporis vitae repudiandae aliquam
-                voluptatem veniam, est atque cumque eum delectus sint!
-              </p>
-            </div>
-          </div>
-        </div>
-      }
-    </div>
-  }
-
-  <div class="bottom-footer p-1 d-flex flex-column flex-md-row justify-content-between align-items-center text-white">
-    <div class="content-container">
-      <ul class="footer-info list-unstyled d-flex justify-content-center justify-content-md-start mb-0">
-        @if (showCookieSettings) {
-          <li>
-            <button class="btn btn-link text-white" type="button" (click)="openCookieSettings()" role="button" tabindex="0">
-              {{ 'footer.link.cookies' | translate }}
-            </button>
-          </li>
-        }
-        <li>
-          <a class="btn text-white" routerLink="info/accessibility" role="link" tabindex="0">
-            {{ 'footer.link.accessibility' | translate }}
-          </a>
-        </li>
-        @if (showPrivacyPolicy) {
-          <li>
-            <a class="btn text-white" routerLink="info/privacy" role="link" tabindex="0">
-              {{ 'footer.link.privacy-policy' | translate }}
-            </a>
-          </li>
-        }
-        @if (showEndUserAgreement) {
-          <li>
-            <a class="btn text-white" routerLink="info/end-user-agreement" role="link" tabindex="0">
-              {{ 'footer.link.end-user-agreement' | translate }}
-            </a>
-          </li>
-        }
-      </ul>
-    </div>
-
-    @if (coarLdnEnabled$ | async) {
-      <div class="notify-enabled text-white align-self-end">
-        <a class="coar-notify-support-route" routerLink="info/coar-notify-support" role="link" tabindex="0">
-          <img class="n-coar" src="assets/images/n-coar.svg" [attr.alt]="'menu.header.image.logo' | translate" />
-          {{ 'footer.link.coar-notify-support' | translate }}
-        </a>
       </div>
     }
+  }
 
-    <div class="institutional-logo d-flex align-items-center justify-content-center">
-      <img
-        class="gti-logo"
-        src="assets/custom/images/logo-gti-arapiraca.png"
-        [attr.alt]="'footer.logo.gti' | translate"
-      />
+  <div class="repository-footer__main">
+    <div class="container">
+      <div class="repository-footer__grid">
+        <div class="repository-footer__identity">
+          <p class="repository-footer__name">{{ 'repository.footer.library' | translate }}</p>
+          <p class="repository-footer__note">{{ 'repository.footer.institution' | translate }}</p>
+        </div>
+
+        <nav [attr.aria-labelledby]="'footer-repository'">
+          <h2 id="footer-repository" class="repository-footer__heading">{{ 'repository.footer.repository' | translate }}</h2>
+          <ul class="list-unstyled">
+            <li><a routerLink="/community-list">{{ 'repository.nav.collections' | translate }}</a></li>
+            <li><a routerLink="/search" [queryParams]="{configuration: 'academic_works_search'}">{{ 'repository.nav.works' | translate }}</a></li>
+            <li><a routerLink="/statistics">{{ 'repository.footer.statistics' | translate }}</a></li>
+          </ul>
+        </nav>
+
+        <nav [attr.aria-labelledby]="'footer-researchers'">
+          <h2 id="footer-researchers" class="repository-footer__heading">{{ 'repository.footer.researchers' | translate }}</h2>
+          <ul class="list-unstyled">
+            <li><a [href]="oaiUrl">{{ 'repository.footer.oai' | translate }}</a></li>
+            <li><a href="sitemap_index.html">{{ 'repository.footer.sitemap' | translate }}</a></li>
+            @if (coarLdnEnabled$ | async) {
+              <li><a routerLink="info/coar-notify-support">{{ 'footer.link.coar-notify-support' | translate }}</a></li>
+            }
+          </ul>
+        </nav>
+
+        <nav [attr.aria-labelledby]="'footer-policies'">
+          <h2 id="footer-policies" class="repository-footer__heading">{{ 'repository.footer.policies' | translate }}</h2>
+          <ul class="list-unstyled">
+            <li><a routerLink="info/accessibility">{{ 'footer.link.accessibility' | translate }}</a></li>
+            @if (showPrivacyPolicy) {
+              <li><a routerLink="info/privacy">{{ 'footer.link.privacy-policy' | translate }}</a></li>
+            }
+            @if (showEndUserAgreement) {
+              <li><a routerLink="info/end-user-agreement">{{ 'footer.link.end-user-agreement' | translate }}</a></li>
+            }
+            @if (showCookieSettings) {
+              <li><button class="repository-footer__button" type="button" (click)="openCookieSettings()">{{ 'footer.link.cookies' | translate }}</button></li>
+            }
+          </ul>
+        </nav>
+      </div>
+
+      <div class="repository-footer__bottom">
+        <p>{{ 'repository.footer.platform' | translate }}</p>
+        <img class="gti-logo" src="assets/custom/images/logo-gti-arapiraca.png"
+          [attr.alt]="'footer.logo.gti' | translate" width="136" height="48" loading="lazy" />
+      </div>
     </div>
   </div>
 </footer>

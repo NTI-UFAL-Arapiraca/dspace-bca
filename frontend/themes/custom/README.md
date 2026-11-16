@@ -47,38 +47,15 @@ do backend (`DSPACE_NAME`) continua sendo a fonte para os títulos das
 estatísticas. Alterações nos catálogos do tema exigem uma nova imagem Angular
 em produção.
 
-O componente `app/home-page/home-news/` usa a extensão oficial para apresentar
-o acervo institucional, com título, descrição e links para pesquisa no acervo
-e comunidades. Busca, comunidades e adições recentes continuam herdadas da home
-oficial; nenhum total ou conteúdo do acervo é inventado no tema.
+O componente `app/home-page/home-news/` usa a extensão oficial para a abertura
+da home: eyebrow institucional, título, descrição, a busca do repositório como
+ação principal e os números do acervo (`overview/home-stats.component.ts`).
+Os números vêm da busca e das facetas da configuração `academic_works_aggregates`
+(RFC 0025); nada é inventado no tema e falhas resultam em blocos ocultos.
 
-A abertura usa a foto da biblioteca em `assets/images/biblioteca-arapiraca.webp`
-como fundo decorativo de toda a superfície. A derivada WebP atual tem
-1600 × 1200 px e 165.984 bytes, sem metadados da câmera. Ela é recortada com
-`cover`, recebe 25% de saturação, contraste de 85% e opacidade de 20% sobre o
-gradiente do tema. O texto e os links preservam sua nitidez nos modos claro e
-escuro. A foto foi reduzida de 1920 × 1440 px / 315.592 bytes para a resolução
-atual após avaliar a área de exibição; junto à foto do cartão de acesso, o peso
-das duas imagens caiu de 468.012 para 227.200 bytes (51%). Alterar a foto
-ou o tratamento exige uma nova imagem Angular em produção.
-
-O fundo das páginas usa `assets/images/page-contours.svg`, um módulo repetível de
-720 × 1120 px com curvas finas inspiradas nas folhas de um livro aberto. O SCSS
-global aplica o SVG como máscara decorativa na área principal (`#main-content`),
-com 11% de opacidade e a cor dos links do tema, acompanhando os modos claro e
-escuro sem duplicar o arquivo. A textura aparece nos espaços entre os blocos;
-cartões e fotografia mantêm suas superfícies opacas. Cabeçalho, breadcrumb e
-rodapé conservam seus fundos. A camada não recebe cliques, não entra na árvore
-acessível e é ocultada em cores forçadas. Abaixo de 768 px, a máscara usa
-`page-contours-mobile.svg`: um módulo de 480 × 1120 px com quatro posições,
-inclinações alternadas e pequenas variações de escala. A sequência mais longa
-evita repetir o mesmo livro em uma coluna estreita, mantendo o espaçamento
-vertical de 280 px e a mesma opacidade. Os dois módulos incluem uma lâmpada
-simplificada, com contorno fino, base curta e três raios de luz, menor que os
-livros e presente uma vez a cada quatro deles. No desktop, a altura
-do módulo foi duplicada para espaçar esse complemento, preservando as posições,
-o tamanho e o ritmo dos livros anteriores.
-Publicar essa alteração exige uma nova imagem Angular.
+Desde a RFC 0026 não há fotografia de fundo nem textura decorativa nas páginas:
+o conteúdo fica sobre o fundo `--ufal-paper`. Publicar alterações do tema exige
+uma nova imagem Angular.
 
 ## VLibras
 
@@ -127,22 +104,19 @@ e as opções selecionadas são preservados. A extensão em
 no carregador de filtros por data pelo bundle eager. Produção exige nova imagem
 Angular.
 
-O azul institucional (`#006da5`) identifica links e ações principais. O vermelho
-do brasão (`#ed1c24`) aparece como acento na aba selecionada; ações secundárias
-usam cinza azulado para não competir com a navegação. Cores de sucesso, alerta e
-erro mantêm o significado definido pelo DSpace.
+O sistema visual Folha de Rosto (RFC 0026) usa Source Serif 4 para títulos de
+página e conteúdo acadêmico (títulos de trabalhos, resumos) e Inter para a
+interface. As fontes variáveis ficam em `assets/fonts/`, com as licenças OFL, e
+são declaradas em `styles/_fonts.scss` com os subconjuntos latin e latin-ext.
 
-O azul vivo `#0994dc`, extraído do SVG do brasão, aparece em filetes decorativos
-pelo token `--ufal-brand-detail`. `--ufal-action-border` mantém azul de ação no
-claro e azul legível no escuro. Superfícies suaves `#e4f1f8`/`#203e54` e bordas
-`#b9d6e8`/`#476c86` reforçam a separação de blocos nos dois modos. Essas derivações
-são escolhas de interface, não uma nova especificação oficial da marca.
-
-Fundos claros, superfícies brancas e títulos em azul profundo organizam a
-leitura. A tipografia usa fontes do sistema, sem downloads externos. Busca,
-comunidades, listas, filtros e cartões dos perfis compartilham espaçamentos,
-bordas e raios. O cabeçalho se reorganiza em telas pequenas e os controles
-mantêm indicação de foco para uso por teclado.
+O azul institucional (`#006da5`) identifica links e ações principais. O azul do
+brasão (`#0994dc`) e o vermelho (`#ed1c24`) são decorativos: o vermelho aparece
+no filete de 24 px do eyebrow (`.ufal-eyebrow`). Os tokens `--ufal-*` em
+`_theme_css_variable_overrides.scss` e `_color-modes.scss` definem papel, tinta,
+texto secundário, linhas, campos e estados de acesso (aberto, embargo,
+restrito) nos modos claro e escuro. Essas derivações são escolhas de interface,
+não uma nova especificação oficial da marca. O brasão do cabeçalho é oficial;
+a logo da Biblioteca é provisória e não é usada.
 
 Links e botões não têm sublinhado permanente. Os links de texto usam uma linha
 que se expande no hover ou foco de teclado; a transição respeita a preferência
@@ -207,30 +181,21 @@ Na página `/search`, retirar o escopo consulta novamente todo o repositório,
 sem reutilizar a coleção inicial como valor padrão da paginação. Essa extensão
 não altera os escopos fixos das pesquisas em comunidades, coleções ou perfis.
 
-A página simples do trabalho, compartilhada com Publication, usa uma grade
-local: arquivos e metadados na lateral, conteúdo na área de leitura. Abaixo de
-992 px, a ordem é arquivos, conteúdo e dados acadêmicos, igual à ordem do DOM.
-Os componentes oficiais continuam responsáveis por autorização, download,
-mídia, licenças e exibição condicional de campos. O resumo permanece justificado
-conforme a RFC 0006. Links de registro completo usam semântica de navegação;
-cartões de atividade dos perfis exibem rótulos e setas decorativas.
-Os links e a rota de metadados completos exigem o privilégio de administrador;
-acessos diretos à rota recebem um aviso e um link para a página pública do item.
-Isso controla a apresentação Angular: não altera as respostas da API REST nem
-substitui as regras `metadata.hide.*` do backend.
-
-O cartão de acesso ao documento usa a foto do corredor da biblioteca em
-`assets/images/biblioteca-corredor.webp` como fundo decorativo. A derivada WebP
-atual tem 800 × 600 px e 61.216 bytes, sem metadados da câmera, carregamento
-adiado e recorte central. A coluna mede 19 rem no desktop; em telas
-menores ela ocupa a largura disponível. Essa resolução fornece mais de 2×
-os pixels da coluna desktop e mantém a imagem leve nos layouts móveis.
-Saturação de 20%, contraste de 85% e opacidade de 16% sobre o azul suave do
-tema mantêm a imagem discreta nos modos claro e escuro. O tratamento se aplica
-somente à foto; a miniatura real, os textos e os controles preservam sua
-nitidez. Os links do cartão usam a cor de maior contraste já definida pelo
-tema para hover. A foto tem alternativa vazia e fica fora da árvore acessível.
-Publication reutiliza o mesmo template e SCSS; publicar requer nova imagem Angular.
+A página simples do trabalho, compartilhada com Publication pelo mesmo
+template e por `work/academic-item-imports.ts`, segue a folha de rosto:
+`work/work-context.component.ts` mostra tipo, curso, campus e ano; depois vêm o
+título, a autoria e a orientação, e o cartão `work/work-access.component.ts`.
+O cartão usa o arquivo principal (ou o primeiro do ORIGINAL) com o componente
+oficial de download, o selo oficial de acesso (`item.showAccessStatuses`),
+mensagens para arquivo restrito ou ausente, copiar link permanente e
+compartilhar; no celular, uma barra fixa de download aparece quando o cartão
+sai da tela. “Dados do trabalho” reúne curso, campus, grande área, datas,
+idioma do documento (`work/work-language.component.ts`) e banca; “Registro”
+reúne URI, coleções, licença e relações. Os estilos ficam em
+`styles/_work-page.scss`, porque alcançam a marcação interna de componentes
+oficiais. Os links e a rota de metadados completos exigem o privilégio de
+administrador; isso não altera as respostas da API REST nem as regras
+`metadata.hide.*` do backend.
 
 Na área de informações, `app/item-page/simple/abstracts/` consulta o item com
 `projection=allLanguages` e usa somente os valores de `dc.description.abstract`.
@@ -258,20 +223,14 @@ composição está na [RFC 0015](../../../rfc/0015-experiencia-visual-do-reposit
 
 ## Rodapé institucional
 
-`app/footer/` personaliza o componente oficial do rodapé. A versão local mantém
-os links de acessibilidade, cookies, privacidade, acordo de usuário e COAR
-quando habilitados, remove o crédito/copyright de DSpace e LYRASIS e o link de
-envio de feedback. A logo da Gerência de Tecnologia da Informação da UFAL em
-Arapiraca fica alinhada à direita no desktop e centralizada em telas pequenas,
-diretamente sobre o fundo azul do rodapé. Ela é servida dos assets do tema;
-alterações exigem recompilar a imagem Angular de produção. O conteúdo da rota
-`info/privacy` substitui o modelo genérico do
-DSpace por um aviso em português do Brasil, específico para o repositório e
-complementar às políticas institucionais da UFAL. O override está em
-`frontend/overrides/` e declara `lang="pt-BR"` no artigo para preservar a
-pronúncia mesmo quando o idioma da interface for alterado. Ele é aplicado nos
-Dockerfiles de desenvolvimento e produção; alterações exigem reconstruir a
-imagem Angular correspondente.
+`app/footer/` personaliza o componente oficial do rodapé. Identifica a
+Biblioteca em texto, agrupa os links por público (repositório, pesquisadores,
+acessibilidade e privacidade), oferece a coleta OAI-PMH (RFC 0011) e o mapa do
+site (RFC 0012) e mantém cookies, privacidade, acordo de usuário e COAR quando
+habilitados. A logo da GTI em Arapiraca continua no rodapé. O conteúdo da rota
+`info/privacy` substitui o modelo genérico do DSpace por um aviso em português
+do Brasil; o override está em `frontend/overrides/` e é aplicado nos
+Dockerfiles de desenvolvimento e produção.
 
 ## Leitura integrada de PDFs
 
@@ -394,25 +353,12 @@ montado separadamente da imagem compilada.
 
 ## Composição da home
 
-A extensão `app/home-page/home-page.component.*` mantém a abertura institucional
-em `home-news` e organiza busca, novidades e comunidades. Em desktop, as
-novidades ocupam a coluna principal; abaixo de 992 px, as seções ficam em coluna.
-A busca inicial abrange todo o repositório e o refinamento fica nos resultados.
-
-`recent-records/` herda o carregamento oficial, inclusive tamanho, ordenação e
-navegação para mais registros. Os cartões exibem título, tipo de apresentação
-(perfil de pessoa ou registro) e curso quando disponível. `top-level-community-list/`
-mostra a página retornada pelo serviço como uma prévia com acesso ao catálogo
-completo. Ambas mantêm carregamento, erro e vazio; não há nova consulta ou filtro.
-CMS, COAR, sugestões e a opção de filtros Discovery continuam na composição.
-
-O tipo do registro é um texto secundário, sem fundo ou cor de destaque.
-O cartão inteiro é um link: hover e foco realçam sua superfície e borda e
-deslocam a seta, sem sublinhar apenas o título. O atalho para mais registros
-segue a animação dos demais links de texto.
-
-Home e comunidades entram no registro eager; recentes é importado diretamente.
-Os estilos compartilhados ficam em `_home-sections.scss`; o formulário recebe
-ajustes globais limitados a `.home-search`. O pipeline Sass do DSpace injeta
-variáveis antes do SCSS, por isso o parcial usa `@import`, como o tema existente.
-Produção exige nova imagem Angular. A decisão está na RFC 0015.
+A extensão `app/home-page/home-page.component.*` organiza a abertura
+(`home-news`), a exploração por curso, tipo e ano
+(`overview/home-explore.component.ts`) e os trabalhos recém-adicionados. As
+facetas `course`, `itemtype` e `publicationYear` e os recentes consultam a
+configuração `academic_works_aggregates`, que exclui Person (RFC 0026). As
+barras de ano somam valores pelo ano (`overview/year-series.ts`) e cada barra
+leva à busca filtrada por aquele ano. Os estilos dos blocos ficam em
+`styles/_home.scss`. CMS, COAR, sugestões e a opção de filtros Discovery
+continuam na composição. Produção exige nova imagem Angular. A decisão está na RFC 0026.

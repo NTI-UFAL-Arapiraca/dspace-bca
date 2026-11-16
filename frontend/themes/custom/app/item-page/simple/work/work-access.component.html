@@ -1,0 +1,63 @@
+@let state = state$ | async;
+<section #card class="work-access" [class.work-access--closed]="state && (!state.file || !state.canDownload)"
+  aria-labelledby="work-access-title">
+  <div class="work-access__head">
+    <h2 id="work-access-title" class="ufal-label">{{ 'repository.item.access.title' | translate }}</h2>
+    <ds-access-status-badge [object]="item()"></ds-access-status-badge>
+  </div>
+
+  @if (state) {
+    @if (state.file) {
+      @if (state.canDownload) {
+        <ds-file-download-link [bitstream]="state.file" [item]="item()" [showAccessStatusBadge]="false"
+          cssClasses="btn btn-primary btn-lg w-100 work-access__download">
+          <i class="fas fa-download me-2" aria-hidden="true"></i>
+          {{ (state.isPdf ? 'repository.item.access.download-pdf' : 'repository.item.access.download') | translate }}
+          <span class="work-access__size">· {{ state.file.sizeBytes | dsFileSize }}</span>
+        </ds-file-download-link>
+        @if (state.isPdf && readerId()) {
+          <button type="button" class="btn btn-outline-primary w-100 work-access__read" (click)="openReader()">
+            <i class="fas fa-book-open me-2" aria-hidden="true"></i>{{ 'repository.item.access.read-here' | translate }}
+          </button>
+        }
+      } @else {
+        <p class="work-access__message">{{ 'repository.item.access.restricted' | translate }}</p>
+        <ds-file-download-link [bitstream]="state.file" [item]="item()" [showAccessStatusBadge]="false"
+          cssClasses="btn btn-outline-primary w-100 work-access__download">
+          {{ 'repository.item.access.options' | translate }}
+        </ds-file-download-link>
+      }
+    } @else {
+      <p class="work-access__message">{{ 'repository.item.access.no-file' | translate }}</p>
+    }
+  } @else {
+    <div class="work-access__loading" aria-hidden="true"></div>
+  }
+
+  <div class="work-access__files">
+    <ng-content></ng-content>
+  </div>
+
+  <div class="work-access__actions">
+    <button type="button" class="btn btn-link btn-sm" (click)="copyLink()">
+      <i class="fas fa-link me-1" aria-hidden="true"></i>{{ 'repository.item.access.copy-link' | translate }}
+    </button>
+    @if (canShare()) {
+      <button type="button" class="btn btn-link btn-sm" (click)="share()">
+        <i class="fas fa-share-alt me-1" aria-hidden="true"></i>{{ 'repository.item.access.share' | translate }}
+      </button>
+    }
+  </div>
+  <p class="visually-hidden" aria-live="polite">{{ copied() ? ('repository.item.access.copied' | translate) : '' }}</p>
+</section>
+
+@if (floatingVisible() && state?.file && state?.canDownload) {
+  <div class="work-access-bar">
+    <ds-file-download-link [bitstream]="state.file" [item]="item()" [showAccessStatusBadge]="false"
+      cssClasses="btn btn-primary w-100 work-access__download">
+      <i class="fas fa-download me-2" aria-hidden="true"></i>
+      {{ (state.isPdf ? 'repository.item.access.download-pdf' : 'repository.item.access.download') | translate }}
+      <span class="work-access__size">· {{ state.file.sizeBytes | dsFileSize }}</span>
+    </ds-file-download-link>
+  </div>
+}

@@ -1,0 +1,411 @@
+// Página do trabalho — Folha de Rosto (RFC 0026).
+// Order in the DOM and on every width: context → title → authorship → access,
+// then abstracts and the work data. Shared by UntypedItem and Publication.
+
+:is(ds-untyped-item, ds-publication) {
+  .work-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 22rem);
+    gap: 2rem 3.5rem;
+    align-items: start;
+    padding: 1rem 0 2.5rem;
+    border-bottom: 1px solid var(--ufal-line);
+  }
+
+  .work-header__main {
+    min-width: 0;
+  }
+
+  .work-header__title {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+
+    ds-item-page-title-field {
+      flex: 1;
+      min-width: 0;
+    }
+
+    h1 {
+      max-width: 30ch;
+      margin: 0;
+      hyphens: none;
+    }
+  }
+
+  // Authorship reads as the byline of a title page: label, then the names.
+  .work-byline {
+    display: grid;
+    gap: 0.625rem;
+    margin-top: 1.75rem;
+
+    .simple-view-element {
+      display: grid;
+      grid-template-columns: 9.5rem minmax(0, 1fr);
+      gap: 0 1.25rem;
+      align-items: baseline;
+      margin: 0;
+    }
+
+    .simple-view-element-header {
+      margin: 0;
+      color: var(--ufal-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .simple-view-element-body {
+      color: var(--ufal-ink);
+      font-size: 1.09375rem;
+      font-weight: 500;
+    }
+  }
+
+  .work-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(17rem, 24rem);
+    gap: 3rem 4rem;
+    align-items: start;
+    padding-top: 2.5rem;
+  }
+
+  .work-body__main, .work-body__data {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .work-body__main > * + * {
+    display: block;
+    margin-top: 2rem;
+  }
+
+  .work-reader {
+    margin-top: 3rem;
+    scroll-margin-top: 1rem;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  // Work data: one label/value row per field, technical fields grouped apart.
+  .work-data__title {
+    margin: 0 0 0.75rem;
+    color: var(--ufal-ink);
+    font-family: var(--ufal-sans);
+    font-size: 1.125rem;
+    font-weight: 600;
+
+    &:not(:first-child) {
+      margin-top: 2.25rem;
+    }
+  }
+
+  .work-data {
+    .simple-view-element, .item-page-field ds-metadata-values > div {
+      display: grid;
+      grid-template-columns: 9.5rem minmax(0, 1fr);
+      gap: 0.75rem;
+      margin: 0;
+      padding: 0.75rem 0;
+      border-top: 1px solid var(--ufal-line);
+    }
+
+    :is(.simple-view-element-header, .item-page-label) {
+      margin: 0;
+      color: var(--ufal-muted);
+      font-size: 0.84375rem;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    :is(.simple-view-element-body, ul) {
+      color: var(--ufal-ink);
+      font-size: 0.9375rem;
+    }
+
+    ul {
+      margin: 0;
+    }
+
+    .fa-link {
+      display: none;
+    }
+  }
+
+  // Abstracts keep the justified reading of RFC 0006 on wide screens only.
+  .document-abstract {
+    display: block;
+
+    .simple-view-element-header, h2 {
+      font-family: var(--ufal-serif);
+      font-size: clamp(1.375rem, 1vw + 1rem, 1.6875rem);
+      font-weight: 600;
+      letter-spacing: -0.005em;
+    }
+
+    .abstract-text {
+      max-width: var(--ufal-reading-measure);
+      color: var(--bs-body-color);
+      font-family: var(--ufal-serif);
+      font-size: 1.15625rem;
+      line-height: 1.7;
+      text-align: justify;
+      hyphens: auto;
+    }
+  }
+
+  .work-keywords__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+}
+
+// Context line above the title: type, course, campus, year.
+.work-context {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem 0.75rem;
+  align-items: center;
+  margin: 0 0 1rem;
+  color: var(--ufal-muted);
+  font-size: 0.90625rem;
+}
+
+.work-context__type {
+  padding: 0.375rem 0.625rem;
+  color: var(--bs-link-hover-color);
+  background: var(--ufal-blue-soft);
+  border-radius: 999px;
+  font-size: 0.78125rem;
+  font-weight: 600;
+}
+
+.work-context__item + .work-context__item::before,
+.work-context__type + .work-context__item::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  margin-inline-end: 0.75rem;
+  vertical-align: middle;
+  background: var(--ufal-field);
+  border-radius: 50%;
+}
+
+.work-context__type + .work-context__item::before {
+  display: none;
+}
+
+// Access card: the single primary action of the page.
+.work-access {
+  padding: 1.5rem;
+  background: var(--ufal-surface);
+  border: 1px solid var(--ufal-line);
+  border-top: 4px solid var(--bs-link-color);
+  border-radius: var(--bs-border-radius);
+  box-shadow: var(--ufal-shadow-sm);
+
+  &.work-access--closed {
+    border-top-color: var(--ufal-warn);
+  }
+
+  .btn {
+    min-height: 44px;
+  }
+
+  .work-access__download {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem 0 0 !important;
+    font-weight: 600;
+  }
+
+  .btn-lg.work-access__download {
+    min-height: 52px;
+  }
+
+  .work-access__read {
+    margin-top: 0.625rem;
+  }
+}
+
+.work-access__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.work-access__size {
+  margin-inline-start: 0.375rem;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.work-access__message {
+  margin: 1rem 0 0;
+  color: var(--ufal-ink);
+  font-weight: 600;
+}
+
+.work-access__loading {
+  height: 52px;
+  margin-top: 1rem;
+  background: var(--ufal-surface-muted);
+  border-radius: var(--bs-border-radius);
+}
+
+.work-access__files {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+
+  .simple-view-element {
+    margin: 0;
+  }
+
+  .simple-view-element-header {
+    margin: 0 0 0.25rem;
+    color: var(--ufal-muted);
+    font-size: 0.78125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  ds-file-download-link a {
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--ufal-line);
+  }
+
+  .badge {
+    color: var(--ufal-ink);
+    background: var(--ufal-surface-muted) !important;
+  }
+}
+
+.work-access__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--ufal-line);
+
+  .btn-link {
+    min-height: 40px;
+    color: var(--bs-body-color);
+    font-weight: 500;
+  }
+}
+
+// Access status badges: icon-free text with meaning in words, color as support.
+.access-status-list-element-badge {
+  padding: 0.375rem 0.625rem !important;
+  border-radius: 6px !important;
+  font-size: 0.78125rem !important;
+  font-weight: 600 !important;
+
+  &.access-status-open-access-listelement-badge {
+    color: var(--ufal-ok) !important;
+    background: var(--ufal-ok-soft) !important;
+  }
+
+  &.access-status-embargo-listelement-badge {
+    color: var(--ufal-warn) !important;
+    background: var(--ufal-warn-soft) !important;
+  }
+
+  &.access-status-restricted-listelement-badge {
+    color: var(--ufal-danger) !important;
+    background: var(--ufal-danger-soft) !important;
+  }
+
+  &:is(.access-status-metadata-only-listelement-badge, .access-status-unknown-listelement-badge) {
+    color: var(--ufal-muted) !important;
+    background: var(--ufal-surface-muted) !important;
+  }
+}
+
+// Compact download bar on phones, only once the access card scrolled away.
+.work-access-bar {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .work-access-bar {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 1020;
+    display: block;
+    padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
+    background: var(--ufal-surface);
+    border-top: 1px solid var(--ufal-line);
+    box-shadow: 0 -6px 18px rgba(15, 34, 54, 0.08);
+
+    .work-access__download {
+      margin: 0 !important;
+    }
+  }
+}
+
+.ufal-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 0.875rem;
+  color: var(--bs-body-color);
+  background: var(--ufal-surface);
+  border: 1px solid #b4c2d0;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+
+  &:hover {
+    color: var(--bs-link-hover-color);
+    border-color: var(--bs-link-color);
+  }
+}
+
+:root[data-bs-theme='dark'] .ufal-chip {
+  border-color: var(--ufal-field);
+}
+
+@media (max-width: 991.98px) {
+  :is(ds-untyped-item, ds-publication) {
+    .work-header, .work-body {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .work-header {
+      gap: 1.5rem;
+    }
+  }
+}
+
+@media (max-width: 767.98px) {
+  :is(ds-untyped-item, ds-publication) {
+    .work-byline .simple-view-element, .work-data .simple-view-element,
+    .work-data .item-page-field ds-metadata-values > div {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.125rem;
+    }
+
+    .document-abstract .abstract-text {
+      font-size: 1.0625rem;
+      text-align: start;
+    }
+  }
+}

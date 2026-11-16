@@ -1,26 +1,38 @@
 @if (showBackButton$ | async) {
   <ds-results-back-button [back]="back"></ds-results-back-button>
 }
-<div class="person-profile__layout">
-  <div class="person-profile__primary">
-    <div class="person-profile__title">
-      <p class="text-muted mb-1">{{ 'person.profile.label' | translate }}</p>
-      <h1 class="person-profile__name">{{ displayName }}</h1>
-      @for (degree of values('local.person.degree'); track degree) {
-        <span class="badge rounded-pill text-bg-light border me-2 profile-degree">
-          @if (degreeTranslation(degree); as key) { {{ key | translate }} } @else { {{ degree }} }
-        </span>
-      }
-    </div>
-    <div class="profile-identity">
-      <ds-metadata-field-wrapper [hideIfNoTextContent]="false">
-        <ds-thumbnail [thumbnail]="object?.thumbnail | async"
-          [defaultImage]="'assets/images/person-placeholder.svg'" [alt]="'thumbnail.person.alt'"
-          [placeholder]="'thumbnail.person.placeholder'"></ds-thumbnail>
-      </ds-metadata-field-wrapper>
+<!-- Perfil bibliográfico (RFC 0026): a Person record is not an account; the
+     e-mail is shown only when the REST API itself returns it. -->
+<header class="person-header">
+  <div class="person-header__identity">
+    @let thumbnail = (object?.thumbnail | async)?.payload;
+    @if (thumbnail) {
+      <ds-thumbnail class="person-header__photo" [thumbnail]="thumbnail" [alt]="'thumbnail.person.alt'"></ds-thumbnail>
+    } @else if (initials) {
+      <span class="person-header__initials" aria-hidden="true">{{ initials }}</span>
+    }
+    <div class="person-header__copy">
+      <p class="ufal-eyebrow">{{ 'person.profile.label' | translate }}</p>
+      <div class="person-header__title">
+        <h1 class="person-profile__name">{{ displayName }}</h1>
+        <ds-dso-edit-menu></ds-dso-edit-menu>
+      </div>
+      <p class="person-header__facts">
+        @for (degree of values('local.person.degree'); track degree) {
+          <span class="person-header__degree">
+            @if (degreeTranslation(degree); as key) { {{ key | translate }} } @else { {{ degree }} }
+          </span>
+        }
+        @for (title of values('person.jobTitle'); track title) {
+          <span>{{ title }}</span>
+        }
+        @for (affiliation of values('person.affiliation.name'); track affiliation) {
+          <span>{{ affiliation }}</span>
+        }
+      </p>
+      <ds-generic-item-page-field class="person-header__about" [item]="object" [fields]="['dc.description.abstract']" [label]="'person.profile.about'"></ds-generic-item-page-field>
       @if (values('person.email').length || values('person.identifier.lattes').length) {
-        <h2 class="h6 mt-3">{{ 'person.profile.contact' | translate }}</h2>
-        <ul class="list-unstyled profile-links">
+        <ul class="list-unstyled profile-links" [attr.aria-label]="'person.profile.contact' | translate">
           @for (email of values('person.email'); track email) {
             <li><a [href]="'mailto:' + email"><i class="fas fa-envelope me-2" aria-hidden="true"></i>{{ email }}</a></li>
           }
@@ -36,31 +48,22 @@
       }
       <ds-item-page-orcid-field [item]="object"></ds-item-page-orcid-field>
       @if (isAdmin$ | async) {
-        <a class="repository-text-link d-inline-block mt-2" [routerLink]="[itemPageRoute + '/full']">
+        <a class="repository-text-link" [routerLink]="[itemPageRoute + '/full']">
           {{ 'item.page.link.full' | translate }} <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
         </a>
       }
     </div>
   </div>
-  <div class="person-profile__main">
-    <div class="person-profile__about-layout">
-      <div class="person-profile__about-content">
-        <ds-generic-item-page-field [item]="object" [fields]="['dc.description.abstract']" [label]="'person.profile.about'"></ds-generic-item-page-field>
-      </div>
-      <ds-dso-edit-menu></ds-dso-edit-menu>
-    </div>
-    <div class="person-profile__details">
-      <ds-generic-item-page-field [item]="object" [fields]="['person.jobTitle']" [label]="'person.page.jobtitle'"></ds-generic-item-page-field>
-      <ds-generic-item-page-field [item]="object" [fields]="['person.affiliation.name']" [label]="'person.profile.affiliation'"></ds-generic-item-page-field>
-      <ds-related-items [parentItem]="object" [relationType]="'isProjectOfPerson'" [label]="'item.page.projects' | translate"></ds-related-items>
-      <ds-related-items [parentItem]="object" [relationType]="'isOrgUnitOfPerson'" [label]="'item.page.org-units' | translate"></ds-related-items>
-      @if (areAuthorityRelationsEnabled) {
-        <ds-person-activity [item]="object" [itemPageRoute]="itemPageRoute"></ds-person-activity>
-      }
-    </div>
-  </div>
-</div>
-<section id="person-works" class="mt-5" tabindex="-1" [attr.aria-label]="'person.profile.count.works' | translate">
+  <p class="person-header__note">{{ 'person.profile.note' | translate }}</p>
+</header>
+
+@if (areAuthorityRelationsEnabled) {
+  <ds-person-activity [item]="object" [itemPageRoute]="itemPageRoute"></ds-person-activity>
+}
+<ds-related-items [parentItem]="object" [relationType]="'isProjectOfPerson'" [label]="'item.page.projects' | translate"></ds-related-items>
+<ds-related-items [parentItem]="object" [relationType]="'isOrgUnitOfPerson'" [label]="'item.page.org-units' | translate"></ds-related-items>
+
+<section id="person-works" class="person-works" tabindex="-1" [attr.aria-label]="'person.profile.count.works' | translate">
   @if (areAuthorityRelationsEnabled) {
     <ds-authority-related-entities-search [item]="object" [configurations]="configurations"></ds-authority-related-entities-search>
   } @else {

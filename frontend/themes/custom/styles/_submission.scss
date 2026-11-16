@@ -1,0 +1,91 @@
+// Submissão e edição — Folha de Rosto (RFC 0026), sem override.
+// Sections read as titled cards, labels are explicit and errors are stated in
+// words below the field. The side stepper of the design needs an override of
+// the official form and is not part of this change.
+
+ds-submission-form {
+  .submission-form-header, .submission-form-footer {
+    background: var(--ufal-paper);
+  }
+
+  .submission-form-footer {
+    padding-block: 0.75rem;
+    border-top: 1px solid var(--ufal-line);
+  }
+}
+
+ds-submission-section-container {
+  .accordion-item, .card {
+    background: var(--ufal-surface);
+    border: 1px solid var(--ufal-line);
+    border-radius: var(--bs-border-radius) !important;
+    overflow: hidden;
+  }
+
+  .accordion-button, .card-header {
+    min-height: 56px;
+    color: var(--ufal-ink);
+    background: var(--ufal-surface);
+    box-shadow: none;
+  }
+
+  .section-title {
+    font-family: var(--ufal-serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .section-focus .accordion-item, .section-focus .card {
+    border-color: var(--bs-link-color);
+    box-shadow: 0 0 0 3px var(--ufal-blue-border);
+  }
+}
+
+ds-dynamic-form-control-container {
+  .form-label, label {
+    color: var(--ufal-ink);
+    font-weight: 600;
+  }
+
+  .ds-hint {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--ufal-muted) !important;
+    font-size: 0.84375rem;
+    line-height: 1.45;
+  }
+
+  .form-control, .form-select {
+    min-height: 46px;
+    border-width: 1.5px;
+    border-color: var(--ufal-field);
+  }
+
+  textarea.form-control {
+    font-family: var(--ufal-serif);
+    font-size: 1.03125rem;
+    line-height: 1.6;
+  }
+
+  .form-control.is-invalid, .form-select.is-invalid {
+    border-color: var(--ufal-danger);
+    box-shadow: 0 0 0 3px var(--ufal-danger-soft);
+  }
+
+  .invalid-feedback {
+    color: var(--ufal-danger);
+    font-size: 0.84375rem;
+    font-weight: 500;
+  }
+}
+
+// Selected authority values (people) read as removable chips.
+ds-dynamic-form-control-container .ds-chips .badge,
+ds-chips .badge {
+  padding: 0.5rem 0.75rem;
+  color: var(--bs-link-hover-color);
+  background: var(--ufal-blue-soft) !important;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}

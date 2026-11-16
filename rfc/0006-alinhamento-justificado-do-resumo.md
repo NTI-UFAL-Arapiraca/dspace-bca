@@ -1,6 +1,6 @@
 # RFC 0006 — Alinhamento justificado do resumo
 
-- Status: aceita
+- Status: aceita; restrita a larguras a partir de 768 px pela [RFC 0026](0026-sistema-visual-folha-de-rosto.md)
 - Escopo: frontend
 
 ## Contexto

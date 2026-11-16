@@ -42,5 +42,8 @@ themes:
   - name: dspace
 
 # People profiles query work roles through authority UUIDs.
+# Access status (open, embargo, restricted, metadata only) is shown on work
+# pages and results (RFC 0026); per-file badges stay off to keep lists quiet.
 item:
   showAuthorityRelations: true
+  showAccessStatuses: true

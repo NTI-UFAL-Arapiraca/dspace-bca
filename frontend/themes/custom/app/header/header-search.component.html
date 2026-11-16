@@ -1,0 +1,10 @@
+<form class="header-search" #form="ngForm" (ngSubmit)="search(form.value.query)" role="search"
+  [attr.aria-label]="'search.header.title' | translate">
+  <i class="fas fa-search header-search__icon" aria-hidden="true"></i>
+  <input #queryInput type="search" name="query" ngModel class="header-search__input"
+    [attr.aria-label]="'search.header.title' | translate"
+    [placeholder]="'repository.header.search.placeholder' | translate"
+    aria-keyshortcuts="/" enterkeyhint="search">
+  <kbd class="header-search__key" aria-hidden="true">/</kbd>
+  <button type="submit" class="visually-hidden">{{ 'search.form.search' | translate }}</button>
+</form>

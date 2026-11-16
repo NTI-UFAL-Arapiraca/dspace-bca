@@ -1,23 +1,14 @@
-<section class="repository-intro container" aria-labelledby="repository-intro-title">
-  <div class="repository-intro__surface">
-    <img class="repository-intro__photo" src="assets/custom/images/biblioteca-arapiraca.webp"
-      alt="" aria-hidden="true" width="1920" height="1440" decoding="async" />
+<section class="repository-intro" aria-labelledby="repository-intro-title">
+  <div class="container repository-intro__layout">
     <div class="repository-intro__copy">
-      <p class="repository-intro__eyebrow">{{ 'repository.home.eyebrow' | translate }}</p>
+      <p class="ufal-eyebrow">{{ 'repository.home.eyebrow' | translate }}</p>
       <h1 id="repository-intro-title">{{ 'repository.home.title' | translate }}</h1>
       <p class="repository-intro__description">{{ 'repository.home.description' | translate }}</p>
+      <div class="repository-intro__search">
+        <ds-search-form [inPlaceSearch]="false" [showScopeSelector]="false"
+          [searchPlaceholder]="'repository.home.search.placeholder' | translate"></ds-search-form>
+      </div>
     </div>
-    <nav class="repository-intro__paths" [attr.aria-label]="'repository.home.explore' | translate">
-      <p class="repository-intro__nav-title">{{ 'repository.home.explore' | translate }}</p>
-      <a routerLink="/search" [queryParams]="{configuration: 'academic_works_search'}">
-        <span>{{ 'repository.home.works' | translate }}</span>
-        <i class="fas fa-arrow-right" aria-hidden="true"></i>
-      </a>
-      <a routerLink="/community-list">
-        <span>{{ 'repository.home.collections' | translate }}</span>
-        <i class="fas fa-arrow-right" aria-hidden="true"></i>
-      </a>
-      <p class="repository-intro__hint">{{ 'repository.home.hint' | translate }}</p>
-    </nav>
+    <ds-home-stats class="repository-intro__stats"></ds-home-stats>
   </div>
 </section>

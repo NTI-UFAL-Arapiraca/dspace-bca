@@ -1,5 +1,9 @@
 import { AsyncPipe } from '@angular/common';
-import { afterNextRender, Component, inject } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  inject,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthorizationDataService } from '@dspace/core/data/feature-authorization/authorization-data.service';
 import { FeatureID } from '@dspace/core/data/feature-authorization/feature-id';
@@ -10,17 +14,20 @@ import { GenericItemPageFieldComponent } from 'src/app/item-page/simple/field-co
 import { TabbedRelatedEntitiesSearchComponent } from 'src/app/item-page/simple/related-entities/tabbed-related-entities-search/tabbed-related-entities-search.component';
 import { RelatedItemsComponent } from 'src/app/item-page/simple/related-items/related-items-component';
 import { DsoEditMenuComponent } from 'src/app/shared/dso-page/dso-edit-menu/dso-edit-menu.component';
-import { MetadataFieldWrapperComponent } from 'src/app/shared/metadata-field-wrapper/metadata-field-wrapper.component';
 import { ThemedResultsBackButtonComponent } from 'src/app/shared/results-back-button/themed-results-back-button.component';
 import { ThemedThumbnailComponent } from 'src/app/thumbnail/themed-thumbnail.component';
 
 import { PersonComponent as BaseComponent } from '../../../../../../../app/entity-groups/research-entities/item-pages/person/person.component';
 import { ItemPageOrcidFieldComponent } from '../../../../../../../app/item-page/simple/field-components/specific-field/orcid/item-page-orcid-field.component';
 import { AuthorityRelatedEntitiesSearchComponent } from '../../../../../../../app/item-page/simple/related-entities/authority-related-entities-search/authority-related-entities-search.component';
-import { listableObjectComponent } from '../../../../../../../app/shared/object-collection/shared/listable-object/listable-object.decorator';
 import { PersonSearchNavigationService } from '../../../../../../../app/person-search-navigation.service';
+import { listableObjectComponent } from '../../../../../../../app/shared/object-collection/shared/listable-object/listable-object.decorator';
 import { PersonActivityComponent } from './person-activity.component';
-import { degreeTranslation, lattesUrl } from './person-profile.helpers';
+import {
+  degreeTranslation,
+  lattesUrl,
+  personInitials,
+} from './person-profile.helpers';
 
 @listableObjectComponent('Person', ViewMode.StandalonePage, Context.Any, 'custom')
 @Component({
@@ -29,7 +36,7 @@ import { degreeTranslation, lattesUrl } from './person-profile.helpers';
   templateUrl: './person.component.html',
   imports: [
     AsyncPipe, AuthorityRelatedEntitiesSearchComponent, DsoEditMenuComponent,
-    GenericItemPageFieldComponent, ItemPageOrcidFieldComponent, MetadataFieldWrapperComponent,
+    GenericItemPageFieldComponent, ItemPageOrcidFieldComponent,
     PersonActivityComponent, RelatedItemsComponent, RouterLink, TabbedRelatedEntitiesSearchComponent,
     ThemedResultsBackButtonComponent, ThemedThumbnailComponent, TranslateModule,
   ],
@@ -51,6 +58,10 @@ export class PersonComponent extends BaseComponent {
   get displayName(): string {
     return [this.object?.firstMetadataValue('person.givenName'), this.object?.firstMetadataValue('person.familyName')]
       .filter(Boolean).join(' ') || this.object?.name;
+  }
+
+  get initials(): string {
+    return personInitials(this.displayName);
   }
 
   values(field: string): string[] {

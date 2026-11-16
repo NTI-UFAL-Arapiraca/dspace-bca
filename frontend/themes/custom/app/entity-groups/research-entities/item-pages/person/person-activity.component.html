@@ -1,32 +1,33 @@
-<section aria-labelledby="person-activity-heading" class="mt-0 mb-4">
-  <h2 id="person-activity-heading" class="h4">{{ 'person.profile.activity' | translate }}</h2>
-  <div class="activity-grid" aria-live="polite">
+<section aria-labelledby="person-activity-heading" class="person-activity">
+  <h2 id="person-activity-heading" class="visually-hidden">{{ 'person.profile.activity' | translate }}</h2>
+  <nav class="role-tabs" [attr.aria-label]="'person.profile.activity' | translate" aria-live="polite">
     @for (summary of counts$ | async; track summary.role) {
-      <a class="activity-card" [class.is-active]="(activeRole$ | async) === summary.role"
+      <a class="role-tab" [class.is-active]="(activeRole$ | async) === summary.role"
         [attr.aria-current]="(activeRole$ | async) === summary.role ? 'page' : null"
         [routerLink]="[itemPageRoute]" fragment="person-works" [queryParams]="{tab: 'RELATION.Person.' + summary.role}">
-        <span class="activity-count">
+        <span class="role-tab__label">{{ ('person.profile.count.' + summary.role) | translate }}</span>
+        <span class="role-tab__count">
           @if (summary.count === undefined) {
             <span aria-hidden="true">…</span><span class="visually-hidden">{{ 'person.profile.loading' | translate }}</span>
           } @else if (summary.count === null) {
             <span aria-hidden="true">—</span><span class="visually-hidden">{{ 'person.profile.unavailable' | translate }}</span>
           } @else { {{ summary.count }} }
         </span>
-        <span class="activity-label">{{ ('person.profile.count.' + summary.role) | translate }} <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i></span>
       </a>
     }
-  </div>
+  </nav>
+  <p class="person-activity__help">{{ 'person.profile.context.help' | translate }}</p>
   @if (context$ | async; as context) {
-    <div class="row mt-4">
+    <div class="person-context">
       @for (facet of context; track facet.field) {
         @if (facet.values.length) {
-          <div class="col-12 col-md-4 mb-3" [attr.data-context]="facet.field">
-            <h3 class="h6">{{ ('person.profile.context.' + facet.field) | translate }}</h3>
-            <ul class="list-unstyled context-values">
+          <div class="person-context__group" [attr.data-context]="facet.field">
+            <h3 class="ufal-label">{{ ('person.profile.context.' + facet.field) | translate }}</h3>
+            <ul class="context-values">
               @for (value of facet.values; track value.label) {
                 <li>
-                  <a [routerLink]="[itemPageRoute]" fragment="person-works" [queryParams]="filterParams(facet.field, value.label)">
-                    {{ value.label }} <span class="text-muted">({{ value.count }})</span>
+                  <a class="ufal-chip" [routerLink]="[itemPageRoute]" fragment="person-works" [queryParams]="filterParams(facet.field, value.label)">
+                    {{ value.label }} <span class="context-values__count">{{ value.count }}</span>
                   </a>
                 </li>
               }
@@ -36,5 +37,4 @@
       }
     </div>
   }
-  <p class="small text-muted">{{ 'person.profile.context.help' | translate }}</p>
 </section>

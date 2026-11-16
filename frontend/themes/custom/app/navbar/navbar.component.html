@@ -1,0 +1,26 @@
+<nav [ngClass]="{'open': (menuCollapsed | async) !== true}"
+  [@slideMobileNav]="(isMobile$ | async) !== true ? 'default' : ((menuCollapsed | async) ? 'collapsed' : 'expanded')"
+  class="navbar navbar-light navbar-expand-md px-md-0 navbar-container" role="navigation"
+  [attr.aria-label]="'nav.main.description' | translate" id="main-navbar">
+  <div class="navbar-inner-container w-100" [class.container]="(isMobile$ | async) !== true">
+    <div class="w-100">
+      <div id="collapsingNav">
+        @if ((isMobile$ | async) && (isAuthenticated$ | async)) {
+          <ds-user-menu [inExpandableNavbar]="true"></ds-user-menu>
+        }
+        <div class="navbar-nav align-items-md-center me-auto shadow-none gapx-3" role="menubar">
+          @for (entry of primaryLinks; track entry.id) {
+            <div class="ds-menu-item-wrapper text-md-center" [id]="'navbar-section-' + entry.id">
+              <a class="ds-menu-item" role="menuitem" [attr.data-test]="'primary-nav.' + entry.id"
+                [routerLink]="entry.link" [queryParams]="entry.queryParams">{{ entry.label | translate }}</a>
+            </div>
+          }
+          @for (section of (sections | async); track section) {
+            <ng-container
+            *ngComponentOutlet="(sectionMap$ | async).get(section.id)?.component; injector: (sectionMap$ | async).get(section.id)?.injector;"></ng-container>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

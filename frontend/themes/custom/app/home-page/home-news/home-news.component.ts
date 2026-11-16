@@ -2,14 +2,15 @@ import {
   ChangeDetectionStrategy,
   Component,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { HomeNewsComponent as BaseComponent } from '../../../../../app/home-page/home-news/home-news.component';
+import { ThemedSearchFormComponent } from '../../../../../app/shared/search-form/themed-search-form.component';
+import { HomeStatsComponent } from '../overview/home-stats.component';
 
 /**
- * Introduce the institutional collection at the existing home extension point.
- * Search, community loading and recent submissions remain owned by DSpace.
+ * Home opening (RFC 0026): what the repository holds, the search as the main
+ * action and the collection in numbers. Uses the official extension point.
  */
 @Component({
   selector: 'ds-themed-home-news',
@@ -17,7 +18,8 @@ import { HomeNewsComponent as BaseComponent } from '../../../../../app/home-page
   styleUrls: ['./home-news.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    RouterLink,
+    HomeStatsComponent,
+    ThemedSearchFormComponent,
     TranslateModule,
   ],
 })

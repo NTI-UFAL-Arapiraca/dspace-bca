@@ -1,0 +1,25 @@
+@if (overview$ | async; as data) {
+  @if (data.total) {
+    <div class="collection-overview">
+      <dl class="collection-overview__stats">
+        <div><dt>{{ 'repository.collection.works' | translate }}</dt><dd>{{ data.total | number }}</dd></div>
+        @if (data.years.length) {
+          <div><dt>{{ 'repository.collection.years' | translate }}</dt>
+            <dd>{{ data.years[0].year }}@if (data.years.length > 1) {–{{ data.years[data.years.length - 1].year }}}</dd></div>
+        }
+      </dl>
+      @if (data.years.length > 1) {
+        <ol class="home-years__bars collection-overview__bars">
+          @for (bar of data.years; track bar.year) {
+            <li>
+              <a [routerLink]="['/search']" [queryParams]="yearParams(bar.year)"
+                [style.--bar]="bar.percent + '%'" [class.is-empty]="!bar.count"
+                [attr.aria-label]="'repository.home.explore.year-label' | translate: { year: bar.year, count: bar.count }">
+              </a>
+            </li>
+          }
+        </ol>
+      }
+    </div>
+  }
+}

@@ -1,43 +1,90 @@
+// Institutional footer (RFC 0026): identifies the Library in text, groups
+// links by audience and keeps the GTI credit. No unofficial logos.
 :host {
-  .bottom-footer {
-    gap: 1rem;
-  }
+  display: block;
+}
 
-  .content-container {
-    min-width: 0;
-    margin-right: auto;
-  }
+.repository-footer__main {
+  padding: 3.5rem 0 1.75rem;
+  color: #d7e2ec;
+  background: var(--ufal-footer-bg);
+  font-size: 0.90625rem;
 
-  .notify-enabled {
-    position: static;
-    align-self: center !important;
-    margin-top: 0;
-  }
+  a, .repository-footer__button {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0;
+    color: #fff;
+    background: none;
+    border: 0;
+    font: inherit;
+    text-align: start;
 
-  .institutional-logo {
-    flex-shrink: 0;
-    margin-left: auto;
-  }
-
-  .gti-logo {
-    display: block;
-    width: 8.5rem;
-    height: auto;
-    object-fit: contain;
-  }
-
-  @media (max-width: 767.98px) {
-    .content-container {
-      width: 100%;
-      margin-right: 0;
+    &:hover {
+      text-decoration: underline !important;
+      text-underline-offset: 0.2em;
     }
 
-    .institutional-logo {
-      margin-left: 0;
-    }
-
-    .gti-logo {
-      width: 7.5rem;
+    &:focus-visible {
+      outline: 3px solid #fff;
+      outline-offset: 2px;
     }
   }
+
+  ul {
+    margin: 0;
+  }
+}
+
+.repository-footer__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 2rem;
+}
+
+.repository-footer__name {
+  margin: 0;
+  color: #fff;
+  font-family: var(--ufal-serif);
+  font-size: 1.1875rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.repository-footer__note {
+  margin: 0.5rem 0 0;
+  color: #a9bccd;
+}
+
+.repository-footer__heading {
+  margin-bottom: 0.5rem;
+  color: #a9bccd;
+  font-family: var(--ufal-sans);
+  font-size: 0.78125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.repository-footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #2c3f53;
+  color: #a9bccd;
+
+  p {
+    margin: 0;
+  }
+}
+
+.gti-logo {
+  width: 8.5rem;
+  height: auto;
+  object-fit: contain;
 }

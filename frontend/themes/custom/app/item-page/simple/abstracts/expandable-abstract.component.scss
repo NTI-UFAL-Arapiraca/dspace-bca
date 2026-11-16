@@ -4,8 +4,9 @@
 
 .abstract-text {
   // Keep a substantial reading column alongside the academic metadata.
-  line-height: 1.8;
-  max-block-size: 18em;
+  // Ten lines of the serif reading style (RFC 0018: 10-line previews).
+  line-height: 1.7;
+  max-block-size: 17em;
   overflow: hidden;
 
   &.is-expanded {
@@ -13,7 +14,7 @@
   }
 
   &.is-truncated {
-    mask-image: linear-gradient(to bottom, #000 calc(100% - 1.8em), transparent);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 1.7em), transparent);
   }
 }
 

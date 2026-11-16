@@ -1,0 +1,103 @@
+// Busca e listas de resultados — Folha de Rosto (RFC 0026).
+// Facets read as a quiet index (title, options, counts) instead of stacked
+// cards; active filters are dark removable chips; results are separated by
+// hairlines, not boxes.
+
+#main-content ds-search-filter .facet-filter {
+  margin-bottom: 0 !important;
+  padding: 1rem 0 !important;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--ufal-line);
+  border-radius: 0;
+
+  .filter-name {
+    width: 100%;
+    min-height: 44px;
+    align-items: center;
+    padding: 0;
+    background: none;
+    border: 0;
+
+    .h4 {
+      color: var(--ufal-ink) !important;
+      font-family: var(--ufal-sans);
+      font-size: 0.90625rem;
+      font-weight: 600;
+    }
+
+    .filter-toggle {
+      text-align: end;
+      color: var(--ufal-muted);
+    }
+  }
+
+  &.focus {
+    outline: 3px solid var(--ufal-focus);
+    outline-offset: 2px;
+  }
+}
+
+ds-search-facet-option a, ds-search-facet-selected-option a {
+  min-height: 36px;
+  color: var(--bs-body-color);
+  font-size: 0.90625rem;
+
+  &:hover {
+    color: var(--bs-link-hover-color);
+  }
+
+  .filter-checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--bs-link-color);
+  }
+
+  .badge.bg-secondary {
+    padding: 0;
+    color: var(--ufal-muted) !important;
+    background: transparent !important;
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+  }
+}
+
+// Active filters: dark chip = applied and removable.
+ds-search-labels ds-search-label a.badge, ds-search-labels ds-search-label-range a.badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 0.875rem;
+  color: #fff !important;
+  background: var(--ufal-ink) !important;
+  border-radius: 999px;
+  font-size: 0.84375rem;
+  font-weight: 500;
+  text-transform: none !important;
+}
+
+:root[data-bs-theme='dark'] ds-search-labels ds-search-label a.badge {
+  color: var(--bs-body-bg) !important;
+}
+
+// Result lists: hairlines between works, generous rhythm.
+ds-search-results ds-object-list ul[data-test='objects'] > li,
+ds-object-list ul[data-test='objects'] > li {
+  margin: 0 !important;
+  padding: 1.375rem 0;
+  border-top: 1px solid var(--ufal-line);
+  border-bottom: 0 !important;
+}
+
+ds-search-results ds-object-list ul[data-test='objects'] > li:first-child {
+  border-top: 0;
+}
+
+ds-search-settings .setting-option, ds-sidebar-dropdown .setting-option {
+  padding: 1rem 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-top: 1px solid var(--ufal-line) !important;
+  border-radius: 0 !important;
+}

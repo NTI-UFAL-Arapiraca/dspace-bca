@@ -1,0 +1,62 @@
+@if (object !== undefined && object !== null) {
+  @let ctx = work;
+  <article class="work-result">
+    <div class="work-result__meta">
+      @for (type of ctx.types; track type) {
+        <span class="work-result__type">{{ type }}</span>
+      }
+      @if (ctx.year) {
+        <span class="work-result__year">{{ ctx.year }}</span>
+      }
+      @if (showLabel) {
+        <ds-badges [object]="dso" [context]="context" [showAccessStatus]="true"></ds-badges>
+      }
+    </div>
+
+    <ds-truncatable [id]="dso.id">
+      <h3 class="work-result__title">
+        @if (linkType !== linkTypes.None) {
+          <a [target]="(linkType === linkTypes.ExternalLink) ? '_blank' : '_self'"
+            [attr.rel]="(linkType === linkTypes.ExternalLink) ? 'noopener noreferrer' : null"
+            [routerLink]="[itemPageRoute]" class="item-list-title dont-break-out" [dsMetadata]="dsoTitle"></a>
+        } @else {
+          <span class="item-list-title dont-break-out" [dsMetadata]="dsoTitle"></span>
+        }
+      </h3>
+
+      @if (dso.allMetadataValues(authorMetadata, placeholderFilter).length > 0 || advisors) {
+        <p class="work-result__by">
+          @if (dso.allMetadataValues(authorMetadata, placeholderFilter).length > 0) {
+            <span class="item-list-authors">
+              @for (author of dso.limitedMetadata(authorMetadata, additionalMetadataLimit, placeholderFilter); track author; let last = $last) {
+                <ds-metadata-link-view [metadata]="author"></ds-metadata-link-view>@if (!last) {<span>; </span>}
+              }
+            </span>
+          }
+          @if (advisors) {
+            <span class="work-result__advisors">{{ 'repository.result.advised-by' | translate: { names: advisors } }}</span>
+          }
+        </p>
+      }
+
+      @if (firstMetadataValue('dc.description.abstract')) {
+        <div class="work-result__excerpt">
+          <ds-truncatable-part [id]="dso.id" [minLines]="2">
+            <span [dsMetadata]="firstMetadata('dc.description.abstract')"></span>
+          </ds-truncatable-part>
+        </div>
+      }
+    </ds-truncatable>
+
+    @if (ctx.courses.length || ctx.campuses.length) {
+      <p class="work-result__facts">
+        @for (course of ctx.courses; track course) {
+          <span>{{ course }}</span>
+        }
+        @for (campus of ctx.campuses; track campus) {
+          <span>{{ campus }}</span>
+        }
+      </p>
+    }
+  </article>
+}

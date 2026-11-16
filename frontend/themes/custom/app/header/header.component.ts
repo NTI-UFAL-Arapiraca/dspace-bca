@@ -1,15 +1,19 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import {
+  Component,
+  inject,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { ThemedLangSwitchComponent } from 'src/app/shared/lang-switch/themed-lang-switch.component';
+
 import { ContextHelpToggleComponent } from '../../../../app/header/context-help-toggle/context-help-toggle.component';
 import { HeaderComponent as BaseComponent } from '../../../../app/header/header.component';
-import { ThemedSearchNavbarComponent } from '../../../../app/search-navbar/themed-search-navbar.component';
 import { ThemedAuthNavMenuComponent } from '../../../../app/shared/auth-nav-menu/themed-auth-nav-menu.component';
 import { ImpersonateNavbarComponent } from '../../../../app/shared/impersonate-navbar/impersonate-navbar.component';
 import { ColorModeService } from '../color-mode/color-mode.service';
+import { HeaderSearchComponent } from './header-search.component';
 import { MobileSearchComponent } from './mobile-search.component';
 
 @Component({
@@ -19,13 +23,13 @@ import { MobileSearchComponent } from './mobile-search.component';
   imports: [
     AsyncPipe,
     ContextHelpToggleComponent,
+    HeaderSearchComponent,
     ImpersonateNavbarComponent,
     MobileSearchComponent,
     NgbDropdownModule,
     RouterLink,
     ThemedAuthNavMenuComponent,
     ThemedLangSwitchComponent,
-    ThemedSearchNavbarComponent,
     TranslateModule,
   ],
 })
