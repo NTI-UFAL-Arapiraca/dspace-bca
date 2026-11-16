@@ -19,6 +19,7 @@
                         <entry key="RELATION.Person.coadvised" value-ref="academic_coadvised"/>
                         <entry key="RELATION.Person.reviewed" value-ref="academic_reviewed"/>
                         <entry key="academic_works_search" value-ref="academic_works_search"/>
+                        <entry key="academic_works_aggregates" value-ref="academic_works_aggregates"/>
                 </map>
             </list>
         </property>
@@ -54,6 +55,17 @@
         <property name="facetLimit" value="10"/>
     </bean>
 
+    <!-- Text facet over the publication year. The official date facet groups
+         years into ranges of at least ten; this one returns one value per
+         stored dc.date.issued, which the migration normalizes to YYYY. -->
+    <bean id="academicFilter_publicationYear" class="org.dspace.discovery.configuration.DiscoverySearchFilterFacet">
+        <property name="indexFieldName" value="publicationYear"/>
+        <property name="metadataFields"><list><value>dc.date.issued</value></list></property>
+        <property name="facetLimit" value="100"/>
+        <property name="sortOrderSidebar" value="VALUE"/>
+        <property name="sortOrderFilterPage" value="VALUE"/>
+    </bean>
+
     <!-- General public search used by course and campus links on item pages. -->
     <bean id="academic_works_search" class="org.dspace.discovery.configuration.DiscoveryConfiguration">
         <property name="id" value="academic_works_search"/>
@@ -74,6 +86,46 @@
                 <ref bean="searchFilterIssued"/>
                 <ref bean="searchFilterType"/>
                 <ref bean="searchFilterSubject"/>
+                <ref bean="academicFilter_course"/>
+                <ref bean="academicFilter_campus"/>
+            </list>
+        </property>
+        <property name="searchSortConfiguration">
+            <bean class="org.dspace.discovery.configuration.DiscoverySortConfiguration">
+                <property name="sortFields">
+                    <list><ref bean="sortDateIssued"/><ref bean="sortTitleAsc"/></list>
+                </property>
+            </bean>
+        </property>
+        <property name="defaultFilterQueries">
+            <list>
+                <value>search.resourcetype:Item AND latestVersion:true</value>
+                <value>-withdrawn:true AND -discoverable:false</value>
+            </list>
+        </property>
+        <property name="defaultRpp" value="10"/>
+    </bean>
+
+    <!-- Aggregates for overview components (counts by year, course, type and
+         campus). No search page uses this id, so its facets never appear in
+         the public sidebar. Same scope as academic_works_search. -->
+    <bean id="academic_works_aggregates" class="org.dspace.discovery.configuration.DiscoveryConfiguration">
+        <property name="id" value="academic_works_aggregates"/>
+        <property name="indexAlways" value="true"/>
+        <property name="searchFilters">
+            <list>
+                <ref bean="searchFilterIssued"/>
+                <ref bean="searchFilterType"/>
+                <ref bean="academicFilter_publicationYear"/>
+                <ref bean="academicFilter_course"/>
+                <ref bean="academicFilter_campus"/>
+            </list>
+        </property>
+        <property name="sidebarFacets">
+            <list>
+                <ref bean="searchFilterIssued"/>
+                <ref bean="searchFilterType"/>
+                <ref bean="academicFilter_publicationYear"/>
                 <ref bean="academicFilter_course"/>
                 <ref bean="academicFilter_campus"/>
             </list>

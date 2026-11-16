@@ -47,7 +47,7 @@ copiar o exemplo `people-authority.cfg.example` manualmente para o container.
 | `backend/config/item-submission.xml` | Acrescenta a seção acadêmica à submissão e à edição de trabalhos. |
 | `backend/config/submission-forms.xml` | Define os controles de edição e os seletores fechados de pessoas. |
 | `backend/config/registries/academic-metadata.xml` | Cadastra os campos adicionais. |
-| `backend/config/spring/api/academic-discovery.xml` | Acrescenta buscas por autoria, orientação, coorientação e banca, sem substituir as buscas oficiais. |
+| `backend/config/spring/api/academic-discovery.xml` | Acrescenta buscas por autoria, orientação, coorientação e banca, sem substituir as buscas oficiais, e a configuração de agregados com contagem por ano de publicação ([RFC 0025](../../rfc/0025-faceta-de-ano-de-publicacao.md)). |
 | `frontend/themes/custom/` | Mostra nomes com links, curso e campus nos trabalhos e perfil com titulação, contato, Lattes, resumo calculado e cinco abas de trabalhos. |
 
 Os arquivos do backend são montados como somente leitura nos serviços

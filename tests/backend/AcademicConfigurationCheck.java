@@ -4,6 +4,7 @@ import java.util.Map;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.dspace.discovery.configuration.DiscoveryConfiguration;
+import org.dspace.discovery.configuration.DiscoveryConfigurationParameters;
 import org.dspace.discovery.configuration.DiscoveryConfigurationService;
 import org.dspace.discovery.configuration.DiscoverySearchFilterFacet;
 import org.dspace.discovery.configuration.DiscoverySortFieldConfiguration;
@@ -51,6 +52,21 @@ public class AcademicConfigurationCheck {
                 if (!service.getMap().containsKey(id) || !id.equals(service.getMap().get(id).getId())) {
                     throw new AssertionError("Missing discovery registration: " + id);
                 }
+            }
+            DiscoveryConfiguration aggregates = service.getMap().get("academic_works_aggregates");
+            if (aggregates == null || !"academic_works_aggregates".equals(aggregates.getId())
+                || !aggregates.isIndexAlways()) {
+                throw new AssertionError("Missing indexed discovery registration: academic_works_aggregates");
+            }
+            DiscoverySearchFilterFacet year = aggregates.getSidebarFacet("publicationYear");
+            if (year == null || !"text".equals(year.getType())
+                || !year.getMetadataFields().equals(java.util.List.of("dc.date.issued"))
+                || year.getFacetLimit() != 100
+                || year.getSortOrderSidebar() != DiscoveryConfigurationParameters.SORT.VALUE) {
+                throw new AssertionError("publicationYear must be a text facet over dc.date.issued sorted by value");
+            }
+            if (service.getMap().get("academic_works_search").getSidebarFacet("publicationYear") != null) {
+                throw new AssertionError("publicationYear must stay out of the public search sidebar");
             }
         }
         System.out.println("Academic forms, DTDs and discovery registration validated against DSpace 10.1.");

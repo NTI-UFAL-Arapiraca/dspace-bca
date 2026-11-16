@@ -31,7 +31,11 @@ de propriedades expostas e inclui `relationship.enable-virtual-metadata`.
 com os quatro papéis e a busca pública `academic_works_search`, usada pelos
 links de curso e campus nas páginas de trabalho. `indexAlways` garante que os
 campos desses filtros sejam indexados também nos trabalhos migrados sem tipo
-de entidade.
+de entidade. A configuração `academic_works_aggregates` não é usada por
+páginas de busca. Ela expõe facetas para resumos, inclusive
+`publicationYear`, que conta trabalhos por ano de `dc.date.issued`
+([RFC 0025](../rfc/0025-faceta-de-ano-de-publicacao.md)). Alterar facetas
+exige recriar `dspace` e reconstruir o índice.
 
 O Compose REST define `user.registration=false` para bloquear o cadastro
 público de contas por senha/e-mail. Contas existentes continuam podendo fazer

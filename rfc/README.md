@@ -30,6 +30,7 @@ de contexto para reaplicar e revisar essas diferenças ao atualizar as imagens.
 | [0022](0022-vlibras-widget.md) | Integrar o VLibras oficial no tema, somente no navegador e sem duplicação entre rotas. |
 | [0023](0023-grande-area-cnpq.md) | Preservar e exibir a grande área CNPq do legado em campo próprio. |
 | [0024](0024-mounts-producao-e-prefixo-rest.md) | Permitir escrita nos binds SAF e GeoLite2 e encaminhar o prefixo público da API. |
+| [0025](0025-faceta-de-ano-de-publicacao.md) | Oferecer contagem por ano de publicação em uma configuração Discovery de agregados. |
 
 Uma nova alteração por override deve incluir sua RFC neste índice no mesmo
 commit. Cada RFC deve identificar arquivos, consequência operacional e testes.
