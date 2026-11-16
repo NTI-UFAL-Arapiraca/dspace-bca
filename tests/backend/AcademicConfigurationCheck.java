@@ -41,6 +41,7 @@ public class AcademicConfigurationCheck {
             }
             context.getBeanFactory().registerSingleton("sortDateIssued", new DiscoverySortFieldConfiguration());
             context.getBeanFactory().registerSingleton("sortTitleAsc", new DiscoverySortFieldConfiguration());
+            context.getBeanFactory().registerSingleton("sortDateAccessioned", new DiscoverySortFieldConfiguration());
             new XmlBeanDefinitionReader(context).loadBeanDefinitions(
                 "file:/dspace/config/spring/api/academic-discovery.xml");
             context.refresh();
@@ -65,8 +66,18 @@ public class AcademicConfigurationCheck {
                 || year.getSortOrderSidebar() != DiscoveryConfigurationParameters.SORT.VALUE) {
                 throw new AssertionError("publicationYear must be a text facet over dc.date.issued sorted by value");
             }
-            if (service.getMap().get("academic_works_search").getSidebarFacet("publicationYear") != null) {
+            DiscoveryConfiguration works = service.getMap().get("academic_works_search");
+            if (works.getSidebarFacet("publicationYear") != null) {
                 throw new AssertionError("publicationYear must stay out of the public search sidebar");
+            }
+            DiscoverySearchFilterFacet cnpq = works.getSidebarFacet("cnpq");
+            if (cnpq == null || !cnpq.getMetadataFields().equals(java.util.List.of("local.cnpq.area"))) {
+                throw new AssertionError("The public works search must facet local.cnpq.area as cnpq");
+            }
+            for (DiscoveryConfiguration config : new DiscoveryConfiguration[]{works, aggregates}) {
+                if (config.getDefaultFilterQueries().stream().noneMatch(q -> q.contains("-entityType_keyword:Person"))) {
+                    throw new AssertionError("Works configurations must exclude Person profiles: " + config.getId());
+                }
             }
         }
         System.out.println("Academic forms, DTDs and discovery registration validated against DSpace 10.1.");

@@ -55,6 +55,13 @@
         <property name="facetLimit" value="10"/>
     </bean>
 
+    <!-- CNPq great area as stored ("code name"), one value per linked area (RFC 0023). -->
+    <bean id="academicFilter_cnpq" class="org.dspace.discovery.configuration.DiscoverySearchFilterFacet">
+        <property name="indexFieldName" value="cnpq"/>
+        <property name="metadataFields"><list><value>local.cnpq.area</value></list></property>
+        <property name="facetLimit" value="10"/>
+    </bean>
+
     <!-- Text facet over the publication year. The official date facet groups
          years into ranges of at least ten; this one returns one value per
          stored dc.date.issued, which the migration normalizes to YYYY. -->
@@ -78,6 +85,7 @@
                 <ref bean="searchFilterSubject"/>
                 <ref bean="searchFilterType"/>
                 <ref bean="academicFilter_course"/>
+                <ref bean="academicFilter_cnpq"/>
                 <ref bean="academicFilter_campus"/>
             </list>
         </property>
@@ -87,6 +95,7 @@
                 <ref bean="searchFilterType"/>
                 <ref bean="searchFilterSubject"/>
                 <ref bean="academicFilter_course"/>
+                <ref bean="academicFilter_cnpq"/>
                 <ref bean="academicFilter_campus"/>
             </list>
         </property>
@@ -99,16 +108,18 @@
         </property>
         <property name="defaultFilterQueries">
             <list>
-                <value>search.resourcetype:Item AND latestVersion:true</value>
+                <!-- Works only: Person profiles are bibliographic records, not works (RFC 0026). -->
+                <value>search.resourcetype:Item AND latestVersion:true AND -entityType_keyword:Person</value>
                 <value>-withdrawn:true AND -discoverable:false</value>
             </list>
         </property>
         <property name="defaultRpp" value="10"/>
     </bean>
 
-    <!-- Aggregates for overview components (counts by year, course, type and
-         campus). No search page uses this id, so its facets never appear in
-         the public sidebar. Same scope as academic_works_search. -->
+    <!-- Aggregates for overview components (counts by year, course, area, type
+         and campus) and the home list of recent works. No search page uses this
+         id, so its facets never appear in the public sidebar. Same scope as
+         academic_works_search. -->
     <bean id="academic_works_aggregates" class="org.dspace.discovery.configuration.DiscoveryConfiguration">
         <property name="id" value="academic_works_aggregates"/>
         <property name="indexAlways" value="true"/>
@@ -118,6 +129,7 @@
                 <ref bean="searchFilterType"/>
                 <ref bean="academicFilter_publicationYear"/>
                 <ref bean="academicFilter_course"/>
+                <ref bean="academicFilter_cnpq"/>
                 <ref bean="academicFilter_campus"/>
             </list>
         </property>
@@ -127,19 +139,20 @@
                 <ref bean="searchFilterType"/>
                 <ref bean="academicFilter_publicationYear"/>
                 <ref bean="academicFilter_course"/>
+                <ref bean="academicFilter_cnpq"/>
                 <ref bean="academicFilter_campus"/>
             </list>
         </property>
         <property name="searchSortConfiguration">
             <bean class="org.dspace.discovery.configuration.DiscoverySortConfiguration">
                 <property name="sortFields">
-                    <list><ref bean="sortDateIssued"/><ref bean="sortTitleAsc"/></list>
+                    <list><ref bean="sortDateIssued"/><ref bean="sortDateAccessioned"/><ref bean="sortTitleAsc"/></list>
                 </property>
             </bean>
         </property>
         <property name="defaultFilterQueries">
             <list>
-                <value>search.resourcetype:Item AND latestVersion:true</value>
+                <value>search.resourcetype:Item AND latestVersion:true AND -entityType_keyword:Person</value>
                 <value>-withdrawn:true AND -discoverable:false</value>
             </list>
         </property>

@@ -51,9 +51,9 @@ a busca pública pelo intervalo oficial, com
   completa gera uma entrada `AAAA-MM-DD` separada. O componente que consome a
   faceta deve somar os valores pelos quatro primeiros dígitos e ignorar os que
   não começam por um ano.
-- Os totais incluem os mesmos registros que a `academic_works_search`,
-  inclusive itens Person. Isso não afeta as contagens por ano, curso ou tipo
-  dos trabalhos, porque Person não tem esses campos.
+- A configuração usa os mesmos filtros padrão da `academic_works_search`. A
+  [RFC 0026](0026-sistema-visual-folha-de-rosto.md) passou a excluir Person das
+  duas, então os totais contam apenas trabalhos.
 - `facetLimit` 100 cobre até cem anos distintos. O tamanho por página do
   endpoint segue limitado por `rest.search.max.results`.
 
