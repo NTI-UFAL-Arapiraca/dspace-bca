@@ -726,7 +726,7 @@ ds-lang-switch #language-menu-list {
     .coar-notify-support-route
   ):not(.btn, .ufal-chip):is(:hover, :focus-visible),
   .section-link:is(:hover, :focus-visible) > span,
-  :is(.work-byline, .work-data) ds-metadata-link-view a:is(:hover, :focus-visible) > span[dsEntityIcon] {
+  :is(.work-byline, .work-data, ds-work-contributors) ds-metadata-link-view a:is(:hover, :focus-visible) > span[dsEntityIcon] {
     text-decoration: underline !important;
     text-decoration-thickness: 1px !important;
   }
@@ -734,7 +734,7 @@ ds-lang-switch #language-menu-list {
   // People links underline only the name, not the authority icon beside it.
   // The :not() matches the specificity of the rule above, which also reaches
   // these anchors through ds-metadata-representation-list.
-  :is(.work-byline, .work-data) ds-metadata-link-view a:not(.btn, .ufal-chip):is(:hover, :focus-visible) {
+  :is(.work-byline, .work-data, ds-work-contributors) ds-metadata-link-view a:not(.btn, .ufal-chip):is(:hover, :focus-visible) {
     text-decoration: none !important;
   }
 }

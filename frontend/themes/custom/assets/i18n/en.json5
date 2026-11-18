@@ -223,7 +223,7 @@
   "repository.item.record.title": "Record",
   "item.page.document-language": "Document language",
 
-  "repository.result.advised-by": "advised by {{names}}",
+  "repository.result.advisor-prefix": "advised by",
 
   "repository.home.stats.label": "The collection in numbers",
   "repository.home.stats.works": "works",

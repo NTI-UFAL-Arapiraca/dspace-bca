@@ -13,40 +13,19 @@
       }
     </div>
 
-    <ds-truncatable [id]="dso.id">
-      <h3 class="work-result__title">
-        @if (linkType !== linkTypes.None) {
-          <a [target]="(linkType === linkTypes.ExternalLink) ? '_blank' : '_self'"
-            [attr.rel]="(linkType === linkTypes.ExternalLink) ? 'noopener noreferrer' : null"
-            [routerLink]="[itemPageRoute]" class="item-list-title dont-break-out" [dsMetadata]="dsoTitle"></a>
-        } @else {
-          <span class="item-list-title dont-break-out" [dsMetadata]="dsoTitle"></span>
-        }
-      </h3>
-
-      @if (dso.allMetadataValues(authorMetadata, placeholderFilter).length > 0 || advisors) {
-        <p class="work-result__by">
-          @if (dso.allMetadataValues(authorMetadata, placeholderFilter).length > 0) {
-            <span class="item-list-authors">
-              @for (author of dso.limitedMetadata(authorMetadata, additionalMetadataLimit, placeholderFilter); track author; let last = $last) {
-                <ds-metadata-link-view [metadata]="author"></ds-metadata-link-view>@if (!last) {<span>; </span>}
-              }
-            </span>
-          }
-          @if (advisors) {
-            <span class="work-result__advisors">{{ 'repository.result.advised-by' | translate: { names: advisors } }}</span>
-          }
-        </p>
+    <h3 class="work-result__title">
+      @if (linkType !== linkTypes.None) {
+        <a [target]="(linkType === linkTypes.ExternalLink) ? '_blank' : '_self'"
+          [attr.rel]="(linkType === linkTypes.ExternalLink) ? 'noopener noreferrer' : null"
+          [routerLink]="[itemPageRoute]" class="item-list-title dont-break-out" [dsMetadata]="dsoTitle"></a>
+      } @else {
+        <span class="item-list-title dont-break-out" [dsMetadata]="dsoTitle"></span>
       }
+    </h3>
 
-      @if (firstMetadataValue('dc.description.abstract')) {
-        <div class="work-result__excerpt">
-          <ds-truncatable-part [id]="dso.id" [minLines]="2">
-            <span [dsMetadata]="firstMetadata('dc.description.abstract')"></span>
-          </ds-truncatable-part>
-        </div>
-      }
-    </ds-truncatable>
+    <ds-work-contributors
+      [authors]="dso.limitedMetadata(authorMetadata, additionalMetadataLimit, placeholderFilter)"
+      [advisors]="dso.allMetadata('dc.contributor.advisor')"></ds-work-contributors>
 
     @if (ctx.courses.length || ctx.campuses.length) {
       <p class="work-result__facts">

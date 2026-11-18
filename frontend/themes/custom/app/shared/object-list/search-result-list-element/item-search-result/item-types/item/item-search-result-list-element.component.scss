@@ -49,37 +49,6 @@
   }
 }
 
-.work-result__by {
-  margin: 0;
-  color: var(--bs-body-color);
-  font-size: 0.9375rem;
-
-  .item-list-authors {
-    color: var(--ufal-ink);
-    font-weight: 600;
-  }
-
-  .work-result__advisors::before {
-    content: ' · ';
-    color: var(--ufal-muted);
-  }
-}
-
-.work-result__excerpt {
-  color: var(--ufal-muted);
-  font-size: 0.9375rem;
-  line-height: 1.55;
-
-  ::ng-deep em, ::ng-deep strong {
-    padding: 0 2px;
-    color: inherit;
-    background: var(--ufal-mark);
-    border-radius: 2px;
-    font-style: normal;
-    font-weight: inherit;
-  }
-}
-
 .work-result__facts span + span::before {
   content: '·';
   margin-inline-end: 0.875rem;

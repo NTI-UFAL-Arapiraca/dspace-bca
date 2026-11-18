@@ -183,6 +183,12 @@ Na página `/search`, retirar o escopo consulta novamente todo o repositório,
 sem reutilizar a coleção inicial como valor padrão da paginação. Essa extensão
 não altera os escopos fixos das pesquisas em comunidades, coleções ou perfis.
 
+Em `/search`, os dois-pontos digitados são tratados como pontuação do texto.
+O Angular escapa o sinal no parâmetro `query` enviado ao Discovery e mantém
+o texto original no campo e na URL da página. Os filtros da interface continuam
+disponíveis para pesquisar por campo. A mudança requer reconstruir a imagem
+Angular em desenvolvimento e em produção.
+
 A página simples do trabalho, compartilhada com Publication pelo mesmo
 template e por `work/academic-item-imports.ts`, segue a folha de rosto:
 `work/work-context.component.ts` mostra tipo, curso, campus e ano; depois vêm o
@@ -364,3 +370,10 @@ barras de ano somam valores pelo ano (`overview/year-series.ts`) e cada barra
 leva à busca filtrada por aquele ano. Os estilos dos blocos ficam em
 `styles/_home.scss`. CMS, COAR, sugestões e a opção de filtros Discovery
 continuam na composição. Produção exige nova imagem Angular. A decisão está na RFC 0026.
+
+A home e os resultados de busca usam `app/shared/work-contributors/` para
+exibir autores e orientadores. Nomes com UUID de autoridade usam o mesmo
+`ds-metadata-link-view` da página do trabalho: ícone de pessoa, link direto
+ao perfil `Person` e cartão do perfil no hover. Quando o trabalho contém apenas
+o nome, o link abre a busca de pessoas com esse nome, preservando a distinção
+entre homônimos. O resumo aparece na página do trabalho.

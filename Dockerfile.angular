@@ -49,6 +49,11 @@ COPY frontend/overrides/person-search-navigation*.ts /app/src/app/
 COPY frontend/patches/apply-person-search-navigation.mjs /tmp/apply-person-search-navigation.mjs
 RUN node /tmp/apply-person-search-navigation.mjs /app/src/app
 
+# Treat colons in repository search text as punctuation.
+COPY frontend/overrides/escape-search-colons.ts /app/src/app/core/shared/search/models/
+COPY frontend/patches/apply-public-search-colons.mjs /tmp/apply-public-search-colons.mjs
+RUN node /tmp/apply-public-search-colons.mjs /app/src/app
+
 # Keep the crawler policy under version control. Express renders the public UI
 # origin into this EJS template and serves it at the top-level /robots.txt.
 COPY frontend/overrides/robots.txt.ejs /app/src/robots.txt.ejs

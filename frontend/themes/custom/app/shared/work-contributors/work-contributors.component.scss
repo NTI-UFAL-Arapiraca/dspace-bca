@@ -1,0 +1,17 @@
+:host {
+  display: contents;
+}
+
+.contributors {
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+.item-list-authors {
+  color: var(--ufal-ink);
+  font-weight: 600;
+}
+
+.contributors__separator {
+  color: var(--ufal-muted);
+}

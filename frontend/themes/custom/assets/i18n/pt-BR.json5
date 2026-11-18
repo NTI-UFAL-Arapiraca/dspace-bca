@@ -224,7 +224,7 @@
   "repository.item.record.title": "Registro",
   "item.page.document-language": "Idioma do documento",
 
-  "repository.result.advised-by": "orientação de {{names}}",
+  "repository.result.advisor-prefix": "orientação de",
 
   "repository.home.stats.label": "O acervo em números",
   "repository.home.stats.works": "trabalhos",

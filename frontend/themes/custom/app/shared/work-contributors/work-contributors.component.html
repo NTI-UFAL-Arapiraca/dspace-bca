@@ -1,0 +1,29 @@
+@if (authors().length || advisors().length) {
+  <p class="contributors">
+    @if (authors().length) {
+      <span class="item-list-authors">
+        <ng-container [ngTemplateOutlet]="names" [ngTemplateOutletContext]="{ $implicit: authors() }"></ng-container>
+      </span>
+    }
+    @if (advisors().length) {
+      @if (authors().length) {
+        <span class="contributors__separator" aria-hidden="true">&ngsp;·&ngsp;</span>
+      }
+      <span>{{ 'repository.result.advisor-prefix' | translate }}&ngsp;<ng-container
+        [ngTemplateOutlet]="names" [ngTemplateOutletContext]="{ $implicit: advisors() }"></ng-container></span>
+    }
+  </p>
+}
+
+<!-- Linked names reuse the item page's authority link: Person icon, direct
+     profile route and hover card. Names without a Person UUID open the people
+     search, since homonyms make a name alone ambiguous. -->
+<ng-template #names let-people>
+  @for (person of people; track person; let last = $last) {
+    @if (isLinked(person)) {
+      <ds-metadata-link-view [metadata]="person" popoverPlacement="bottom"></ds-metadata-link-view>
+    } @else {
+      <a routerLink="/search" [queryParams]="personSearchParams(person.value)">{{ person.value }}</a>
+    }@if (!last) {<span>;&ngsp;</span>}
+  }
+</ng-template>

@@ -6,6 +6,10 @@ import { SearchConfigurationService } from '../../../../app/shared/search/search
 
 @Injectable()
 export class RepositorySearchConfigurationService extends SearchConfigurationService {
+  protected override get escapeQueryColons(): boolean {
+    return true;
+  }
+
   override getCurrentScope(): Observable<string> {
     // On the repository search page, removing scope always means all collections.
     // The base service can reuse the initial URL's scope as its pagination default.

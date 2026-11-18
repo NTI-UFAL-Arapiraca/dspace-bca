@@ -171,3 +171,11 @@ link e recebe destaque de superfície e borda, acompanhado pelo deslocamento
 da seta em hover e foco. O atalho para mais registros compartilha o tratamento
 dos demais links de texto. Consultas, classificação dos registros e destinos
 de navegação são preservados. Produção exige uma nova imagem Angular.
+
+## Dois-pontos na pesquisa geral
+
+Títulos acadêmicos usam dois-pontos para separar título e subtítulo. Em
+`/search`, a interface escapa os dois-pontos do texto livre ao montar as
+requisições de resultados e facetas. A URL compartilhável mantém o texto
+original. A interface oferece filtros para selecionar campos. O contrato REST
+do Discovery continua aceitando a sintaxe de consulta oficial do Solr.

@@ -64,8 +64,8 @@ solicitação de cópia explícita (D5) ficam fora desta RFC.
 ### Listas, home, perfis e coleções
 
 - A linha de resultado de item mostra tipo e ano, título, autoria com
-  orientação, trecho do resumo com o destaque do Discovery, curso e campus.
-  Não carrega miniaturas.
+  orientação, curso e campus. O resumo é exibido na página do trabalho.
+  A listagem dispensa miniaturas.
 - A busca `academic_works_search` exclui Person (D2) e ganha a faceta
   “Grande área CNPq” (`cnpq`, D1). Facetas e filtros ativos são reestilizados
   sem override.

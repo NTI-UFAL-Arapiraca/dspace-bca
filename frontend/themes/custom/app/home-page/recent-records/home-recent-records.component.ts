@@ -25,6 +25,7 @@ import { ErrorComponent } from '../../../../../app/shared/error/error.component'
 import { ThemedLoadingComponent } from '../../../../../app/shared/loading/themed-loading.component';
 import { SearchService } from '../../../../../app/shared/search/search.service';
 import { workContext } from '../../item-page/simple/work/work-context';
+import { WorkContributorsComponent } from '../../shared/work-contributors/work-contributors.component';
 import { AGGREGATES_CONFIGURATION } from '../overview/home-overview.service';
 
 /**
@@ -42,6 +43,7 @@ import { AGGREGATES_CONFIGURATION } from '../overview/home-overview.service';
     RouterLink,
     ThemedLoadingComponent,
     TranslateModule,
+    WorkContributorsComponent,
   ],
 })
 export class HomeRecentRecordsComponent extends RecentItemListComponent implements OnInit {

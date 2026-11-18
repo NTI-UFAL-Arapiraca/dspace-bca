@@ -20,14 +20,9 @@
             <h3 class="record__title">
               <a [routerLink]="itemRoute(item)">{{ item.name || ('repository.home.record.untitled' | translate) }}</a>
             </h3>
-            @if (item.allMetadataValues('dc.contributor.author').length || item.allMetadataValues('dc.contributor.advisor').length) {
-              <p class="record__by">
-                <span class="record__authors">{{ item.allMetadataValues('dc.contributor.author').join('; ') }}</span>
-                @if (item.allMetadataValues('dc.contributor.advisor').length) {
-                  <span class="record__advisors">{{ 'repository.result.advised-by' | translate: { names: item.allMetadataValues('dc.contributor.advisor').join('; ') } }}</span>
-                }
-              </p>
-            }
+            <ds-work-contributors
+              [authors]="item.allMetadata('dc.contributor.author')"
+              [advisors]="item.allMetadata('dc.contributor.advisor')"></ds-work-contributors>
             @if (ctx.courses.length) {
               <p class="record__facts">{{ ctx.courses.join(' · ') }}</p>
             }

@@ -55,21 +55,6 @@
   }
 }
 
-.record__by {
-  margin: 0;
-  font-size: 0.9375rem;
-}
-
-.record__authors {
-  color: var(--ufal-ink);
-  font-weight: 600;
-}
-
-.record__advisors::before {
-  content: ' · ';
-  color: var(--ufal-muted);
-}
-
 .empty-state {
   padding: 1.25rem 0;
   color: var(--ufal-muted);
