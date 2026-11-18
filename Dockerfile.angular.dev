@@ -31,6 +31,13 @@ COPY frontend/patches/apply-eperson-initial-password.mjs /tmp/apply-eperson-init
 RUN node /tmp/apply-eperson-initial-password.mjs \
     /app/src/app/access-control/epeople-registry/eperson-form
 
+# Suggest indexed subjects in the keyword field of submission forms.
+COPY frontend/overrides/subject-suggestions.service.ts \
+    /app/src/app/shared/form/builder/ds-dynamic-form-ui/models/tag/
+COPY frontend/patches/apply-subject-suggestions.mjs /tmp/apply-subject-suggestions.mjs
+RUN node /tmp/apply-subject-suggestions.mjs \
+    /app/src/app/shared/form/builder/ds-dynamic-form-ui/models/tag
+
 # Keep Person search navigation local to its results, including smooth scrolling.
 COPY frontend/overrides/person-search-navigation*.ts /app/src/app/
 COPY frontend/patches/apply-person-search-navigation.mjs /tmp/apply-person-search-navigation.mjs

@@ -74,6 +74,14 @@ de pessoas usam seleção de cadastro existente. Se a pessoa ainda não existir,
 a biblioteca a cadastra na coleção Pessoas e depois a seleciona no trabalho.
 Programa de pós-graduação e grau acadêmico não são deduzidos do nome do curso.
 
+Nos formulários de submissão e edição, o campo repetível `dc.subject`
+sugere até dez termos do índice de assuntos. A consulta REST por prefixo
+começa a partir de três caracteres, após 300 ms de pausa. O campo aceita
+selecionar um termo do acervo ou gravar uma palavra-chave nova, inclusive
+quando a consulta de sugestões falha. Os termos são gravados no metadado
+do trabalho e aparecem nas sugestões conforme entram no índice do DSpace.
+O recurso faz parte da imagem Angular de desenvolvimento e produção.
+
 O item distingue `dc.date.issued`, apresentado como ano de publicação, de
 `local.date.defense`, apresentado como data de defesa. A data de defesa não é
 usada como data de publicação nem como data de entrada do registro no DSpace.
