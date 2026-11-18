@@ -48,11 +48,15 @@ COPY frontend/overrides/robots.txt.ejs /app/src/robots.txt.ejs
 
 # Replace the generic DSpace privacy template with the UFAL repository notice.
 COPY frontend/overrides/privacy-content.component.html \
-    /app/src/app/info/privacy/privacy-content/privacy-content.component.html
+    frontend/overrides/privacy-content.component.ts \
+    /app/src/app/info/privacy/privacy-content/
 
 # Merge the locally maintained theme and its component registries into the
-# official source tree. Files not overridden here remain inherited from the
-# version-matched base image.
+# official source tree. Our registries replace the official custom ones, so the
+# official placeholder components under custom/app would be compiled but never
+# used; remove them first. Styles and assets not overridden here remain
+# inherited from the version-matched base image.
+RUN rm -rf /app/src/themes/custom/app
 COPY frontend/themes/ /app/src/themes/
 
 # Merge the labels maintained by the custom theme into the standard language

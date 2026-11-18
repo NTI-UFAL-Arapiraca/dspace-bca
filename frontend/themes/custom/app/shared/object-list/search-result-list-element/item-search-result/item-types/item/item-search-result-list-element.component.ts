@@ -1,7 +1,3 @@
-import {
-  AsyncPipe,
-  NgClass,
-} from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Context } from '@dspace/core/shared/context.model';
@@ -31,10 +27,8 @@ import { workContext } from '../../../../../../item-page/simple/work/work-contex
   styleUrls: ['./item-search-result-list-element.component.scss'],
   templateUrl: './item-search-result-list-element.component.html',
   imports: [
-    AsyncPipe,
     MetadataDirective,
     MetadataLinkViewComponent,
-    NgClass,
     RouterLink,
     ThemedBadgesComponent,
     TranslateModule,

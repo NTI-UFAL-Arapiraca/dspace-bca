@@ -38,8 +38,13 @@ RUN node /tmp/apply-person-search-navigation.mjs /app/src/app
 
 COPY frontend/overrides/robots.txt.ejs /app/src/robots.txt.ejs
 COPY frontend/overrides/privacy-content.component.html \
-    /app/src/app/info/privacy/privacy-content/privacy-content.component.html
+    frontend/overrides/privacy-content.component.ts \
+    /app/src/app/info/privacy/privacy-content/
 COPY frontend/dev/live-theme.mjs /app/dev/live-theme.mjs
+
+# As in production, the local registries replace the official custom ones, so
+# the official placeholder components would only be compiled without use.
+RUN rm -rf /app/src/themes/custom/app
 
 # The official source image starts npm serve. The local entrypoint first copies
 # changed theme files into that source tree, then starts the watcher.
